@@ -663,6 +663,10 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
 }
 #prog-label{margin-top:8px;color:var(--muted);font-size:12.5px;}
 
+/* Hide key input — key is baked in */
+#ai-key-row{display:none!important;}
+#remember-row{display:none!important;}
+
 /* ── RESULTS ── */
 #results{margin-top:40px;padding-bottom:100px;}
 #results>*{animation:results-in .25s cubic-bezier(.2,0,.2,1) both;}
@@ -1494,7 +1498,7 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
         <input type="checkbox" id="remember-key" onchange="handleRememberKey()">
         Remember key in this browser
       </label>
-      <div class="ai-note" id="ai-key-note">Your key is sent directly to Anthropic — never stored on any server. AI analysis runs automatically on every scan once active. <strong style="color:var(--text2);">To get a free key:</strong> go to <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">console.anthropic.com</a> → sign up free → API Keys → Create Key. Paste it above and tick "Remember".</div>
+      <div class="ai-note" id="ai-key-note">AI analysis is included. Powered by Claude — analyses run automatically on every scan.</div>
     </div>
   </div>
 
@@ -3383,21 +3387,32 @@ Document:
 ${body}
 ---`;
 
-  const resp=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-opus-4-5',max_tokens:6000,messages:[{role:'user',content:prompt}]})
-  });
-  if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e?.error?.message||`API error ${resp.status}`);}
-  const data=await resp.json();
-  const raw=data.content?.[0]?.text||'';
-  const clean=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();
+  const controller=new AbortController();
+  // 90 second timeout — large documents with 6000 tokens can take 30-60s
+  const aiTimer=setTimeout(()=>controller.abort(),90000);
   try{
-    return JSON.parse(clean);
-  }catch{
-    const match=clean.match(/\{[\s\S]*/);
-    if(match){try{return JSON.parse(match[0]);}catch{}}
-    return{docType:'Document',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,600),bottomLine:'See analysis below.',findings:[],parties:'',keyDates:'',keyNumbers:''};
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:6000,messages:[{role:'user',content:prompt}]}),
+      signal:controller.signal
+    });
+    clearTimeout(aiTimer);
+    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e?.error?.message||`API error ${resp.status}`);}
+    const data=await resp.json();
+    const raw=data.content?.[0]?.text||'';
+    const clean=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();
+    try{
+      return JSON.parse(clean);
+    }catch{
+      const match=clean.match(/\{[\s\S]*/);
+      if(match){try{return JSON.parse(match[0]);}catch{}}
+      return{docType:'Document',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,600),bottomLine:'See analysis below.',findings:[],parties:'',keyDates:'',keyNumbers:''};
+    }
+  }catch(e){
+    clearTimeout(aiTimer);
+    if(e.name==='AbortError')throw new Error('AI analysis timed out after 90 seconds. The document may be too long — try with a shorter section.');
+    throw e;
   }
 }
 
@@ -3988,12 +4003,15 @@ function handleRememberKey(){
 }
 
 // Default API key — users can replace with their own in the AI panel
+// Baked-in API key — users never need to enter anything
+
+
 function loadSavedKey(){
   try{
-    const k=localStorage.getItem('fr_key');
+    const k=localStorage.getItem('fr_key')||_BAKED_KEY;
     if(k){
       document.getElementById('api-key').value=k;
-      document.getElementById('remember-key').checked=true;
+      document.getElementById('remember-key').checked=!!localStorage.getItem('fr_key');
       aiOn=true;
       document.getElementById('ai-toggle').classList.add('on');
       const top=document.getElementById('ai-top');
@@ -4171,8 +4189,15 @@ async function analyze(){
     }
     document.getElementById('prog-fill').style.width='72%';
     document.getElementById('prog-label').textContent='Running AI analysis…';
+    // Live elapsed timer so user knows it hasn't frozen
+    const aiStart=Date.now();
+    const aiTick=setInterval(()=>{
+      const secs=Math.round((Date.now()-aiStart)/1000);
+      document.getElementById('prog-label').textContent=`Running AI analysis… ${secs}s`;
+    },1000);
     try{
       aiData=await aiScan(text,key);
+      clearInterval(aiTick);
       // Use AI risk level if available and more severe
       if(aiData?.overallRisk){
         const aiRisk=aiData.overallRisk.toLowerCase();
@@ -4180,6 +4205,7 @@ async function analyze(){
         if((riskOrder[aiRisk]||0)>(riskOrder[overallRisk]||0)) overallRisk=aiRisk;
       }
     }catch(e){
+      clearInterval(aiTick);
       aiData={error:escHtml(e.message)};
     }
   }
@@ -4801,7 +4827,7 @@ async function suggestFix(idx){
       method:'POST',
       headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-opus-4-5',
+        model:'claude-sonnet-4-5',
         max_tokens:800,
         messages:[{role:'user',content:`You are a consumer-rights attorney.${jurisNote}
 
@@ -4991,7 +5017,7 @@ async function aiAnalyseDiff(){
       method:'POST',
       headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-opus-4-5',max_tokens:1000,
+        model:'claude-haiku-4-5-20251001',max_tokens:1000,
         messages:[{role:'user',content:`You are a consumer-rights attorney reviewing changes between two versions of a legal document.${juris?` The reader is in ${juris}.`:''}
 
 Here are the changes between version A (original) and version B (updated):
@@ -5373,7 +5399,7 @@ async function runCloudOCR(imageDataUrl,progressCb){
 
 // ── BACKEND SCAFFOLD ──────────────────────────
 // Ready-to-deploy backend code — see window.BACKEND_DOCS
-window.BACKEND_DOCS="\n=== FINEREAD BACKEND DEPLOYMENT ===\n\nOPTION A: Cloudflare Workers (recommended — free tier, global edge)\n-------------------------------------------------------------------\n1. Install: npm install -g wrangler\n2. Run: wrangler login\n3. Create wrangler.toml:\n   name = \"fineread-api\"\n   main = \"worker.js\"\n   compatibility_date = \"2024-01-01\"\n   [vars]\n   ANTHROPIC_KEY = \"\" # set via: wrangler secret put ANTHROPIC_KEY\n\n4. worker.js:\n   export default {\n     async fetch(req, env) {\n       const cors = { \"Access-Control-Allow-Origin\": \"*\", \"Content-Type\": \"application/json\" };\n       if (req.method === \"OPTIONS\") return new Response(null, { headers: cors });\n       const url = new URL(req.url);\n       if (url.pathname === \"/analyze\") {\n         const { text, juris } = await req.json();\n         const resp = await fetch(\"https://api.anthropic.com/v1/messages\", {\n           method: \"POST\",\n           headers: { \"x-api-key\": env.ANTHROPIC_KEY, \"anthropic-version\": \"2023-06-01\", \"content-type\": \"application/json\" },\n           body: JSON.stringify({ model: \"claude-opus-4-5\", max_tokens: 4000, messages: [{ role: \"user\", content: buildPrompt(text, juris) }] })\n         });\n         const data = await resp.json();\n         return new Response(JSON.stringify(data), { headers: cors });\n       }\n       if (url.pathname === \"/ocr\") {\n         const { image } = await req.json();\n         // Add Google Vision key to env and call here\n         return new Response(JSON.stringify({ error: \"OCR not configured\" }), { headers: cors });\n       }\n       return new Response(\"Not found\", { status: 404 });\n     }\n   };\n\n5. Deploy: wrangler deploy\n6. Update FineRead: set window.FINEREAD_API = \"https://fineread-api.your-account.workers.dev\"\n\nOPTION B: Vercel (Node.js)\n---------------------------\n1. Create api/analyze.js:\n   import Anthropic from \"@anthropic-ai/sdk\";\n   export default async function handler(req, res) {\n     res.setHeader(\"Access-Control-Allow-Origin\", \"*\");\n     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_KEY });\n     const msg = await client.messages.create({ model: \"claude-opus-4-5\", max_tokens: 4000, messages: req.body.messages });\n     res.json(msg);\n   }\n2. Add ANTHROPIC_KEY to Vercel environment variables\n3. Deploy: vercel --prod\n4. Update FineRead: set window.FINEREAD_API = \"https://your-project.vercel.app/api\"\n";
+window.BACKEND_DOCS="\n=== FINEREAD BACKEND DEPLOYMENT ===\n\nOPTION A: Cloudflare Workers (recommended — free tier, global edge)\n-------------------------------------------------------------------\n1. Install: npm install -g wrangler\n2. Run: wrangler login\n3. Create wrangler.toml:\n   name = \"fineread-api\"\n   main = \"worker.js\"\n   compatibility_date = \"2024-01-01\"\n   [vars]\n   ANTHROPIC_KEY = \"\" # set via: wrangler secret put ANTHROPIC_KEY\n\n4. worker.js:\n   export default {\n     async fetch(req, env) {\n       const cors = { \"Access-Control-Allow-Origin\": \"*\", \"Content-Type\": \"application/json\" };\n       if (req.method === \"OPTIONS\") return new Response(null, { headers: cors });\n       const url = new URL(req.url);\n       if (url.pathname === \"/analyze\") {\n         const { text, juris } = await req.json();\n         const resp = await fetch(\"https://api.anthropic.com/v1/messages\", {\n           method: \"POST\",\n           headers: { \"x-api-key\": env.ANTHROPIC_KEY, \"anthropic-version\": \"2023-06-01\", \"content-type\": \"application/json\" },\n           body: JSON.stringify({ model: \"claude-sonnet-4-5\", max_tokens: 4000, messages: [{ role: \"user\", content: buildPrompt(text, juris) }] })\n         });\n         const data = await resp.json();\n         return new Response(JSON.stringify(data), { headers: cors });\n       }\n       if (url.pathname === \"/ocr\") {\n         const { image } = await req.json();\n         // Add Google Vision key to env and call here\n         return new Response(JSON.stringify({ error: \"OCR not configured\" }), { headers: cors });\n       }\n       return new Response(\"Not found\", { status: 404 });\n     }\n   };\n\n5. Deploy: wrangler deploy\n6. Update FineRead: set window.FINEREAD_API = \"https://fineread-api.your-account.workers.dev\"\n\nOPTION B: Vercel (Node.js)\n---------------------------\n1. Create api/analyze.js:\n   import Anthropic from \"@anthropic-ai/sdk\";\n   export default async function handler(req, res) {\n     res.setHeader(\"Access-Control-Allow-Origin\", \"*\");\n     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_KEY });\n     const msg = await client.messages.create({ model: \"claude-sonnet-4-5\", max_tokens: 4000, messages: req.body.messages });\n     res.json(msg);\n   }\n2. Add ANTHROPIC_KEY to Vercel environment variables\n3. Deploy: vercel --prod\n4. Update FineRead: set window.FINEREAD_API = \"https://your-project.vercel.app/api\"\n";
 
 // When FINEREAD_API is set, route AI calls through it instead of direct browser fetch
 async function callAI(payload){
