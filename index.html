@@ -113,6 +113,9 @@ html.light h1 em{background:linear-gradient(135deg,#111111,#555555);-webkit-back
 .theme-btn:hover{color:var(--text);border-color:var(--border3);}
 
 
+::selection{background:rgba(0,0,0,0.15);color:inherit;}
+html.light ::selection{background:rgba(0,0,0,0.12);color:inherit;}
+
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 
@@ -1238,11 +1241,11 @@ textarea::placeholder{color:var(--muted);}
   </a>
   <div class="nav-right">
     <span class="nav-pill" aria-hidden="true">Know before you sign</span>
-    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">📚</button>
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">🌙</button>
+    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">≡</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">◐</button>
     <button class="history-btn" onclick="toggleHistory()" id="history-btn"
             aria-haspopup="true" aria-expanded="false" aria-controls="history-panel">
-      <span aria-hidden="true">🕐</span> <span class="label">Recent</span>
+      <span aria-hidden="true">⏱</span> <span class="label">Recent</span>
     </button>
   </div>
   <div class="history-panel" id="history-panel" role="dialog" aria-label="Recent scans" aria-modal="false">
@@ -1281,11 +1284,11 @@ textarea::placeholder{color:var(--muted);}
 <div class="card">
 
   <div class="tab-row" role="tablist" aria-label="Input method">
-    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">✏️ Paste Text</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">📄 Upload</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">📸 Camera</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">⚖️ Compare</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">▶ Demo</button>
+    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">Paste Text</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">Upload</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">Camera</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">Compare</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">Demo</button>
   </div>
 
   <!-- PASTE -->
@@ -1328,7 +1331,7 @@ textarea::placeholder{color:var(--muted);}
         <button class="cam-flip" id="flip-btn" onclick="flipCamera()" aria-label="Flip camera" style="display:none;">🔄</button>
       </div>
       <canvas id="canvas" aria-hidden="true"></canvas><br>
-      <button class="capture-btn" onclick="capturePhoto()">📸 Capture &amp; Extract Text</button>
+      <button class="capture-btn" onclick="capturePhoto()">Capture &amp; Extract Text</button>
       <div id="camera-status" aria-live="polite">Requesting camera…</div>
     </div>
     <div id="photo-preview">
@@ -1504,7 +1507,7 @@ textarea::placeholder{color:var(--muted);}
 <div id="batch-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:28px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.8);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-size:16px;font-weight:600;">📚 Batch Scan</div>
+      <div style="font-size:16px;font-weight:600;">Batch Scan</div>
       <button onclick="closeBatchModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;" aria-label="Close batch scanner">×</button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Paste multiple documents separated by <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px;">---</code> on its own line. Each document is scanned independently.</p>
@@ -2993,7 +2996,7 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
           ${f.severity==='high'||f.severity==='medium'?`
           <div id="neg-wrap-${i}" style="margin-top:4px;">
             <button class="btn-negotiate" onclick="suggestFix(${i})" id="neg-btn-${i}" aria-label="Suggest a fairer replacement for this clause">
-              ✏️ Suggest fairer clause
+              Suggest fairer clause
             </button>
             <div id="neg-result-${i}"></div>
           </div>`:''}
@@ -3543,7 +3546,7 @@ Return ONLY valid JSON — no markdown, no explanation outside the JSON:
     resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;margin-top:8px;">❌ ${escHtml(e.message)}</div>`;
   }finally{
     btn.classList.remove('loading');
-    btn.textContent='✏️ Suggest fairer clause';
+    btn.textContent='Suggest fairer clause';
   }
 }
 
@@ -3720,7 +3723,7 @@ Be direct. No jargon. Write as a trusted friend who just read both versions.`}]
 // ── LIGHT / DARK THEME ────────────────────────
 function toggleTheme(){
   const isLight=document.documentElement.classList.toggle('light');
-  document.getElementById('theme-btn').textContent=isLight?'🌑':'🌙';
+  document.getElementById('theme-btn').textContent=isLight?'◑':'🌙';
   document.getElementById('theme-btn').setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');
   try{localStorage.setItem('fr_theme',isLight?'light':'dark');}catch{}
 }
@@ -3732,7 +3735,7 @@ function loadTheme(){
     if(!useDark){
       document.documentElement.classList.add('light');
       const btn=document.getElementById('theme-btn');
-      if(btn){btn.textContent='🌑';btn.setAttribute('aria-label','Switch to dark mode');}
+      if(btn){btn.textContent='◑';btn.setAttribute('aria-label','Switch to dark mode');}
     }
   }catch{}
 }
@@ -4111,7 +4114,7 @@ loadSharedResults();
 // Update theme-color meta for light mode
 window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
   if(!localStorage.getItem('fr_theme')){
-    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌑';}}
+    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='◑';}}
     else{document.documentElement.classList.remove('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌙';}}
   }
 });
