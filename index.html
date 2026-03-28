@@ -3193,18 +3193,74 @@ function buildDocumentSummary(text, findings, wordCount){
   const wStr=wordCount>=1000?`${(wordCount/1000).toFixed(1)}k words`:`${wordCount} words`;
   const d=findings.filter(f=>f.level==='danger').length;
   const w=findings.filter(f=>f.level==='warning').length;
-  const info=findings.filter(f=>f.level==='info').length;
 
-  // If only danger or high-severity warnings exist, produce the risk-focused summary
+  // ── ALWAYS detect doc type first, regardless of flag count ──────────
+  const lower=text.toLowerCase();
+
+  const docSigs=[
+    {type:'Terms of Service',          keys:['terms of service','terms and conditions','terms of use','by using this service','acceptance of terms','you agree to these terms']},
+    {type:'Privacy Policy',            keys:['privacy policy','personal data','cookies','we collect your','data protection','information we collect']},
+    {type:'Employment Contract',       keys:['employment agreement','salary','compensation','job title','at-will employment','hours of work','position of']},
+    {type:'Non-Disclosure Agreement',  keys:['non-disclosure','confidentiality agreement','proprietary information','trade secret','nda','shall not disclose']},
+    {type:'Residential Lease Agreement',keys:['tenant','landlord','lease','monthly rent','security deposit','rental agreement','premises']},
+    {type:'Loan Agreement',            keys:['loan','annual percentage rate','apr','borrower','lender','repayment','principal amount']},
+    {type:'Software License',          keys:['software license','end user license agreement','eula','source code','open source']},
+    {type:'Service Agreement',         keys:['scope of work','deliverables','professional services','service agreement','statement of work']},
+    {type:'Sales Contract',            keys:['purchase agreement','sale price','buyer','seller','title to goods','delivery of goods']},
+    {type:'Medical Consent Form',      keys:['informed consent','consent to treatment','medical procedure','healthcare provider','hipaa authorization','patient consent']},
+    {type:'Insurance Policy',          keys:['insurance policy','premium','deductible','policyholder','coverage','claim','exclusion']},
+    {type:'Partnership Agreement',     keys:['partnership agreement','profit sharing','general partner','limited partner','dissolution']},
+    {type:'School Consent Form',       keys:['field trip permission','student field trip','school excursion','parental permission slip','school activity consent']},
+    {type:'IEP / Special Education Plan',keys:['individualized education program','iep','special education services','504 plan','learning disability','idea act']},
+    {type:'Surgical Consent Form',     keys:['surgical procedure','consent to surgery','anesthesia','operative','surgeon','surgical risks']},
+    {type:'HIPAA Authorisation',       keys:['hipaa','protected health information','phi','authorized representative','release of health information']},
+    {type:'DNR / Advance Directive',   keys:['do not resuscitate','dnr','advance directive','living will','end of life','allow natural death']},
+    {type:'Government Benefit Form',   keys:['means test','claimant','overpayment','social security','medicaid','government benefit','welfare']},
+    {type:'Court Document',            keys:['plaintiff','defendant','subpoena','summons','court order','complaint','hearing date','jurisdiction of the court']},
+    {type:'Debt Collection Notice',    keys:['debt collector','fdcpa','debt validation','past due balance','creditor','amount owed','account in collections']},
+    {type:'Real Estate Purchase Agreement',keys:['earnest money','closing date','escrow','title insurance','purchase price','real property','deed']},
+    {type:'HOA Agreement',             keys:['homeowners association','hoa','community rules','covenants conditions restrictions','board of directors','dues']},
+    {type:'Gym Membership Agreement',  keys:['gym membership','fitness facility','annual enhancement fee','membership dues','health club','personal training']},
+    {type:'Auto Finance Agreement',    keys:['vehicle','automobile','financing','monthly payment','trade-in','gap insurance','dealer','msrp']},
+    {type:'Travel Agreement',          keys:['passenger','airline','flight','boarding','cruise','resort fee','itinerary','hotel']},
+    {type:'Contractor Agreement',      keys:['scope of work','change order','lien','mechanic lien','completion date','contractor','labor and materials']},
+    {type:'Liability Waiver',          keys:['release of liability','assume the risk','hold harmless','waiver of claims','participant']},
+    {type:'Immigration Document',      keys:['visa','naturalization','green card','immigration status','alien','citizenship']},
+    {type:'Credit Card Agreement',     keys:['credit card','annual percentage rate','credit limit','minimum payment','grace period','billing cycle']},
+    {type:'Bank Account Agreement',    keys:['bank account','overdraft','routing number','account holder','deposit','financial institution']},
+    {type:'Severance Agreement',       keys:['severance pay','separation agreement','release of claims','cobra','final paycheck']},
+    {type:'Non-Compete Agreement',     keys:['non-compete','covenant not to compete','restricted activities','geographic restriction']},
+    {type:'Power of Attorney',         keys:['power of attorney','attorney-in-fact','durable power','healthcare proxy','principal']},
+    {type:'Subscription Agreement',    keys:['subscription','auto-renew','cancel anytime','billing cycle','monthly plan','annual plan']},
+    {type:'Arbitration Agreement',     keys:['binding arbitration','arbitration agreement','waive jury trial','class action waiver','aaa rules']},
+    {type:'Franchise Agreement',       keys:['franchise','franchisor','franchisee','royalty fee','brand standards','franchise fee']},
+    {type:'Clinical Trial Consent',    keys:['clinical trial','research study','investigational','irb','study participant','experimental']},
+  ];
+
+  // Score each type — require MINIMUM 2 key matches to avoid false positives on noisy OCR
+  let detectedType='';
+  let bestScore=0;
+  for(const sig of docSigs){
+    const score=sig.keys.filter(k=>lower.includes(k)).length;
+    // Strictly greater than — no tie sharing, last match doesn't win
+    if(score>bestScore){bestScore=score;detectedType=sig.type;}
+  }
+  // Only use detected type if confident (score ≥ 2, or ≥ 1 for very specific multi-word keys)
+  const specificKeys=['terms of service','terms and conditions','employment agreement','non-disclosure','annual percentage rate','do not resuscitate','field trip permission','homeowners association','power of attorney','binding arbitration','franchise','clinical trial','severance pay'];
+  if(bestScore===1&&!specificKeys.some(k=>lower.includes(k)))detectedType='';
+
+  // ── HIGH-FLAG PATH — include doc type in summary ─────────────────────
   if(d>0||(w>=3)){
     const obligs=findings.filter(f=>f.docCat==='obligation').length;
     const risks=findings.filter(f=>f.docCat==='risk').length;
     const rights=findings.filter(f=>f.docCat==='rights').length;
-    const top=findings.filter(f=>f.level==='danger').length>0
+    const top=d>0
       ? findings.filter(f=>f.level==='danger').slice(0,2).map(f=>f.title.toLowerCase())
       : findings.filter(f=>f.level==='warning').slice(0,2).map(f=>f.title.toLowerCase());
-    let out=`This ${mins}-minute read (${wStr}) flags `;
-    if(d>0)out+=`${d} serious clause${d>1?'s':''} including ${top.join(' and ')}`;
+    let out='';
+    if(detectedType)out+=`This ${detectedType} (${wStr}, ~${mins} min read) `;
+    else out+=`This ${mins}-minute read (${wStr}) `;
+    out+=`flags ${d>0?`${d} serious clause${d>1?'s':''} including ${top.join(' and ')}`:''}`;
     if(d>0&&w>0)out+=`, and `;
     if(w>0)out+=`${w} clause${w>1?'s':''} worth reviewing`;
     out+='.';
@@ -3216,153 +3272,67 @@ function buildDocumentSummary(text, findings, wordCount){
     return out+' Review the highlighted sections carefully before agreeing.';
   }
 
-  // 0-2 minor flags — still show the full document explanation first
-  const lower=text.toLowerCase();
+  // ── LOW-FLAG PATH ─────────────────────────────────────────────────────
   const sentences=text.match(/[^.!?\n]+[.!?\n]+/g)||[];
-  // Also grab plain lines for non-sentence text (receipts, lists, etc.)
   const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>10&&l.length<200);
-  const meaningful=(sentences.length>=3 ? sentences : lines).filter(s=>s.trim().length>20&&s.trim().length<300);
+  const meaningful=(sentences.length>=3?sentences:lines).filter(s=>s.trim().length>20&&s.trim().length<300);
 
-  // Detect document type from content
-  const docSigs=[
-    {type:'Privacy Policy',            keys:['privacy policy','personal data','cookies','we collect','information we collect','your data','data protection']},
-    {type:'Terms of Service',          keys:['terms of service','terms and conditions','terms of use','by using this','you agree to these','acceptance of terms']},
-    {type:'Employment Contract',       keys:['employment agreement','salary','compensation','employee','employer','job title','position','at-will','at will']},
-    {type:'Non-Disclosure Agreement',  keys:['non-disclosure','nda','confidential information','proprietary','trade secret','confidentiality agreement']},
-    {type:'Residential Lease Agreement', keys:['tenant','landlord','lease','monthly rent','premises','security deposit','rental agreement']},
-    {type:'Loan Agreement',            keys:['loan','apr','annual percentage rate','repayment','borrower','lender','principal','interest rate']},
-    {type:'Software License',          keys:['software license','end user license','eula','source code','intellectual property','open source']},
-    {type:'Service Agreement',         keys:['scope of work','deliverables','service agreement','payment terms','contractor','client','professional services']},
-    {type:'Sales Contract',            keys:['purchase agreement','sale price','buyer','seller','delivery','goods','title to goods']},
-    {type:'Medical Consent Form',      keys:['patient','consent to treatment','medical procedure','healthcare provider','hipaa','informed consent','diagnosis']},
-    {type:'Insurance Policy',          keys:['insurance policy','premium','coverage','deductible','insured','claim','policyholder','exclusion']},
-    {type:'Partnership Agreement',     keys:['partnership','partners','profit sharing','dissolution','equity stake','general partner']},
-    {type:'School Consent Form',       keys:['student','parent','guardian','school','permission','field trip','educational','pupil']},
-    {type:'IEP / Special Education Plan', keys:['individualized education','iep','special education','504 plan','disability','idea act','learning disability']},
-    {type:'Surgical Consent Form',     keys:['surgical','surgery','procedure','anaesthesia','anesthesia','surgeon','operative','hospital admission']},
-    {type:'HIPAA Authorisation',       keys:['hipaa','protected health information','phi','release of records','health information','authorized representative']},
-    {type:'DNR / Advance Directive',   keys:['do not resuscitate','dnr','advance directive','living will','durable power of attorney','end of life','hospice']},
-    {type:'Government Benefit Form',   keys:['benefit','means test','eligibility','income','assets','overpayment','claimant','social security','medicaid','welfare']},
-    {type:'Court Document',            keys:['plaintiff','defendant','court','judge','jurisdiction','hearing','judgment','subpoena','summons','complaint']},
-    {type:'Debt Collection Notice',    keys:['debt','creditor','debtor','collection','fdcpa','validation','balance due','past due','account in collections']},
-    {type:'Real Estate Purchase Agreement', keys:['purchase price','earnest money','closing date','escrow','title','property address','real estate','deed']},
-    {type:'HOA Agreement',             keys:['homeowners association','hoa','dues','covenants','restrictions','community rules','board of directors']},
-    {type:'Gym Membership Agreement',  keys:['membership','gym','fitness','facility','monthly dues','annual fee','personal training','health club']},
-    {type:'Auto Purchase / Finance Agreement', keys:['vehicle','automobile','car','dealer','financing','monthly payment','trade-in','msrp','gap insurance']},
-    {type:'Travel Booking / Airline Agreement', keys:['passenger','flight','airline','boarding','itinerary','ticket','cruise','hotel','resort fee']},
-    {type:'Contractor / Home Services Agreement', keys:['contractor','scope of work','materials','labor','permit','change order','completion date','lien']},
-    {type:'Liability Waiver',          keys:['waiver','release','liability','assume the risk','hold harmless','indemnify','participant','voluntary']},
-    {type:'Volunteer Agreement',       keys:['volunteer','voluntary service','no compensation','release of liability','community service']},
-    {type:'Photo / Media Release',     keys:['likeness','image','photograph','video','commercial use','media release','model release']},
-    {type:'Immigration Form',          keys:['visa','immigration','citizenship','naturalization','green card','resident','alien','immigration status']},
-    {type:'Extended Warranty / Service Contract', keys:['extended warranty','service contract','vehicle service','mechanical breakdown','repair coverage']},
-    {type:'Credit Card Agreement',     keys:['credit card','annual percentage rate','credit limit','minimum payment','grace period','cash advance','billing cycle']},
-    {type:'Bank Account Agreement',    keys:['account','bank','deposit','withdrawal','overdraft','routing number','account holder','financial institution']},
-    {type:'Franchise Agreement',       keys:['franchise','franchisor','franchisee','royalty fee','territory','brand standards','franchise fee']},
-    {type:'Clinical Trial Consent',    keys:['clinical trial','research','experimental','investigational','irb','protocol','study participant']},
-    {type:'Arbitration Agreement',     keys:['arbitration agreement','binding arbitration','aaa rules','jams','waive jury trial','class action waiver']},
-    {type:'Severance Agreement',       keys:['severance','separation agreement','in exchange for','release of claims','final paycheck','cobra','references']},
-    {type:'Non-Compete Agreement',     keys:['non-compete','covenant not to compete','restricted activities','geographic restriction','post-employment']},
-    {type:'Power of Attorney',         keys:['power of attorney','attorney-in-fact','principal','agent','durable power','healthcare proxy']},
-    {type:'Subscription Agreement',    keys:['subscription','monthly fee','annual plan','auto-renew','cancel anytime','billing cycle','upgrade']},
-  ];
-
-  let detectedType='Document';
-  let bestScore=0;
-  for(const sig of docSigs){
-    const score=sig.keys.filter(k=>lower.includes(k)).length;
-    if(score>bestScore){bestScore=score;detectedType=sig.type;}
-  }
-
-  // Extract key sentences — ones that contain important signal words
-  const importantWords=[
-    'agree','must','shall','require','responsible','obligat','entitled','right','pay',
-    'terminat','cancel','refund','liable','warrant','guarantee','prohibit','permit',
-    'confidential','disclose','own','grant','license','collect','share','transfer',
-    'effective','commence','expire','notice','govern','law','jurisdiction',
-    'consent','sign','authoris','authoriz','waive','release','arbitrat','judgment',
-    'deposit','fee','penalty','default','expir','renew','suspend','terminat','dismiss'
-  ];
-  const keySentences=meaningful
-    .filter(s=>importantWords.some(w=>s.toLowerCase().includes(w)))
-    .slice(0,10)
-    .map(s=>s.trim().replace(/\s+/g,' '));
-
-  // Build the summary
-  let summary='';
-
-  if(bestScore<1){
+  if(bestScore<1||!detectedType){
     const firstReal=meaningful.slice(0,3).map(s=>s.trim().replace(/\s+/g,' ')).join(' ');
-    summary=`This ${wStr} document doesn't match a standard template that FineRead recognises. `;
-    if(firstReal.length>60) summary+=`It appears to begin: "${firstReal.slice(0,200)}…" `;
+    let summary=`This ${wStr} document doesn't match a standard template FineRead recognises. `;
+    if(firstReal.length>60)summary+=`It appears to begin: "${firstReal.slice(0,200)}…" `;
     summary+=`The keyword scanner found no common legal risk patterns. `;
-    summary+=`For a full understanding of what this document says, add a Claude API key above — the AI can read and explain any document in plain English regardless of type.`;
+    summary+=`For a full explanation, add a Claude API key above — the AI can read and explain any document in plain English.`;
     return summary;
   }
 
-  summary=`This is a ${detectedType} (${wStr}, about a ${mins}-minute read). `;
+  let summary=`This is a ${detectedType} (${wStr}, about a ${mins}-minute read). `;
 
-  // Add type-specific context
   const typeContext={
+    'Terms of Service':'It sets out the rules you agree to when using a product or service — what you can and cannot do, and what happens if things go wrong.',
     'Privacy Policy':'It describes how the organisation collects, uses, stores, and shares your personal information.',
-    'Terms of Service':'It sets out the rules you agree to follow when using a product or service.',
-    'Employment Contract':'It defines the terms of your employment — role, pay, obligations, and how either party can end the relationship.',
-    'Non-Disclosure Agreement':'It creates a legal obligation to keep certain information secret and not share it with others.',
-    'Residential Lease Agreement':'It governs the rental of a property — your rights, your obligations, and the landlord\'s rights over the property.',
-    'Loan Agreement':'It sets out the terms under which money is being lent — amounts, interest rate, repayment schedule, and consequences of default.',
-    'Software License':'It defines how you are permitted to use a piece of software and what rights you have (or don\'t have) over it.',
-    'Service Agreement':'It defines the scope of work, payment terms, and responsibilities between a service provider and a client.',
-    'Sales Contract':'It documents the terms of a purchase or sale between two parties — price, delivery, and what happens if something goes wrong.',
-    'Medical Consent Form':'It records your informed consent to a medical procedure or treatment. You have the right to ask questions and refuse.',
-    'Insurance Policy':'It defines what is covered by your insurance, what is excluded, how to make a claim, and the cost.',
-    'Partnership Agreement':'It sets out how a business partnership is structured, including profit sharing, responsibilities, and how it ends.',
-    'School Consent Form':'It authorises the school to take certain actions involving your child — review carefully what you are permitting.',
-    'IEP / Special Education Plan':'It documents the special education services and accommodations your child is legally entitled to receive.',
-    'Surgical Consent Form':'It records your consent to a surgical procedure. Read carefully — it may include broad consent to additional procedures.',
-    'HIPAA Authorisation':'It authorises the release of your protected health information to a named party. You can revoke this at any time.',
-    'DNR / Advance Directive':'It instructs medical staff on your end-of-life care preferences. This is one of the most important documents you will ever sign.',
-    'Government Benefit Form':'It determines your eligibility for government benefits. Accuracy is critical — errors can result in fraud charges.',
-    'Court Document':'This is a legal court document. If you have received this, you may have legal obligations and deadlines to respond.',
-    'Debt Collection Notice':'A debt collector is attempting to collect a debt. You have legal rights including the right to request validation.',
-    'Real Estate Purchase Agreement':'It sets out the terms of buying or selling a property — price, contingencies, closing date, and what is included.',
-    'HOA Agreement':'It binds you to the rules and fees of a homeowners association — including potential liens if you don\'t pay dues.',
-    'Gym Membership Agreement':'It governs your gym membership — including fees, cancellation terms, and liability waivers for injuries.',
-    'Auto Purchase / Finance Agreement':'It documents the purchase or financing of a vehicle — including the total cost, interest, and your rights.',
-    'Travel Booking / Airline Agreement':'It governs your travel booking — including the airline or cruise line\'s rights to change or cancel without full compensation.',
-    'Contractor / Home Services Agreement':'It defines the scope and cost of home improvement or repair work — including what happens if work is incomplete or defective.',
-    'Liability Waiver':'You are waiving your right to sue if you are injured. Courts sometimes enforce these — read carefully.',
-    'Volunteer Agreement':'It governs your volunteer work — including any liability waivers and restrictions on what you can say publicly.',
-    'Photo / Media Release':'You are giving permission for your image or likeness to be used — potentially commercially and forever.',
-    'Immigration Form':'This is an immigration document. Errors or omissions can have serious consequences for your visa or residency status.',
-    'Extended Warranty / Service Contract':'It covers repair costs for a vehicle or appliance — but exclusions are common and significant.',
-    'Credit Card Agreement':'It governs your credit card — including the interest rate, fees, and what happens if you miss payments.',
-    'Bank Account Agreement':'It sets out the terms of your bank account — including fees, overdraft rules, and your rights as an account holder.',
-    'Franchise Agreement':'It governs your franchise relationship — including fees, rules you must follow, and how the franchisor can terminate.',
-    'Clinical Trial Consent':'You are consenting to participate in medical research involving experimental treatments or drugs.',
-    'Arbitration Agreement':'This requires all disputes to go to private arbitration — waiving your right to a jury trial or class action.',
-    'Severance Agreement':'Your employer is offering severance pay in exchange for you releasing all legal claims against them.',
-    'Non-Compete Agreement':'This restricts where you can work after leaving — review the geographic scope, duration, and enforceability in your state.',
-    'Power of Attorney':'You are granting someone legal authority to make decisions on your behalf. Choose this person with extreme care.',
-    'Subscription Agreement':'It governs your subscription — including auto-renewal terms, price change rights, and cancellation policy.',
+    'Employment Contract':'It defines your role, pay, obligations, and how either party can end the relationship.',
+    'Non-Disclosure Agreement':'It creates a legal obligation to keep certain information confidential.',
+    'Residential Lease Agreement':'It governs your rental — your rights, the landlord\'s rights, and your obligations.',
+    'Loan Agreement':'It sets out how much is borrowed, the interest rate, repayment schedule, and what happens if you default.',
+    'Software License':'It defines how you are permitted to use the software and what rights you have over it.',
+    'Service Agreement':'It defines scope of work, payment, and responsibilities between provider and client.',
+    'Sales Contract':'It documents the terms of a purchase or sale — price, delivery, and risk.',
+    'Medical Consent Form':'It records your consent to a medical procedure. You have the right to ask questions and refuse.',
+    'Insurance Policy':'It defines what is covered, what is excluded, and how to make a claim.',
+    'Partnership Agreement':'It governs a business partnership — profit sharing, responsibilities, and dissolution.',
+    'School Consent Form':'It authorises the school to take certain actions involving your child.',
+    'Surgical Consent Form':'It records consent to a surgical procedure — read carefully for broad consent clauses.',
+    'DNR / Advance Directive':'It instructs medical staff on your end-of-life care preferences.',
+    'Government Benefit Form':'It determines eligibility for government benefits — accuracy is critical.',
+    'Court Document':'This is a legal court document. You may have deadlines to respond.',
+    'Debt Collection Notice':'A debt collector is attempting to collect a debt. You have legal rights including validation.',
+    'Real Estate Purchase Agreement':'It sets out the terms of buying or selling a property.',
+    'HOA Agreement':'It binds you to homeowners association fees and rules — including potential liens.',
+    'Gym Membership Agreement':'It governs your gym membership — including fees and liability waivers.',
+    'Auto Finance Agreement':'It documents the purchase or financing of a vehicle.',
+    'Liability Waiver':'You are waiving your right to sue if you are injured.',
+    'Credit Card Agreement':'It governs your credit card — interest, fees, and your rights.',
+    'Bank Account Agreement':'It sets out the terms of your bank account — fees, overdraft rules, your rights.',
+    'Severance Agreement':'Your employer offers severance in exchange for you releasing all legal claims.',
+    'Non-Compete Agreement':'This restricts where you can work after leaving — check enforceability in your jurisdiction.',
+    'Power of Attorney':'You are granting someone legal authority to make decisions on your behalf.',
+    'Subscription Agreement':'It governs your subscription — auto-renewal terms, price changes, cancellation.',
+    'Arbitration Agreement':'This requires all disputes to go to private arbitration — waiving your right to a jury trial.',
+    'Franchise Agreement':'It governs your franchise — fees, rules, and how the franchisor can terminate.',
+    'Clinical Trial Consent':'You are consenting to participate in medical research involving experimental treatments.',
   };
+  if(typeContext[detectedType])summary+=typeContext[detectedType]+' ';
 
-  // Add what the document requires/says based on key sentences
+  const importantWords=['agree','must','shall','require','responsible','obligat','entitled','right','pay','terminat','cancel','refund','liable','warrant','guarantee','prohibit','permit','confidential','disclose','own','grant','license','collect','share','transfer','effective','commence','expire','notice','govern','law','jurisdiction','consent','sign','authoris','authoriz','waive','release','arbitrat','judgment','deposit','fee','penalty','default','expir','renew','suspend'];
+  const keySentences=meaningful.filter(s=>importantWords.some(w=>s.toLowerCase().includes(w))).slice(0,8).map(s=>s.trim().replace(/\s+/g,' '));
   if(keySentences.length>0){
-    summary+=`The key things it covers include: `;
-    summary+=keySentences.slice(0,3).join(' ').replace(/\s+/g,' ');
-    summary+=' ';
+    summary+=`Key things it covers: `;
+    summary+=keySentences.slice(0,3).map(s=>s.length>120?s.slice(0,120)+'…':s).join(' ');
   }
-
-  // Add keyword findings if any
-  if(info>0){
-    const infoTitles=findings.filter(f=>f.level==='info').slice(0,2).map(f=>f.title.toLowerCase());
-    summary+=`The keyword scanner noted ${info} informational item${info>1?'s':''} — ${infoTitles.join(' and ')}. `;
-  }
-
-  summary+=`No common red flags were detected by the keyword scanner. Add a Claude API key above for a complete clause-by-clause AI analysis that explains exactly what you are agreeing to.`;
+  if(d===0&&w===0&&(meaningful.length>0))summary+=` No major risk clauses were detected by the keyword scanner.`;
   return summary;
 }
-
 
 // ── AI SCAN ───────────────────────────────────
 async function aiScan(text,key){
