@@ -2417,15 +2417,6 @@ async function detectMultipleCams(){
 }
 
 async function startCamera(){
-  // Lazy-load Tesseract only when camera tab is first used
-  if(typeof Tesseract==='undefined'){
-    const status=document.getElementById('camera-status');
-    try{await loadTesseract(status);}
-    catch(e){
-      status.textContent='❌ '+e.message;
-      return;
-    }
-  }
   const video=document.getElementById('video');
   const status=document.getElementById('camera-status');
   const flipBtn=document.getElementById('flip-btn');
@@ -2494,42 +2485,70 @@ async function runOCR(src){
   document.getElementById('ocr-progress').style.display='block';
   bar.style.width='0%';
   bar.setAttribute('aria-valuenow','0');
-  label.textContent='Initializing OCR engine…';
-  // Ensure Tesseract is loaded
+  label.textContent='Loading OCR engine…';
+
+  // Load Tesseract at capture time — not camera open time
   if(typeof Tesseract==='undefined'){
     try{await loadTesseract(label);}
     catch(e){
-      bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
       label.textContent='❌ '+e.message;return;
     }
   }
+
+  // Timeout safety — if OCR hangs for 60s, show an error
+  let timedOut=false;
+  const timeout=setTimeout(()=>{
+    timedOut=true;
+    label.textContent='❌ OCR timed out — try Upload tab or a clearer photo.';
+    bar.style.width='0%';
+  },60000);
+
   try{
-    const worker=await Tesseract.createWorker('eng',1,{
-      logger:m=>{if(m.status==='recognizing text'){
-        const p=Math.round(m.progress*100);
-        bar.style.width=p+'%';
-        bar.setAttribute('aria-valuenow',String(p));
-        label.textContent=`Extracting text… ${p}%`;
-      }}
+    label.textContent='Initializing OCR engine…';
+    bar.style.width='5%';
+
+    // Tesseract.js v5 correct API — no second numeric argument
+    const worker=await Tesseract.createWorker('eng',Tesseract.OEM?.LSTM_ONLY??1,{
+      logger:m=>{
+        if(timedOut)return;
+        if(m.status==='loading tesseract core'){
+          label.textContent='Loading OCR engine…';bar.style.width='15%';
+        } else if(m.status==='initializing tesseract'){
+          label.textContent='Initializing OCR…';bar.style.width='30%';
+        } else if(m.status==='loading language traineddata'){
+          label.textContent='Loading English language data…';bar.style.width='50%';
+        } else if(m.status==='initializing api'){
+          label.textContent='Starting OCR…';bar.style.width='65%';
+        } else if(m.status==='recognizing text'){
+          const p=Math.round(m.progress*100);
+          bar.style.width=(65+Math.round(p*0.35))+'%';
+          bar.setAttribute('aria-valuenow',String(65+Math.round(p*0.35)));
+          label.textContent=`Extracting text… ${p}%`;
+        }
+      }
     });
+
+    if(timedOut){await worker.terminate();return;}
     const result=await worker.recognize(src);
     await worker.terminate();
+    clearTimeout(timeout);
+
+    if(timedOut)return;
     const text=result.data.text.trim();
     if(text.length<30){
-      bar.style.width='0%';
-      bar.setAttribute('aria-valuenow','0');
-      label.textContent='⚠ Not enough text — try a clearer photo.';
+      bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+      label.textContent='⚠ Not enough text — try a clearer photo or better lighting.';
       return;
     }
-    bar.style.width='100%';
-    bar.setAttribute('aria-valuenow','100');
+    bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
     document.getElementById('tc-text').value=text;updateCounter();
     label.textContent=`✅ Extracted ${text.length.toLocaleString()} characters`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
   }catch(e){
-    bar.style.width='0%';
-    bar.setAttribute('aria-valuenow','0');
-    document.getElementById('ocr-label').textContent='❌ OCR failed — try Upload tab.';
+    clearTimeout(timeout);
+    if(timedOut)return;
+    bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+    label.textContent='❌ OCR failed — '+e.message+'. Try Upload tab instead.';
   }
 }
 
@@ -2634,22 +2653,36 @@ async function loadTesseract(statusEl){
 }
 
 async function runOCRFromFile(src,statusEl){
-  // Ensure Tesseract is loaded — user may have gone directly to Upload tab
   if(typeof Tesseract==='undefined'){
     try{await loadTesseract(statusEl);}
     catch(e){statusEl.textContent='❌ '+e.message;return;}
   }
+  let timedOut=false;
+  const timeout=setTimeout(()=>{timedOut=true;statusEl.textContent='❌ OCR timed out — try a clearer image.';},60000);
   try{
-    const worker=await Tesseract.createWorker('eng',1,{
-      logger:m=>{if(m.status==='recognizing text')statusEl.textContent=`OCR: ${Math.round(m.progress*100)}%`;}
+    statusEl.textContent='Starting OCR…';
+    const worker=await Tesseract.createWorker('eng',Tesseract.OEM?.LSTM_ONLY??1,{
+      logger:m=>{
+        if(timedOut)return;
+        if(m.status==='recognizing text')statusEl.textContent=`OCR: ${Math.round(m.progress*100)}%`;
+        else if(m.status==='loading language traineddata')statusEl.textContent='Loading language data…';
+        else if(m.status==='initializing api')statusEl.textContent='Initializing…';
+      }
     });
-    const result=await worker.recognize(src);await worker.terminate();
+    if(timedOut){await worker.terminate();return;}
+    const result=await worker.recognize(src);
+    await worker.terminate();
+    clearTimeout(timeout);
+    if(timedOut)return;
     const text=result.data.text.trim();
-    if(text.length<30){statusEl.textContent='⚠ Not enough text detected.';return;}
+    if(text.length<30){statusEl.textContent='⚠ Not enough text detected — try a clearer image.';return;}
     document.getElementById('tc-text').value=secureText(text);updateCounter();
     statusEl.textContent=`✅ OCR complete — ${text.length.toLocaleString()} chars`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-  }catch{statusEl.textContent='❌ OCR failed.';}
+  }catch(e){
+    clearTimeout(timeout);
+    if(!timedOut)statusEl.textContent='❌ OCR failed — '+e.message;
+  }
 }
 
 // ── DEMO ──────────────────────────────────────
