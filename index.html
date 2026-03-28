@@ -1773,7 +1773,7 @@ const RULES=[
   {id:'data_sale',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',
    title:'Your data is sold to third parties',
    desc:'The document explicitly states your personal data is sold. Once sold, you have no control over how third parties use your name, contacts, or browsing habits.',
-   patterns:[/\bsell(s|ing)?\s+(your|user)\s+(personal\s+)?(information|data)\b/i,/\bsale\s+of\s+(personal\s+)?data\b/i,/\bmonetize\s+(your|user)\s+(personal\s+)?data\b/i,/\bsell\s+(your\s+)?personal\s+information\b/i]},
+   patterns:[/\bsell(s|ing)?\s+(your|user)\s+(personal\s+)?(information|data)\b/i,/\bsale\s+of\s+(personal\s+)?data\b/i,/\bmonetize\s+(your|user)\s+(personal\s+)?data\b/i,/\bsell\s+(your\s+)?personal\s+information\b/i,/\bshare.*personal.*information.*subsidiaries\b/i,/\bshare.*personal.*information.*third.part\b/i,/\bshare.*your.*data.*partners\b/i,/\bdisclose.*personal.*information.*companies\b/i]},
 
   {id:'class_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Class action lawsuit waiver',
@@ -1793,12 +1793,12 @@ const RULES=[
   {id:'perpetual_license',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Perpetual irrevocable license on your content',
    desc:'You grant a license that never expires and cannot be revoked — even after deleting your account. The company can use your content forever.',
-   patterns:[/\bperpetual.*irrevocable\b/i,/\birrevocable.*perpetual\b/i,/\broyalty.?free.*perpetual\b/i,/\bperpetual.*worldwide.*licen[sc]e\b/i]},
+   patterns:[/\bperpetual.*irrevocable\b/i,/\birrevocable.*perpetual\b/i,/\broyalty.?free.*perpetual\b/i,/\bperpetual.*worldwide.*license\b/i,/\bnon.exclusive.*worldwide.*royalty.free.*license\b/i,/\bgrant.*apple.*license.*reproduce.*modify.*distribute\b/i,/\byou grant.*license.*sublicensable\b/i,/\bgrant.*worldwide.*license.*user.*content\b/i,/\blicense to use.*reproduce.*modify.*adapt.*publish\b/i]},
 
   {id:'liability_trivial',level:'danger',category:'Liability',docCat:'risk',icon:'·',
    title:'Company liability capped at trivial amount',
    desc:"The company's total liability to you is capped at almost nothing. Even if they cause serious financial or personal harm, you can recover next to nothing legally.",
-   patterns:[/\bliability.*\$1[^0-9]/i,/\bnot exceed.*\$1[^0-9]/i,/\bmaximum.*one dollar\b/i,/\bliability.*shall not exceed.*\$[0-9]{1,3}[^,0-9]/i,/\baggregate liability.*not exceed.*(?:fees paid|one month|30 days)\b/i]},
+   patterns:[/\bliability.*shall not exceed.*\$50\b/i,/\btotal.*liability.*limited to fifty\b/i,/\bliability.*limited to.*amount.*paid.*twelve\b/i,/\bmaximum.*liability.*shall.*not.*exceed\b/i,/\baggregate.*liability.*shall not exceed\b/i,/\bliability.*shall not exceed.*\$[0-9]+\b/i,/\btotal liability.*limited to.*dollar/i,/\bliability.*capped.*one hundred\b/i,/\bliability.*not exceed.*fees paid\b/i,/\bliability.*not exceed.*one month\b/i]},
 
   {id:'indefinite_retention',level:'danger',category:'Data Retention',docCat:'risk',icon:'·',
    title:'Your data kept forever after account deletion',
@@ -1808,7 +1808,7 @@ const RULES=[
   {id:'law_enforcement',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
    title:'Data disclosed to government without telling you',
    desc:'The company can hand your data to law enforcement or government agencies without notifying you — leaving you no chance to legally object.',
-   patterns:[/\blaw enforcement.*without notice\b/i,/\bwithout.*notif.*government\b/i,/\bdisclose.*government.*without.*notice\b/i,/\bcompelled.*to\s+disclose\b/i,/\bgovernment.*request.*not\s+notify\b/i]},
+   patterns:[/\blaw enforcement.*without notice\b/i,/\bwithout.*notif.*government\b/i,/\bdisclose.*government.*without.*notice\b/i,/\bcompelled.*to\s+disclose\b/i,/\bgovernment.*request.*not\s+notify\b/i,/\bdisclose.*government.*officials\b/i,/\bdisclose.*law enforcement\b/i,/\bgovernment.*request.*personal.*information\b/i,/\blaw enforcement.*officials.*private parties\b/i,/\bdisclose.*to protect.*operations\b/i,/\bsole discretion.*believe.*necessary.*disclose\b/i]},
 
   {id:'responsible_after_termination',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
    title:'You still owe money even if service is cancelled',
@@ -1860,7 +1860,7 @@ const RULES=[
   {id:'auto_charge',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Card charged automatically every billing period',
    desc:'Your card is charged automatically without any action from you. If the card expires or funds run low, you may face service interruptions or overdraft fees.',
-   patterns:[/\bautomatically charged\b/i,/\bautomatic.*charge\b/i,/\bauto.billed\b/i,/\bcharged.*automatically\b/i,/\bautomatically.*debited\b/i,/\brecurring.*charge\b/i,/\bcharged.*on a.*basis\b/i]},
+   patterns:[/\bautomatically charged\b/i,/\bautomatic.*charge\b/i,/\bauto.billed\b/i,/\bcharged.*automatically\b/i,/\bautomatically.*debited\b/i,/\brecurring.*charge\b/i,/\bcharged.*on a.*basis\b/i,/\baccount.*will be charged.*renewal\b/i,/\bcharged.*prior.*to.*end.*of.*current.*period\b/i,/\bcharged.*for renewal.*within.*24\b/i,/\bbilled.*automatically.*unless.*cancel\b/i]},
 
   {id:'credit_card_interest',level:'warning',category:'Billing',docCat:'risk',icon:'·',
    title:'Your card may charge interest on top',
@@ -1875,12 +1875,12 @@ const RULES=[
   {id:'personal_info_collection',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Extensive personal information collected and shared',
    desc:'The company and its partners collect, process, and share your name, address, email, and financial details across multiple parties.',
-   patterns:[/\bcollect.*process.*transmit.*maintain.*use.*personal\b/i,/\bcollect.*personal information.*name.*address\b/i,/\bsubsidiaries.*agents.*collect\b/i,/\bmay collect.*process.*personal\b/i,/\bwe.*collect.*following.*information\b/i]},
+   patterns:[/\bcollect.*process.*transmit.*maintain.*use.*personal\b/i,/\bcollect.*personal information.*name.*address\b/i,/\bsubsidiaries.*agents.*collect\b/i,/\bmay collect.*process.*personal\b/i,/\bwe.*collect.*following.*information\b/i,/\bmay collect.*information.*name.*address.*phone\b/i,/\bcollect.*email.*payment.*information\b/i,/\bwe collect information about your activity\b/i,/\bcollect information.*such as\b/i,/\bcollect.*information.*when you.*create.*account\b/i]},
 
   {id:'terms_change_anytime',level:'warning',category:'Policy Changes',docCat:'obligation',icon:'·',
    title:'Terms can be rewritten any time',
    desc:'The company can change these terms whenever they want. Continuing to use the service after a change means you automatically agree to the new terms.',
-   patterns:[/\breserves?\s+the right to.*change.*cancel\b/i,/\breserves?\s+the right to substitute.*change\b/i,/\bmay.*modify.*terms.*at any time\b/i,/\bwithout.*prior notice\b/i,/\breserve.*right.*update.*at any time\b/i,/\bcontinued use.*constitutes acceptance\b/i,/\bwe may update.*at any time\b/i,/\bnotice.*not required.*change\b/i]},
+   patterns:[/\breserves?\s+the right to.*change.*cancel\b/i,/\breserves?\s+the right to substitute.*change\b/i,/\bmay.*modify.*terms.*at any time\b/i,/\bwithout.*prior notice\b/i,/\breserve.*right.*update.*at any time\b/i,/\bcontinued use.*constitutes acceptance\b/i,/\bwe may update.*at any time\b/i,/\bnotice.*not required.*change\b/i,/\breserves the right to modify these terms at any time\b/i,/\bprovide notice.*changes.*posting.*revised\b/i,/\bcontinuing.*use.*after.*revised.*effective.*agree\b/i,/\bbound by the revised terms\b/i,/\breserves.*right to change.*terms.*effective.*immediately\b/i]},
 
   {id:'installment_loan',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
    title:'Multi-month installment loan',
@@ -1900,12 +1900,12 @@ const RULES=[
   {id:'no_refund',level:'warning',category:'Billing',docCat:'rights',icon:'·',
    title:'No refunds once payment is made',
    desc:"All payments are final. If you change your mind, encounter a problem, or the service doesn't meet expectations, you cannot get your money back.",
-   patterns:[/\ball.*sales.*final\b/i,/\bno\s+refund\b/i,/\bpayments.*non.refundable\b/i,/\bnon.refundable.*payment\b/i,/\bno.*right.*refund\b/i,/\brefunds.*not.*available\b/i,/\bcharges.*non.refundable\b/i]},
+   patterns:[/\ball.*sales.*final\b/i,/\bno\s+refund\b/i,/\bpayments.*non.refundable\b/i,/\bnon.refundable.*payment\b/i,/\bno.*right.*refund\b/i,/\brefunds.*not.*available\b/i,/\bcharges.*non.refundable\b/i,/\ball.*charges.*are.*non.refundable\b/i,/\bpurchases.*made.*non.refundable\b/i,/\bsubscription.*fees.*non.refundable\b/i,/\bno.*refund.*subscription\b/i]},
 
   {id:'price_increase',level:'warning',category:'Billing',docCat:'risk',icon:'·',
    title:'Price can be increased with limited notice',
    desc:'The company can raise prices, often with only 30 days\' notice or less. You must cancel before the next billing date to avoid the higher charge.',
-   patterns:[/\bprice.*may.*increase\b/i,/\bwe.*may.*change.*price\b/i,/\bmodif.*pricing\b/i,/\brate.*may.*change\b/i,/\bfees.*subject.*change\b/i,/\bincrease.*price.*notice\b/i,/\bnew.*price.*effective.*next.*billing\b/i]},
+   patterns:[/\bprice.*may.*increase\b/i,/\bwe.*may.*change.*price\b/i,/\bmodif.*pricing\b/i,/\brate.*may.*change\b/i,/\bfees.*subject.*change\b/i,/\bincrease.*price.*notice\b/i,/\bnew.*price.*effective.*next.*billing\b/i,/\bprice.*of.*subscription.*may.*change\b/i,/\bwe.*may.*change.*pricing.*any.*time\b/i,/\bfees.*may.*be.*changed.*at.*any.*time\b/i,/\bnew.*price.*will.*take.*effect\b/i]},
 
   {id:'communications_consent',level:'warning',category:'Marketing',docCat:'obligation',icon:'·',
    title:'You agree to receive texts, emails, and surveys',
@@ -1915,7 +1915,7 @@ const RULES=[
   {id:'third_party_sharing',level:'warning',category:'Data Sharing',docCat:'risk',icon:'·',
    title:'Data shared with third-party partners',
    desc:'Your information is passed to external companies for purposes beyond the original service — including marketing, analytics, and advertising.',
-   patterns:[/\bshare.*third.party\b/i,/\bthird.party.*partner\b/i,/\badvertising partner\b/i,/\bjoint marketing\b/i,/\bsubsidiaries and agents\b/i,/\baffiliated.*companies\b/i,/\bshare.*with.*our.*partners\b/i]},
+   patterns:[/\bshare.*third.party\b/i,/\bthird.party.*partner\b/i,/\badvertising partner\b/i,/\bjoint marketing\b/i,/\bsubsidiaries and agents\b/i,/\baffiliated.*companies\b/i,/\bshare.*with.*our.*partners\b/i,/\bmay.*share.*personal.*information.*companies.*provide.*services\b/i,/\bshare.*information.*with.*service.*providers\b/i,/\bpersonal.*information.*third.party.*service.*providers\b/i,/\bshare.*information.*companies.*who.*provide.*services\b/i,/\bdisclose.*personal.*data.*vendors.*partners\b/i]},
 
   {id:'at_will_employment',level:'warning',category:'Employment',docCat:'risk',icon:'·',
    title:'At-will employment — fired any time for any reason',
@@ -1965,12 +1965,12 @@ const RULES=[
   {id:'auto_renewal',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Subscription renews automatically',
    desc:'Your subscription renews without any action from you. You must actively cancel before the renewal date or face another full charge for the next period.',
-   patterns:[/\bautomatically renew\b/i,/\bauto.renew\b/i,/\bautomatic renewal\b/i,/\brenews at the end\b/i,/\bautomatically.*renewed.*unless.*cancel\b/i,/\bcontinuous.*until.*cancel\b/i,/\bwill renew.*unless\b/i]},
+   patterns:[/\bautomatically renew\b/i,/\bauto.renew\b/i,/\bautomatic renewal\b/i,/\brenews at the end\b/i,/\bautomatically.*renewed.*unless.*cancel\b/i,/\bcontinuous.*until.*cancel\b/i,/\bwill renew.*unless\b/i,/\bwill automatically renew unless cancelled\b/i,/\bsubscription.*automatically renew.*unless.*cancel\b/i,/\bauto.renew.*unless.*cancel.*at least\b/i,/\brenew.*automatically.*end.*subscription.*period\b/i]},
 
   {id:'termination_no_reason',level:'warning',category:'Account',docCat:'risk',icon:'·',
    title:'Account can be terminated any time, no reason given',
    desc:'The company can delete your account and revoke access at any time, without explanation or appeal — potentially losing your data and paid balance instantly.',
-   patterns:[/\bterminate.*at any time\b/i,/\bsuspend.*any reason\b/i,/\bwithout.*cause.*terminat\b/i,/\bfor any reason.*terminat\b/i,/\breserve.*right.*suspend.*account\b/i,/\bterminate.*account.*sole discretion\b/i,/\bremove.*account.*without.*notice\b/i]},
+   patterns:[/\bterminate.*at any time\b/i,/\bsuspend.*any reason\b/i,/\bwithout.*cause.*terminat\b/i,/\bfor any reason.*terminat\b/i,/\breserve.*right.*suspend.*account\b/i,/\bterminate.*account.*sole discretion\b/i,/\bremove.*account.*without.*notice\b/i,/\breserves.*right to terminate.*suspend.*access\b/i,/\bterminate.*suspend.*at any time.*any reason\b/i,/\bsuspend.*access.*any.*all.*services.*any time\b/i,/\bdiscontinue.*suspend.*modify.*at any time\b/i]},
 
   {id:'jurisdiction',level:'warning',category:'Jurisdiction',docCat:'obligation',icon:'·',
    title:'Disputes must be resolved in a specific location',
@@ -1995,27 +1995,27 @@ const RULES=[
   {id:'geolocation',level:'warning',category:'Location Data',docCat:'risk',icon:'·',
    title:'Precise location data collected',
    desc:'Your exact GPS location is tracked, which can reveal your home, workplace, medical visits, religious attendance, and daily routines.',
-   patterns:[/\bprecise\s+geo.?location\b/i,/\bexact\s+location\b/i,/\bgps.*location\b/i,/\bprecise.*location.*data\b/i,/\blocation.*tracking\b/i,/\bcollect.*location.*data\b/i]},
+   patterns:[/\bprecise\s+geo.?location\b/i,/\bexact\s+location\b/i,/\bgps.*location\b/i,/\bprecise.*location.*data\b/i,/\blocation.*tracking\b/i,/\bcollect.*location.*data\b/i,/\bcollect.*information.*about.*activity\b/i,/\bcollect.*location.*when.*use.*service\b/i,/\byour.*location.*when.*you.*use\b/i]},
 
   {id:'profiling',level:'warning',category:'Profiling',docCat:'risk',icon:'·',
    title:'Behavioural profile built from your data',
    desc:'The company creates inferences about your personality, preferences, and habits from your data — building a detailed profile that goes far beyond what you consciously share.',
-   patterns:[/\binferences.*about.*preferences\b/i,/\bprofile.*your.*behavior\b/i,/\bbehavioral.*profil\b/i,/\bcharacteristics.*about you\b/i,/\bbuild.*profile.*of.*you\b/i,/\binfer.*interest.*behavior\b/i]},
+   patterns:[/\binferences.*about.*preferences\b/i,/\bprofile.*your.*behavior\b/i,/\bbehavioral.*profil\b/i,/\bcharacteristics.*about you\b/i,/\bbuild.*profile.*of.*you\b/i,/\binfer.*interest.*behavior\b/i,/\buse.*information.*deliver.*targeted.*advertisements\b/i,/\buse.*personal.*information.*advertising\b/i,/\btargeted.*ads.*based.*on.*information\b/i,/\bbehavior.*improve.*advertising\b/i,/\buse.*activity.*to.*personalize\b/i]},
 
   {id:'merger_transfer',level:'warning',category:'Data Transfer',docCat:'risk',icon:'·',
    title:'Your data transferred if company is acquired',
    desc:'If the company is bought out or merges, all your personal data transfers to the new owner who may have entirely different privacy practices.',
-   patterns:[/\bmerger.*acquisition\b/i,/\bsale of assets.*data\b/i,/\btransfer.*data.*business.*transaction\b/i,/\bassign.*agreement.*successor\b/i,/\btransfer.*in.*event.*merger\b/i,/\bbusiness.*transfer.*personal.*data\b/i]},
+   patterns:[/\bmerger.*acquisition\b/i,/\bsale of assets.*data\b/i,/\btransfer.*data.*business.*transaction\b/i,/\bassign.*agreement.*successor\b/i,/\btransfer.*in.*event.*merger\b/i,/\bbusiness.*transfer.*personal.*data\b/i,/\bdisclose.*information.*enforce.*terms\b/i,/\bdisclose.*protect.*operations\b/i,/\bsole discretion.*believe.*necessary.*appropriate\b/i]},
 
   {id:'browsing_history',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Browsing history tracked',
    desc:'Your web browsing activity is recorded, which can reveal health concerns, financial interests, political views, and personal relationships.',
-   patterns:[/\bbrowsing history\b/i,/\bweb browsing\b/i,/\bpages you visit\b/i,/\bbrowsing.*behavior\b/i,/\bwebsites.*visited\b/i,/\bsearch.*history\b/i]},
+   patterns:[/\bbrowsing history\b/i,/\bweb browsing\b/i,/\bpages you visit\b/i,/\bbrowsing.*behavior\b/i,/\bwebsites.*visited\b/i,/\bsearch.*history\b/i,/\bcontent.*you.*view.*searches.*you.*make\b/i,/\bactivity.*on.*our.*services.*content.*view\b/i,/\btrack.*content.*view.*purchases\b/i,/\bcollect.*information.*about.*your.*activity\b/i]},
 
   {id:'content_license',level:'warning',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Broad license over content you upload',
    desc:'You grant wide rights to reproduce, modify, and distribute your uploaded content — often for commercial purposes without payment to you.',
-   patterns:[/\broyalty.free.*licen[sc]e.*content\b/i,/\blicen[sc]e.*reproduce.*modify\b/i,/\bworldwide.*licen[sc]e.*publish\b/i,/\bgrant.*licen[sc]e.*content.*upload\b/i,/\buse.*your.*content.*freely\b/i]},
+   patterns:[/\bryalty.free.*license.*content\b/i,/\bgrant.*non.exclusive.*worldwide.*royalty.free.*license\b/i,/\byou grant.*reproduce.*modify.*adapt.*publish.*translate\b/i,/\blicense.*to use.*reproduce.*modify.*adapt.*publish\b/i,/\byou grant.*apple.*transferable.*sublicensable.*license\b/i,/\blicense.*reproduce.*modify\b/i,/\bworldwide.*license.*publish\b/i,/\bgrant.*license.*content.*upload\b/i,/\buse.*your.*content.*freely\b/i,/\bnon.exclusive.*worldwide.*royalty.free.*fully paid\b/i]},
 
   {id:'nda_broad_scope',level:'warning',category:'NDA',docCat:'obligation',icon:'·',
    title:'Sweeping confidentiality obligation',
@@ -2077,7 +2077,7 @@ const RULES=[
   {id:'cookies',level:'info',category:'Tracking',docCat:'risk',icon:'·',
    title:'Cookies and tracking technologies used',
    desc:'Cookies, pixels, or beacons track your activity across sessions and across third-party websites.',
-   patterns:[/\bcookies?.*tracking\b/i,/\btracking.*technologies\b/i,/\bweb beacon\b/i,/\bpixel.*track\b/i,/\bwe use.*cookies\b/i,/\bcookie.*policy\b/i]},
+   patterns:[/\bcookies?.*tracking\b/i,/\btracking.*technologies\b/i,/\bweb beacon\b/i,/\bpixel.*track\b/i,/\bwe use.*cookies\b/i,/\bcookie.*policy\b/i,/\bcookies.*pixel.*tags.*other.*technologies\b/i,/\buse.*cookies.*pixel.*tags.*understand.*behavior\b/i,/\bpixel tag.*improve.*advertising\b/i,/\bcookies.*and.*similar.*tracking\b/i]},
 
   {id:'analytics',level:'info',category:'Analytics',docCat:'risk',icon:'·',
    title:'Third-party analytics in use',
@@ -2107,7 +2107,7 @@ const RULES=[
   {id:'governing_law',level:'info',category:'Jurisdiction',docCat:'obligation',icon:'·',
    title:'Specific governing law stated',
    desc:'This agreement is governed by the laws of a particular state or country, which affects your rights and how any dispute is interpreted.',
-   patterns:[/\bgoverned.*laws.*of.*(?:state|california|new york|delaware|texas|florida|uk|england|ireland)\b/i,/\bsubject.*laws.*of\b/i,/\bapplicable law.*shall be\b/i]},
+   patterns:[/\bgoverned.*laws.*of.*(?:state|california|new york|delaware|texas|florida|uk|england|ireland)\b/i,/\bsubject.*laws.*of\b/i,/\bapplicable law.*shall be\b/i,/\bgoverned by.*laws.*state.*california\b/i,/\bgoverning law.*california\b/i,/\bsubject to.*jurisdiction.*california\b/i,/\bgoverned.*laws.*of.*the.*state\b/i]},
 
   {id:'notice_requirement',level:'info',category:'Contracts',docCat:'obligation',icon:'·',
    title:'Formal written notice required',
@@ -2129,7 +2129,7 @@ const RULES=[
   {id:'no_appeal_arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Arbitration decision is final — no appeal',
    desc:'The arbitration award is binding and final. Unlike a court judgment, it cannot be appealed except in extremely narrow circumstances. If the arbitrator makes a mistake — even a serious one — you are stuck with the outcome.',
-   patterns:[/\barbitration.*final.*binding\b/i,/\baward.*final.*not.*appeal\b/i,/\bno.*appeal.*arbitration\b/i,/\barbitration.*award.*binding\b/i,/\bfinal.*decision.*arbitrator\b/i,/\bfinal and binding\b/i]},
+   patterns:[/\barbitration.*final.*binding\b/i,/\baward.*final.*not.*appeal\b/i,/\bno.*appeal.*arbitration\b/i,/\barbitration.*award.*binding\b/i,/\bfinal.*decision.*arbitrator\b/i,/\bfinal and binding\b/i,/\bbinding arbitration.*rather than.*court\b/i,/\bdispute.*resolved.*binding arbitration\b/i,/\bwaiving.*right.*trial.*jury\b/i,/\bwaiving.*right.*to.*class action\b/i,/\barbitration.*not.*litigate.*court\b/i]},
 
   {id:'unilateral_modification',level:'danger',category:'Policy Changes',docCat:'obligation',icon:'·',
    title:'Company can change your contract terms unilaterally',
@@ -2374,7 +2374,7 @@ const RULES=[
   {id:'third_party_ad_networks',level:'warning',category:'Privacy',docCat:'risk',icon:'·',
    title:'Data shared with advertising networks',
    desc:'Your personal information and behaviour is shared with third-party advertising networks who use it to target you with ads across the internet — including on completely unrelated websites.',
-   patterns:[/\badvertising.*network.*data\b/i,/\bthird.party.*advertiser.*share\b/i,/\bdata.*advertising.*partner\b/i,/\bad.*network.*personal.*information\b/i,/\btargeted.*advertis.*partner.*data\b/i]},
+   patterns:[/\badvertising.*network.*data\b/i,/\bthird.party.*advertiser.*share\b/i,/\bdata.*advertising.*partner\b/i,/\bad.*network.*personal.*information\b/i,/\btargeted.*advertis.*partner.*data\b/i,/\btargeted.*advertisements.*to you\b/i,/\bdeliver.*targeted.*ads.*based.*on\b/i,/\buse.*personal.*to send.*targeted\b/i,/\badvertising.*partners.*information\b/i,/\bpixel.*tag.*other.*technolog.*understand.*behavior\b/i]},
 
   {id:'dark_patterns',level:'warning',category:'Privacy',docCat:'rights',icon:'·',
    title:'Opt-out harder than opt-in — dark pattern consent',
@@ -2627,7 +2627,520 @@ const RULES=[
    desc:'When you cancel your subscription, your data — including files, messages, history, and settings — may be permanently deleted after a short grace period. Export your data before cancelling.',
    patterns:[/\bdata.*deleted.*cancel\b/i,/\baccount.*data.*remov.*terminat\b/i,/\bcontent.*deleted.*subscription.*end\b/i,/\bfiles.*deleted.*account.*clos\b/i,/\bdata.*purge.*cancel.*subscription\b/i]},
 
+  // ══ PRIVACY & DATA — EXHAUSTIVE ═══════════════════════════════════════
+  {id:'ip_address_collection',level:'info',category:'Privacy',docCat:'risk',icon:'·',
+   title:'IP address and device identifiers collected',
+   desc:'Your IP address, device identifiers, and network information are collected and may be used for targeting, fraud detection, or shared with analytics partners.',
+   patterns:[/\bip address.*collect\b/i,/\bcollect.*ip address\b/i,/\bdevice identifier.*collect\b/i,/\bcollect.*device.*identifier\b/i,/\bnetwork.*information.*collect\b/i]},
+
+  {id:'sensitive_data_collection',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Sensitive personal data collected (race, religion, health, politics)',
+   desc:'The organisation collects sensitive categories of personal data including racial or ethnic origin, religious beliefs, health information, political opinions, or sexual orientation.',
+   patterns:[/\bracial.*origin.*collect\b/i,/\bethnic.*origin.*information\b/i,/\breligious.*belief.*collect\b/i,/\bpolitical.*opinion.*collect\b/i,/\bsexual.*orientation.*collect\b/i,/\bsensitive.*personal.*data.*includ\b/i]},
+
+  {id:'children_data_13',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Service collects data from children under 13',
+   desc:'If children under 13 use this service, their data may be collected without adequate parental consent mechanisms. This may violate COPPA in the US.',
+   patterns:[/\bcoppa\b/i,/\bchildren.*under.*13\b/i,/\bunder.*13.*data\b/i,/\bparental.*consent.*collect.*child\b/i,/\bchild.*privacy.*protection\b/i,/\bchildren.*online.*privacy\b/i]},
+
+  {id:'data_retention_period',level:'info',category:'Privacy',docCat:'obligation',icon:'·',
+   title:'Data kept for a specified retention period',
+   desc:'Your data is retained for a defined period after your account is closed or your relationship with the company ends. Know how long your information stays in their systems.',
+   patterns:[/\bretain.*data.*for.*year\b/i,/\bdata.*retained.*period.*of\b/i,/\bkeep.*your.*information.*for\b/i,/\bpersonal.*data.*retained.*up.*to\b/i,/\bstore.*your.*data.*for\b/i]},
+
+  {id:'right_to_erasure',level:'info',category:'Privacy',docCat:'rights',icon:'·',
+   title:'You have the right to request deletion of your data',
+   desc:'Under GDPR, CCPA, or similar laws you have the right to request that your personal data be deleted. Check how to exercise this right and any exceptions that apply.',
+   patterns:[/\bright.*erasure\b/i,/\bright.*to.*delet.*your.*data\b/i,/\brequest.*delet.*personal.*data\b/i,/\bright.*to.*be.*forgotten\b/i,/\berase.*personal.*information.*request\b/i,/\bdelete.*account.*data.*request\b/i]},
+
+  {id:'data_portability_right',level:'info',category:'Privacy',docCat:'rights',icon:'·',
+   title:'You have the right to export your data',
+   desc:'Under GDPR and CCPA you have the right to receive a copy of your personal data in a portable, machine-readable format. Check whether the company provides a data export tool.',
+   patterns:[/\bright.*data.*portability\b/i,/\bexport.*your.*data\b/i,/\bdownload.*your.*information\b/i,/\bdata.*portability.*request\b/i,/\brequest.*copy.*personal.*data\b/i]},
+
+  {id:'automated_decision_making',level:'danger',category:'Privacy',docCat:'rights',icon:'·',
+   title:'Automated decisions made about you without human review',
+   desc:'Automated systems make legally significant decisions about you — such as credit, insurance, employment eligibility, or pricing — without meaningful human oversight. GDPR Article 22 gives you rights to contest these.',
+   patterns:[/\bautomated.*decision.*making\b/i,/\bautomated.*profiling.*decision\b/i,/\balgorithm.*decision.*about\b/i,/\bautomated.*processing.*legal.*effect\b/i,/\bno.*human.*review.*decision\b/i,/\bmachine.*learning.*decision.*eligibil\b/i]},
+
+  {id:'cross_border_transfer',level:'warning',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Your data transferred to other countries',
+   desc:'Your personal data is transferred to and processed in countries outside your own, potentially with weaker privacy laws. The EU requires adequate protection safeguards for such transfers.',
+   patterns:[/\btransfer.*data.*other.*countr\b/i,/\binternational.*data.*transfer\b/i,/\bprocess.*data.*outside.*your.*countr\b/i,/\bdata.*transfer.*united states\b/i,/\bpersonal.*data.*transferred.*abroad\b/i,/\bcross.border.*data.*transfer\b/i]},
+
+  {id:'cookie_consent_implied',level:'warning',category:'Privacy',docCat:'rights',icon:'·',
+   title:'Cookie consent implied by continued use',
+   desc:'By continuing to use the website you are deemed to have consented to cookies. This implied consent approach may not comply with GDPR which requires explicit, informed, and freely given consent.',
+   patterns:[/\bcontinued.*use.*consent.*cookie\b/i,/\busing.*site.*accept.*cookie\b/i,/\bcookie.*consent.*continued.*use\b/i,/\bimplied.*consent.*cookies\b/i,/\byour.*use.*constitutes.*acceptance.*cookie\b/i]},
+
+  {id:'third_party_links',level:'info',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Third-party links — their privacy policies apply',
+   desc:'The service contains links to third-party websites or services. When you click those links, their own privacy policies apply and the company accepts no responsibility for how those third parties use your data.',
+   patterns:[/\bthird.party.*links.*not.*responsible\b/i,/\blinks.*third.*party.*own.*privacy\b/i,/\bexternal.*sites.*privacy.*policy\b/i,/\bnot.*responsible.*third.party.*site\b/i,/\bthird.party.*website.*privacy\b/i]},
+
+  {id:'consent_withdrawal',level:'info',category:'Privacy',docCat:'rights',icon:'·',
+   title:'You can withdraw consent but data already shared may remain',
+   desc:'You can withdraw your consent to data processing, but data already shared with third parties before withdrawal may not be retrievable. Withdrawing consent may also affect service functionality.',
+   patterns:[/\bwithdraw.*consent.*data.*shared.*remain\b/i,/\bwithdrawal.*consent.*not.*affect.*prior\b/i,/\bwithdrawing.*consent.*may.*limit\b/i,/\bconsent.*can.*be.*withdrawn\b/i,/\bopt.*out.*future.*collection\b/i]},
+
+  // ══ FINANCIAL — EXHAUSTIVE ═══════════════════════════════════════════
+  {id:'compound_interest',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Compound interest charged — debt grows exponentially',
+   desc:'Interest is compounded daily, monthly, or continuously, meaning you pay interest on your interest. This causes debt to grow much faster than simple interest and is common in credit cards and payday loans.',
+   patterns:[/\bcompound.*interest\b/i,/\binterest.*compounded.*daily\b/i,/\binterest.*compounded.*monthly\b/i,/\bdaily.*periodic.*rate\b/i,/\binterest.*added.*to.*principal\b/i]},
+
+  {id:'penalty_apr',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Penalty APR applied after late payment',
+   desc:'If you miss a payment, a much higher penalty APR — sometimes over 29% — is applied to your entire balance. This rate may apply indefinitely and can dramatically increase what you owe.',
+   patterns:[/\bpenalty.*apr\b/i,/\bpenalty.*rate.*apply\b/i,/\bdefault.*rate.*apply.*late\b/i,/\bhigher.*rate.*missed.*payment\b/i,/\bpenalty.*interest.*rate\b/i]},
+
+  {id:'personal_guarantee',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Personal guarantee — you are personally liable for business debts',
+   desc:'You are personally guaranteeing a business loan or obligation. If the business cannot pay, creditors can come after your personal assets — your home, savings, and personal finances.',
+   patterns:[/\bpersonal.*guarantee\b/i,/\bpersonally.*guarantee\b/i,/\bguarantor.*personally.*liable\b/i,/\bsurety.*personally.*obligat\b/i,/\bunderlying.*personal.*liability\b/i]},
+
+  {id:'balloon_payment',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Balloon payment — large lump sum due at end of term',
+   desc:'A very large final payment is due at the end of the loan term. After making regular smaller payments throughout the loan, you must pay a large lump sum that many borrowers cannot afford, forcing refinancing.',
+   patterns:[/\bballoon.*payment\b/i,/\bfinal.*balloon.*due\b/i,/\blump.*sum.*due.*end.*term\b/i,/\bresidue.*amount.*due.*end\b/i,/\blarge.*final.*payment\b/i]},
+
+  {id:'negative_amortisation',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Negative amortisation — your debt grows even when you pay',
+   desc:'Minimum payments may not cover all accrued interest, causing the unpaid interest to be added to your principal balance. Your debt grows larger even while you are making payments.',
+   patterns:[/\bnegative.*amortisation\b/i,/\bnegative.*amortization\b/i,/\bdeferred.*interest.*added.*principal\b/i,/\bunpaid.*interest.*capitaliz\b/i,/\bprincipal.*may.*increase\b/i]},
+
+  {id:'prepayment_fee',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Fee charged for paying off loan early',
+   desc:'You are penalised for paying off your loan ahead of schedule. The lender charges a prepayment penalty to recoup the interest income they lose when you pay early.',
+   patterns:[/\bprepayment.*penalty\b/i,/\bearly.*repayment.*charge\b/i,/\bfee.*for.*paying.*early\b/i,/\bredemption.*penalty\b/i,/\bearly.*settlement.*fee\b/i,/\bbreakage.*cost.*early.*repay\b/i]},
+
+  {id:'cross_collateralisation',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Cross-collateralisation — multiple assets at risk',
+   desc:'Your assets pledged as collateral for one loan are also used to secure other debts with the same lender. Defaulting on one loan could put all your collateral at risk.',
+   patterns:[/\bcross.collateral\b/i,/\bcollateral.*all.*obligations\b/i,/\bsecure.*all.*debt.*lender\b/i,/\bcross.default\b/i,/\bdefault.*any.*obligation.*default.*all\b/i]},
+
+  {id:'interest_rate_floor',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Interest rate floor — rate cannot fall below a minimum',
+   desc:'Even if market rates fall significantly, your interest rate has a floor below which it cannot drop. You will not benefit fully from falling interest rates.',
+   patterns:[/\binterest.*rate.*floor\b/i,/\brate.*shall.*not.*fall.*below\b/i,/\bminimum.*interest.*rate\b/i,/\brate.*floor.*of\b/i,/\brate.*never.*less.*than\b/i]},
+
+  {id:'origination_fee',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Loan origination fee charged upfront',
+   desc:'A loan origination fee is charged when the loan is created — typically 0.5% to 5% of the loan amount. This is deducted from the funds you receive, meaning you actually get less than the loan amount.',
+   patterns:[/\borigination.*fee\b/i,/\bloan.*origination.*charge\b/i,/\bprocessing.*fee.*deducted.*loan\b/i,/\bfee.*deducted.*proceeds\b/i,/\bupfront.*fee.*loan\b/i]},
+
+  // ══ EMPLOYMENT — EXHAUSTIVE ═══════════════════════════════════════════
+  {id:'at_will_any_reason',level:'info',category:'Employment',docCat:'risk',icon:'·',
+   title:'At-will employment — fired for any reason with no warning',
+   desc:'You can be terminated at any time, for any reason or no reason at all, without advance notice or severance — unless a specific exception applies. This is standard in the US but worth understanding.',
+   patterns:[/\bat.will.*for any reason\b/i,/\bterminated.*any.*reason.*no.*reason\b/i,/\bemployment.*at will.*no.*cause\b/i,/\bdischarged.*any.*time.*any.*reason\b/i]},
+
+  {id:'non_compete_broad',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Broad non-compete — wide geography or duration',
+   desc:'The non-compete clause covers a very broad geographic area or lasts longer than 12 months. Courts often scrutinise broad non-competes and many US states limit or ban them entirely.',
+   patterns:[/\bnon.compete.*nationwide\b/i,/\bnon.compete.*worldwide\b/i,/\bcompete.*two.*years\b/i,/\bcompete.*three.*years\b/i,/\brestrict.*compet.*24.*months\b/i,/\brestrict.*compet.*36.*months\b/i]},
+
+  {id:'ownership_all_ip',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Employer claims ownership of all intellectual property you create',
+   desc:'Every invention, creative work, code, or idea you produce — even on personal time — belongs to the employer. This may extend beyond work-related activities in ways that are legally questionable.',
+   patterns:[/\ball.*inventions.*work.*product.*belong.*company\b/i,/\bemployer.*own.*all.*work.*creat\b/i,/\bassign.*all.*right.*invention.*employer\b/i,/\bany.*invention.*created.*employ.*period\b/i,/\bwhole.*time.*endeavors.*assign\b/i]},
+
+  {id:'moonlighting_restrictions',level:'warning',category:'Employment',docCat:'rights',icon:'·',
+   title:'Restrictions on outside work and side projects',
+   desc:'You are restricted from working for other companies, running a business, or taking on freelance work without explicit employer approval — even in unrelated fields.',
+   patterns:[/\bnot.*engage.*other.*employ.*without.*consent\b/i,/\bprior.*written.*approval.*outside.*work\b/i,/\bnot.*perform.*service.*other.*company\b/i,/\bfull.*time.*effort.*employer\b/i,/\boutsid.*business.*activit.*prior.*approval\b/i]},
+
+  {id:'mandatory_arbitration_employment',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'All employment disputes go to mandatory arbitration',
+   desc:'Any dispute about wages, discrimination, harassment, or wrongful termination must go to private arbitration rather than court. This significantly limits your ability to challenge your employer.',
+   patterns:[/\bemployment.*dispute.*arbitration\b/i,/\bdiscrimination.*claim.*arbitration\b/i,/\bharassment.*claim.*arbitrat\b/i,/\bwage.*claim.*arbitrat\b/i,/\bwrongful.*termination.*arbitrat\b/i]},
+
+  {id:'salary_sacrifice',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Salary sacrifice arrangement reduces pensionable pay',
+   desc:'You agree to give up part of your salary in exchange for a benefit. This can reduce your pensionable earnings, sick pay entitlement, and statutory benefit calculations.',
+   patterns:[/\bsalary.*sacrifice\b/i,/\bsalary.*exchange.*benefit\b/i,/\bgive.*up.*salary.*benefit\b/i,/\bsalary.*waiver.*pension\b/i]},
+
+  {id:'zero_paid_leave',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'No paid sick leave or limited paid leave',
+   desc:'The contract provides no paid sick leave, or the amount is significantly below legal minimums. Check your statutory rights — they may exceed what this contract provides.',
+   patterns:[/\bno.*paid.*sick.*leave\b/i,/\bsick.*leave.*unpaid\b/i,/\babsence.*unpaid.*unless.*statutory\b/i,/\bnot.*entitled.*paid.*sick\b/i,/\bsick.*day.*without.*pay\b/i]},
+
+  {id:'competition_in_perpetuity',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Non-compete with no end date or perpetual restriction',
+   desc:'The non-compete restriction has no defined end date or is stated to apply in perpetuity. Indefinite non-competes are unenforceable in most jurisdictions but can still be used to intimidate employees.',
+   patterns:[/\bnon.compete.*perpetual\b/i,/\bnon.compete.*indefinit\b/i,/\brestrict.*compet.*no.*end.*date\b/i,/\bcompete.*restriction.*forever\b/i,/\brestrict.*business.*without.*time.*limit\b/i]},
+
+  {id:'trailing_commission',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Commission clawback after you leave',
+   desc:'Commissions already earned may be clawed back if the deal falls through after you leave, or if you resign before a vesting date. You may owe money back to the employer.',
+   patterns:[/\bcommission.*clawback\b/i,/\brepay.*commission.*terminat\b/i,/\bcommission.*deal.*cancel.*return\b/i,/\bcommission.*not.*earned.*until\b/i,/\bclawback.*variable.*pay\b/i]},
+
+  {id:'trade_secret_broad',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Broad definition of trade secrets covers ordinary knowledge',
+   desc:'The definition of trade secrets is so broad it may cover general business knowledge, customer relationships, and skills you develop on the job — potentially restricting what you can use in future employment.',
+   patterns:[/\btrade.*secret.*includ.*customer.*list\b/i,/\bproprietary.*information.*includ.*know.how\b/i,/\bconfidential.*information.*business.*method\b/i,/\btrade.*secret.*broad.*definition\b/i,/\ball.*business.*information.*confidential\b/i]},
+
+  {id:'probation_dismissal',level:'info',category:'Employment',docCat:'risk',icon:'·',
+   title:'Extended probationary period with easier dismissal',
+   desc:'During the probationary period, you can be dismissed with minimal or no notice and fewer employment protections apply. A longer-than-usual probation period extends the time you are vulnerable.',
+   patterns:[/\bprobation.*period.*dismiss.*without.*notice\b/i,/\bduring.*probation.*terminat.*any.*time\b/i,/\bprobationary.*period.*no.*prior.*notice\b/i,/\bprobation.*may.*extend\b/i,/\bextended.*probation.*period\b/i]},
+
+  // ══ RENTAL & REAL ESTATE — EXHAUSTIVE ════════════════════════════════
+  {id:'rent_to_income_ratio',level:'info',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Income requirement — rent must be fraction of your salary',
+   desc:'You must earn a multiple of the monthly rent (commonly 2.5x-3x) to qualify. This is standard but worth confirming you meet the threshold before applying.',
+   patterns:[/\bincome.*must.*be.*times.*rent\b/i,/\bgross.*income.*ratio.*rent\b/i,/\bearn.*at.*least.*times.*monthly.*rent\b/i,/\bincome.*requirement.*qualify\b/i,/\bmonthly.*rent.*income.*multip\b/i]},
+
+  {id:'joint_several_liability',level:'danger',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Joint and several liability — all tenants liable for full rent',
+   desc:'Every tenant on the lease is individually responsible for the full rent amount. If your co-tenant does not pay their share, the landlord can demand the full amount from you.',
+   patterns:[/\bjoint.*and.*several.*liabilit\b/i,/\bjointly.*and.*severally.*liable\b/i,/\beach.*tenant.*liable.*full.*amount\b/i,/\ball.*tenants.*responsible.*entire\b/i]},
+
+  {id:'landlord_sale_clause',level:'warning',category:'Rental',docCat:'risk',icon:'·',
+   title:'Landlord can terminate lease if property is sold',
+   desc:'If the property is sold, the new owner may be able to terminate your lease with limited notice. Review your rights regarding notice period and whether your deposit is protected.',
+   patterns:[/\bsale.*property.*terminat.*lease\b/i,/\bowner.*sell.*property.*end.*tenancy\b/i,/\bpurchaser.*may.*terminat.*tenancy\b/i,/\bsale.*property.*notice.*vacate\b/i,/\bnew.*owner.*terminat.*lease\b/i]},
+
+  {id:'excessive_deposit',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Security deposit exceeds legal maximum',
+   desc:'The security deposit being requested may exceed what is legally allowed in your jurisdiction. Many states and countries cap security deposits at one or two months rent.',
+   patterns:[/\bdeposit.*equivalent.*three.*months\b/i,/\bsecurity.*deposit.*four.*weeks\b/i,/\bdeposit.*amount.*exceed\b/i,/\bdeposit.*three.*month.*rent\b/i,/\bdeposit.*more.*than.*one.*month\b/i]},
+
+  {id:'no_withhold_rent',level:'info',category:'Rental',docCat:'rights',icon:'·',
+   title:'Tenant cannot withhold rent even for repairs',
+   desc:'The lease prohibits you from withholding rent even if the landlord fails to make required repairs. This may conflict with your statutory rights in many jurisdictions where rent-withholding is legal.',
+   patterns:[/\bnot.*withhold.*rent\b/i,/\bno.*right.*withhold.*rent\b/i,/\brent.*must.*be.*paid.*regardless\b/i,/\bno.*set.off.*rent\b/i,/\bwithhold.*rent.*not.*permitted\b/i]},
+
+  {id:'break_clause',level:'info',category:'Rental',docCat:'rights',icon:'·',
+   title:'Break clause allows early termination by either party',
+   desc:'The lease contains a break clause allowing either the landlord or tenant (or both) to end the tenancy early by giving notice. Check who can exercise this right and under what conditions.',
+   patterns:[/\bbreak.*clause\b/i,/\bearly.*termination.*option.*lease\b/i,/\bbreak.*option.*tenancy\b/i,/\bnotice.*option.*terminat.*early.*lease\b/i]},
+
+  {id:'rental_guarantee_guarantor',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Guarantor required — third party liable for your rent',
+   desc:'A guarantor must co-sign this lease, making them personally liable for your rent and obligations if you default. This is a significant financial commitment for the guarantor.',
+   patterns:[/\bguarantor.*required\b/i,/\brequire.*guarantor\b/i,/\bguarantor.*liable.*rent\b/i,/\bco.signer.*lease.*required\b/i,/\brent.*guarantee.*third.*party\b/i]},
+
+  // ══ HEALTHCARE — EXHAUSTIVE ═══════════════════════════════════════════
+  {id:'assignment_of_benefits',level:'warning',category:'Healthcare',docCat:'obligation',icon:'·',
+   title:'Benefits assigned directly to provider — insurer pays them, not you',
+   desc:'By signing this form, any insurance payments are made directly to the healthcare provider rather than to you. You lose control over the payment and any disputes go between the insurer and provider.',
+   patterns:[/\bassignment.*of.*benefits\b/i,/\bassign.*insurance.*benefits.*provider\b/i,/\binsurance.*payment.*direct.*provider\b/i,/\bassign.*right.*collect.*insurance\b/i]},
+
+  {id:'consent_to_treat_minor',level:'info',category:'Healthcare',docCat:'obligation',icon:'·',
+   title:'Consent to treat a minor — you are authorising treatment',
+   desc:'You are giving consent for medical treatment of a child. Ensure you understand exactly what procedures are covered by this consent and that it is not broader than necessary.',
+   patterns:[/\bconsent.*treat.*minor\b/i,/\bauthorize.*treatment.*child\b/i,/\bpermission.*medical.*child\b/i,/\bconsent.*on.*behalf.*minor\b/i,/\bparent.*guardian.*consent.*treat\b/i]},
+
+  {id:'medication_consent',level:'info',category:'Healthcare',docCat:'obligation',icon:'·',
+   title:'Consent to administer specific medications',
+   desc:'You are consenting to the administration of specific medications. Check that you understand the medication, dosage, potential side effects, and alternatives before signing.',
+   patterns:[/\bconsent.*administer.*medication\b/i,/\bauthorize.*prescribe.*medic\b/i,/\bconsent.*drug.*administration\b/i,/\bpermission.*medicate\b/i,/\btreatment.*medic.*consent.*sign\b/i]},
+
+  {id:'telehealth_limitations',level:'warning',category:'Healthcare',docCat:'risk',icon:'·',
+   title:'Telehealth service has limited scope and liability',
+   desc:'This telehealth service is not a substitute for in-person care and has significant limitations on what can be diagnosed or treated. Liability for misdiagnosis or missed conditions may be limited.',
+   patterns:[/\btelehealth.*not.*substitute\b/i,/\bvirtual.*care.*limitation\b/i,/\btelemedicine.*not.*all.*condition\b/i,/\bonline.*consultation.*limited\b/i,/\bremote.*medical.*service.*limitation\b/i]},
+
+  {id:'no_specific_doctor',level:'info',category:'Healthcare',docCat:'risk',icon:'·',
+   title:'No guarantee of a specific doctor or provider',
+   desc:'The provider cannot guarantee that a specific doctor, therapist, or specialist will be available. You may be assigned to any available provider in the network.',
+   patterns:[/\bcannot.*guarantee.*specific.*provider\b/i,/\bno.*guarantee.*same.*doctor\b/i,/\bprovider.*subject.*to.*availability\b/i,/\bphysician.*assignment.*not.*guaranteed\b/i]},
+
+  {id:'research_use_of_samples',level:'danger',category:'Healthcare',docCat:'rights',icon:'·',
+   title:'Your biological samples used for research',
+   desc:'Samples taken during your care (blood, tissue, genetic material) may be stored and used for research purposes. This may include commercial research without additional payment to you.',
+   patterns:[/\bsample.*research.*purpose\b/i,/\btissue.*sample.*research\b/i,/\bbiological.*sample.*future.*research\b/i,/\bspecimen.*research.*study\b/i,/\bblood.*sample.*stored.*research\b/i]},
+
+  // ══ LEGAL & COURT — EXHAUSTIVE ════════════════════════════════════════
+  {id:'statute_of_limitations_shortened',level:'danger',category:'Legal',docCat:'rights',icon:'·',
+   title:'Time limit to sue is shortened by contract',
+   desc:'The contract shortens the legal time limit within which you can bring a claim — sometimes to as little as 30 days or 6 months. After this period, your claim is extinguished even if a longer statutory period would normally apply.',
+   patterns:[/\bclaim.*must.*brought.*within.*days\b/i,/\baction.*must.*commenced.*within.*month\b/i,/\bshorten.*statute.*limitation\b/i,/\bclaim.*time.*limited.*contract\b/i,/\bone.*year.*bring.*claim\b/i,/\bsix.*months.*file.*claim\b/i]},
+
+  {id:'indemnity_broad',level:'danger',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Broad indemnification obligation — you cover their legal costs',
+   desc:'You agree to indemnify and hold the company harmless from any claims arising from your use. This means you could be responsible for paying the company\'s legal costs if someone sues them in connection with your account or actions.',
+   patterns:[/\bindemnify.*defend.*hold.*harmless\b/i,/\bindemnif.*company.*claim.*arising.*your.*use\b/i,/\bdefend.*us.*from.*claim.*result.*your\b/i,/\bhold.*harmless.*attorney.*fees\b/i,/\bindemnification.*including.*legal.*fees\b/i]},
+
+  {id:'venue_selection',level:'warning',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Disputes must be filed in a specific court location',
+   desc:'Any lawsuits must be filed in a specific court in a city or country that may be inconvenient or expensive for you to travel to. This can effectively prevent you from pursuing claims.',
+   patterns:[/\bvenue.*exclusive.*jurisdiction\b/i,/\bcourt.*of.*competent.*jurisdiction.*state.*of\b/i,/\bdispute.*must.*be.*brought.*in.*court.*of\b/i,/\bexclusive.*venue.*for.*litigation\b/i,/\bsole.*jurisdiction.*courts.*of\b/i]},
+
+  {id:'class_action_no_joinder',level:'danger',category:'Legal',docCat:'rights',icon:'·',
+   title:'Cannot join claims with other people — only individual arbitration',
+   desc:'You must pursue claims entirely on your own. You cannot join your claim with other affected people, participate in a class action, or consolidate with similar claims. This makes small-value claims economically impossible to pursue.',
+   patterns:[/\bno.*joinder.*claims\b/i,/\bclaims.*not.*consolidated\b/i,/\bonly.*individual.*basis.*arbitration\b/i,/\bnot.*join.*claim.*others\b/i,/\bprohibited.*from.*consolidat.*claim\b/i]},
+
+  {id:'choice_of_law',level:'info',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Foreign law governs this contract',
+   desc:'The contract is governed by the law of a state or country different from where you live or where the transaction takes place. This can affect your consumer rights significantly.',
+   patterns:[/\bgoverned.*by.*law.*of.*state.*of\b/i,/\bgoverning.*law.*shall.*be\b/i,/\blaw.*of.*england.*wales.*govern\b/i,/\blaw.*of.*ireland.*govern\b/i,/\blaw.*of.*delaware.*govern\b/i,/\bapplicable.*law.*jurisdiction.*of\b/i]},
+
+  {id:'entire_agreement_no_verbal',level:'warning',category:'Legal',docCat:'rights',icon:'·',
+   title:'No verbal promises count — only what is written here',
+   desc:'The entire agreement clause means any verbal promises, assurances, or representations made by salespeople or representatives are not legally binding. Only what is written in this document applies.',
+   patterns:[/\bentire.*agreement.*verbal.*not.*binding\b/i,/\bno.*oral.*representation.*binding\b/i,/\bsales.*promise.*not.*part.*agreement\b/i,/\bsupersedes.*all.*prior.*oral.*agreement\b/i,/\bno.*reliance.*oral.*statement\b/i]},
+
+  {id:'unilateral_right_to_audit',level:'warning',category:'Legal',docCat:'rights',icon:'·',
+   title:'Company can audit your records or systems',
+   desc:'The company reserves the right to audit your records, systems, or premises to verify compliance with the contract. This gives them significant access rights beyond normal commercial practice.',
+   patterns:[/\bright.*to.*audit.*your.*records\b/i,/\baudit.*right.*inspect.*premises\b/i,/\bcompany.*may.*audit.*compliance\b/i,/\baudit.*right.*books.*records\b/i,/\bwe.*may.*inspect.*your.*system\b/i]},
+
+  // ══ INSURANCE — EXHAUSTIVE ═══════════════════════════════════════════
+  {id:'exclusion_intentional_acts',level:'info',category:'Insurance',docCat:'risk',icon:'·',
+   title:'No coverage for intentional acts or criminal activity',
+   desc:'Coverage does not apply if the loss was caused by your intentional act, criminal activity, or fraud. This is standard but important to understand — claims can be denied if the insurer characterises the event differently.',
+   patterns:[/\bintentional.*act.*exclud\b/i,/\bcriminal.*act.*not.*covered\b/i,/\bwillful.*misconduct.*exclud\b/i,/\bexclusion.*intentional.*damage\b/i,/\bfraud.*exclud.*coverage\b/i]},
+
+  {id:'concurrent_causation',level:'warning',category:'Insurance',docCat:'risk',icon:'·',
+   title:'Coverage denied if any excluded cause contributed to loss',
+   desc:'If an excluded cause contributed to your loss at all — even partly — the entire claim may be denied. This concurrent causation exclusion is one of the most commonly used to deny property insurance claims.',
+   patterns:[/\bconcurrent.*causation\b/i,/\bexcluded.*peril.*contribut.*deny\b/i,/\bany.*excluded.*cause.*deny.*entire\b/i,/\banti.concurrent.*causation\b/i,/\bcontribut.*excluded.*peril\b/i]},
+
+  {id:'insurer_right_to_cancel',level:'warning',category:'Insurance',docCat:'risk',icon:'·',
+   title:'Insurer can cancel your policy mid-term',
+   desc:'The insurer reserves the right to cancel your policy before its expiry date. While they must usually give notice, a mid-term cancellation leaves you without coverage and can affect future insurability.',
+   patterns:[/\binsurer.*cancel.*policy.*mid.term\b/i,/\bwe.*may.*cancel.*policy\b/i,/\binsurance.*cancel.*notice.*days\b/i,/\bright.*cancel.*policy.*any.*time\b/i,/\bterminate.*insurance.*policy\b/i]},
+
+  {id:'substandard_rates',level:'warning',category:'Insurance',docCat:'obligation',icon:'·',
+   title:'Rated or substandard policy — higher premiums due to risk',
+   desc:'You are being insured at a substandard or rated premium because the insurer assessed you as higher risk. Your premiums are higher than standard, and coverage terms may be more restrictive.',
+   patterns:[/\bsubstandard.*rate\b/i,/\brated.*policy\b/i,/\bhigher.*premium.*risk.*factor\b/i,/\bextra.*premium.*risk\b/i,/\brated.*risk.*higher.*premium\b/i]},
+
+  {id:'claims_made_policy',level:'warning',category:'Insurance',docCat:'risk',icon:'·',
+   title:'Claims-made policy — only covers claims filed while active',
+   desc:'This is a claims-made policy, not an occurrence policy. Coverage only applies if the claim is made while the policy is active. If the problem occurred during coverage but you file after the policy lapses, you may not be covered.',
+   patterns:[/\bclaims.made.*policy\b/i,/\bclaim.*must.*be.*made.*during.*policy.*period\b/i,/\bcoverage.*only.*claim.*made.*while.*active\b/i,/\bno.*coverage.*claim.*after.*policy.*lapse\b/i]},
+
+  {id:'valued_agreed_policy',level:'info',category:'Insurance',docCat:'rights',icon:'·',
+   title:'Agreed value policy — no depreciation on total loss',
+   desc:'This is an agreed value or valued policy where the insured amount is paid in full on a total loss without depreciation deductions. This is better than an actual cash value policy.',
+   patterns:[/\bagreed.*value.*policy\b/i,/\bvalued.*policy.*no.*depreciation\b/i,/\bpay.*full.*agreed.*value.*total.*loss\b/i,/\breplacement.*value.*agreed\b/i]},
+
+  // ══ CONSUMER RIGHTS — EXHAUSTIVE ══════════════════════════════════════
+  {id:'cooling_off_waiver',level:'danger',category:'Consumer',docCat:'rights',icon:'·',
+   title:'You waive your cooling-off cancellation right',
+   desc:'You are waiving your statutory right to cancel within a cooling-off period (typically 14 days in the EU, or 3 days for door-to-door sales in the US). This right exists by law in many jurisdictions and cannot always be legally waived.',
+   patterns:[/\bwaive.*cooling.off.*right\b/i,/\bno.*right.*cancel.*cooling.*period\b/i,/\bwaive.*right.*cancel.*14.*day\b/i,/\bcooling.*off.*period.*not.*apply\b/i,/\bwaive.*cancellation.*right.*period\b/i]},
+
+  {id:'no_consumer_protection',level:'danger',category:'Consumer',docCat:'rights',icon:'·',
+   title:'Contract attempts to exclude statutory consumer rights',
+   desc:'The contract purports to exclude or limit statutory consumer rights that cannot legally be excluded. Such clauses are often unenforceable but may be used to discourage you from making claims.',
+   patterns:[/\bexclud.*statutory.*right\b/i,/\bno.*statutory.*right.*apply\b/i,/\bwaive.*consumer.*protection\b/i,/\bexclud.*implied.*terms.*statute\b/i,/\bno.*consumer.*right.*apply\b/i]},
+
+  {id:'unfair_contract_terms',level:'warning',category:'Consumer',docCat:'rights',icon:'·',
+   title:'Potentially unfair contract terms under consumer law',
+   desc:'One or more clauses in this agreement may constitute unfair contract terms under the Unfair Contract Terms Act (UK), EU Directive 93/13, or FTC regulations in the US. Unfair terms are not legally binding on consumers.',
+   patterns:[/\bsole.*discretion.*company\b/i,/\bwe.*may.*at.*our.*discretion\b/i,/\bcompany.*final.*decision.*binding\b/i,/\bour.*determination.*final\b/i,/\bwe.*reserve.*right.*change.*any.*time\b/i]},
+
+  {id:'subscription_trap',level:'danger',category:'Consumer',docCat:'obligation',icon:'·',
+   title:'Difficult cancellation process — subscription trap',
+   desc:'Cancellation requires calling a specific number, mailing a letter, or completing multiple steps that make it difficult to stop being billed. This is a recognised consumer protection issue.',
+   patterns:[/\bcancel.*by.*calling\b/i,/\bcancel.*by.*mail.*only\b/i,/\bcancel.*must.*contact.*us.*by.*phone\b/i,/\bcancel.*written.*notice.*mail\b/i,/\bcancellation.*require.*call.*customer\b/i]},
+
+  {id:'forced_upgrade',level:'warning',category:'Consumer',docCat:'risk',icon:'·',
+   title:'Service can be changed or discontinued without your consent',
+   desc:'The company reserves the right to modify, suspend, or discontinue the service at any time without liability to you. Features you relied on when signing up may be removed without recourse.',
+   patterns:[/\bdiscontinue.*service.*without.*notice\b/i,/\bmodify.*service.*at.*any.*time.*notice\b/i,/\bremove.*feature.*without.*liability\b/i,/\bchange.*service.*without.*compensation\b/i,/\bsuspend.*service.*any.*time.*reason\b/i]},
+
+  {id:'right_to_repair',level:'info',category:'Consumer',docCat:'rights',icon:'·',
+   title:'Warranty may limit your right to repair',
+   desc:'The warranty may be voided if you repair the product yourself or use an unauthorised repairer. Independent repair laws in some jurisdictions may override these restrictions.',
+   patterns:[/\bwarranty.*void.*unauthorised.*repair\b/i,/\bwarranty.*void.*third.party.*repair\b/i,/\brepair.*only.*authorised.*service\b/i,/\bunauthorized.*modification.*void.*warranty\b/i,/\bwarranty.*void.*if.*repaired.*by\b/i]},
+
+  // ══ TECHNOLOGY & DIGITAL — EXHAUSTIVE ════════════════════════════════
+  {id:'account_sharing_prohibited',level:'info',category:'Digital',docCat:'obligation',icon:'·',
+   title:'Account sharing prohibited — one user per account',
+   desc:'Sharing your account credentials with others violates the terms. Detection of account sharing may result in termination. This is increasingly enforced by streaming and software services.',
+   patterns:[/\bsharing.*account.*prohibited\b/i,/\bnot.*share.*account.*credentials\b/i,/\bone.*user.*per.*account\b/i,/\baccount.*sharing.*terminat\b/i,/\bno.*sharing.*login.*details\b/i]},
+
+  {id:'api_rate_limiting',level:'info',category:'Digital',docCat:'obligation',icon:'·',
+   title:'API usage limits — excess use may be throttled or billed',
+   desc:'Your use of the API is subject to rate limits. Exceeding these limits may result in requests being throttled, blocked, or billed at overage rates.',
+   patterns:[/\brate.*limit.*api\b/i,/\bapi.*request.*limit\b/i,/\bthrottl.*exceed.*api\b/i,/\bapi.*overage.*fee\b/i,/\bexceed.*api.*call.*limit\b/i]},
+
+  {id:'user_generated_content_moderation',level:'info',category:'Digital',docCat:'risk',icon:'·',
+   title:'Platform can remove your content at any time',
+   desc:'The platform can remove, hide, or block any content you post at their sole discretion, without prior notice or explanation. Appeals processes, if any, are at the platform\'s discretion.',
+   patterns:[/\bremove.*content.*sole.*discretion\b/i,/\bdelete.*content.*any.*time.*reason\b/i,/\btake.*down.*content.*without.*notice\b/i,/\bmoderat.*content.*discretion\b/i,/\bcontent.*removed.*at.*our.*discretion\b/i]},
+
+  {id:'screen_recording_prohibited',level:'info',category:'Digital',docCat:'obligation',icon:'·',
+   title:'Screenshot or screen recording prohibited',
+   desc:'Recording, screenshotting, or capturing content from this service is prohibited. This may limit your ability to keep records of your transactions or interactions.',
+   patterns:[/\bscreen.*recording.*prohibited\b/i,/\bscreenshot.*not.*permitted\b/i,/\bnot.*capture.*screen.*content\b/i,/\bno.*recording.*screen.*content\b/i,/\bscreencast.*prohibited\b/i]},
+
+  {id:'source_code_restriction',level:'info',category:'Digital',docCat:'rights',icon:'·',
+   title:'Cannot reverse-engineer or decompile the software',
+   desc:'You are prohibited from reverse-engineering, decompiling, or disassembling the software. This restricts your ability to audit the software for security, privacy, or compatibility purposes.',
+   patterns:[/\bnot.*reverse.engineer\b/i,/\bno.*decompil\b/i,/\bprohibit.*disassembl\b/i,/\breverse.*engineer.*prohibited\b/i,/\bdecompil.*or.*disassembl.*not.*permitted\b/i]},
+
+  {id:'api_changes_without_notice',level:'warning',category:'Digital',docCat:'risk',icon:'·',
+   title:'API or service specifications can change without notice',
+   desc:'The technical specifications, API endpoints, data formats, or service features can be changed or deprecated without notice. If you build on this service, your integration may break without warning.',
+   patterns:[/\bapi.*may.*change.*without.*notice\b/i,/\bspecification.*subject.*change\b/i,/\bdeprecate.*endpoint.*without.*notice\b/i,/\bapi.*backward.*compatib.*not.*guaranteed\b/i,/\bservice.*specification.*change\b/i]},
+
+  // ══ GOVERNMENT & TAX — EXHAUSTIVE ════════════════════════════════════
+  {id:'tax_liability_yours',level:'warning',category:'Tax',docCat:'obligation',icon:'·',
+   title:'You are solely responsible for your own tax obligations',
+   desc:'The company makes no representations about the tax treatment of this transaction. You are solely responsible for any tax obligations arising from this agreement, and independent advice is strongly recommended.',
+   patterns:[/\bsole.*responsibility.*tax.*obligation\b/i,/\bnot.*responsible.*your.*tax\b/i,/\btax.*consequences.*your.*responsibility\b/i,/\bconsult.*tax.*advisor.*responsibilit\b/i,/\bwe.*do.*not.*provide.*tax.*advice\b/i]},
+
+  {id:'withholding_tax',level:'warning',category:'Tax',docCat:'obligation',icon:'·',
+   title:'Withholding tax may be deducted from payments',
+   desc:'Applicable taxes may be withheld from payments made to you. The amount you actually receive may be less than the gross amount stated, depending on your tax residency.',
+   patterns:[/\bwithholding.*tax.*deducted\b/i,/\btax.*withheld.*payment\b/i,/\bsubject.*withholding.*tax\b/i,/\bwithhold.*applicable.*tax\b/i,/\bpayment.*net.*withholding\b/i]},
+
+  {id:'vat_exclusive',level:'info',category:'Tax',docCat:'obligation',icon:'·',
+   title:'Prices exclude VAT or sales tax — final cost is higher',
+   desc:'The prices shown do not include Value Added Tax (VAT), sales tax, or other applicable taxes. The amount you actually pay will be higher than the advertised price.',
+   patterns:[/\bprice.*exclud.*vat\b/i,/\bplus.*applicable.*tax\b/i,/\bexcluding.*sales.*tax\b/i,/\bnet.*of.*tax\b/i,/\btax.*not.*included.*price\b/i,/\bplus.*vat\b/i]},
+
+  {id:'government_right_to_audit',level:'warning',category:'Tax',docCat:'risk',icon:'·',
+   title:'Government or regulator may audit or inspect',
+   desc:'By entering this agreement, you acknowledge that government authorities or regulators may have the right to audit, inspect, or access records related to this transaction.',
+   patterns:[/\bgovernment.*right.*audit\b/i,/\bregulatory.*inspection.*right\b/i,/\btax.*authority.*right.*inspect\b/i,/\birs.*right.*audit\b/i,/\bhmrc.*right.*inspect\b/i]},
+
+  // ══ INTELLECTUAL PROPERTY — EXHAUSTIVE ═══════════════════════════════
+  {id:'trademark_restriction',level:'warning',category:'IP Rights',docCat:'obligation',icon:'·',
+   title:'Restricted from using brand name or trademarks',
+   desc:'You are prohibited from using the company\'s name, logo, or trademarks in any form without prior written permission. This includes reviews, social media posts, and references to the product.',
+   patterns:[/\bnot.*use.*trademark.*without.*permission\b/i,/\bno.*right.*use.*trade.*name\b/i,/\bprohibit.*use.*logo.*trademark\b/i,/\btrademark.*may.*not.*use.*without\b/i,/\bnot.*refer.*company.*name.*without\b/i]},
+
+  {id:'open_source_compliance',level:'info',category:'IP Rights',docCat:'obligation',icon:'·',
+   title:'Open source licence obligations apply to you',
+   desc:'This software includes open source components. You may have obligations under GPL, MIT, Apache, or other open source licences, including requirements to share source code or attribution.',
+   patterns:[/\bopen.*source.*license.*obligation\b/i,/\bgpl.*license.*comply\b/i,/\bopen.*source.*component.*terms\b/i,/\bcopyleft.*license\b/i,/\bmust.*attribute.*open.*source\b/i]},
+
+  {id:'no_reverse_engineer_ai',level:'warning',category:'IP Rights',docCat:'rights',icon:'·',
+   title:'Cannot use the service to develop competing AI products',
+   desc:'You cannot use this AI service\'s outputs or capabilities to train, develop, or improve a competing AI product. This is an increasingly common restriction in AI service agreements.',
+   patterns:[/\bnot.*use.*output.*train.*model\b/i,/\bprohibit.*use.*result.*develop.*compet\b/i,/\bnot.*use.*service.*competing.*ai\b/i,/\boutput.*cannot.*train.*machine.*learning\b/i,/\bbenchmark.*testing.*prohibited\b/i]},
+
+  {id:'moral_rights_waiver',level:'warning',category:'IP Rights',docCat:'rights',icon:'·',
+   title:'You waive moral rights over your creative work',
+   desc:'You waive your moral rights as a creator — including the right to be identified as the author and the right to object to derogatory treatment of your work. This is common in platform agreements but significant for creators.',
+   patterns:[/\bwaive.*moral.*rights\b/i,/\bmoral.*rights.*waived\b/i,/\bno.*moral.*rights.*asserted\b/i,/\bwaive.*right.*attribution\b/i,/\bwaive.*right.*integrity.*work\b/i]},
+
+  // ══ ADDITIONAL HIGH-IMPACT RULES ══════════════════════════════════════
+  {id:'force_majeure_broad',level:'warning',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Broad force majeure — company not liable for many disruptions',
+   desc:'A very broad force majeure clause allows the company to escape obligations for a wide range of events including pandemics, labour disputes, government actions, or even "other causes beyond our control" — a catch-all phrase.',
+   patterns:[/\bforce majeure.*includ.*pandemic\b/i,/\bforce majeure.*labor.*dispute\b/i,/\bcauses.*beyond.*our.*control.*not.*liable\b/i,/\bact.*of.*god.*labor.*action.*force.*majeure\b/i,/\bbeyond.*reasonable.*control.*includ\b/i]},
+
+  {id:'assignment_without_consent',level:'danger',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Your contract assigned to third party without your agreement',
+   desc:'The company can transfer your contract to any third party — including after a merger or acquisition — without needing your consent. You could end up dealing with a completely different company.',
+   patterns:[/\bassign.*agreement.*without.*prior.*consent\b/i,/\btransfer.*rights.*third.*party.*without.*consent\b/i,/\bmerger.*acquisition.*assign.*agreement\b/i,/\bsell.*assign.*business.*agreement\b/i]},
+
+  {id:'electronic_signature_binding',level:'info',category:'Contracts',docCat:'obligation',icon:'·',
+   title:'Electronic signature is legally binding',
+   desc:'Clicking "I agree", ticking a checkbox, or providing an electronic signature constitutes a legally binding contract. Ensure you have read and understood the full terms before accepting.',
+   patterns:[/\belectronic.*signature.*binding\b/i,/\bclicking.*agree.*constitutes.*acceptance\b/i,/\bdigital.*signature.*legal.*effect\b/i,/\bonline.*acceptance.*binding.*contract\b/i,/\be.signature.*same.*effect.*handwritten\b/i]},
+
+  {id:'service_level_no_guarantee',level:'warning',category:'Digital',docCat:'risk',icon:'·',
+   title:'No uptime guarantee — service availability not assured',
+   desc:'The service is provided "as available" with no uptime guarantee. If the service goes down, there may be no right to compensation, credit, or refund even if your business or operations are affected.',
+   patterns:[/\bno.*uptime.*guarantee\b/i,/\bservice.*as.*available\b/i,/\bnot.*guarantee.*uninterrupted.*service\b/i,/\bno.*liability.*service.*unavailability\b/i,/\bdowntime.*not.*compens\b/i]},
+
+  {id:'backup_not_guaranteed',level:'warning',category:'Digital',docCat:'risk',icon:'·',
+   title:'Data backups are not guaranteed — you may lose your data',
+   desc:'The company does not guarantee that backups will be maintained or that your data can be recovered in the event of loss. You are responsible for maintaining your own backups.',
+   patterns:[/\bno.*guarantee.*backup\b/i,/\bnot.*responsible.*data.*loss\b/i,/\bbackup.*not.*guaranteed\b/i,/\bdata.*loss.*not.*liable\b/i,/\bmaintain.*own.*backup\b/i]},
+
+  {id:'security_incident_notification',level:'info',category:'Privacy',docCat:'rights',icon:'·',
+   title:'You will be notified of data breaches',
+   desc:'The company commits to notifying you in the event of a security incident affecting your data. Check the timeframe for notification and what actions they will take.',
+   patterns:[/\bnotify.*you.*breach\b/i,/\bdata.*breach.*notification\b/i,/\bsecurity.*incident.*notify.*user\b/i,/\binfom.*you.*unauthorised.*access\b/i,/\breach.*notification.*timely\b/i]},
+
+  {id:'waiver_of_class_action_explicit',level:'danger',category:'Legal',docCat:'rights',icon:'·',
+   title:'Explicit waiver of class action and collective claims',
+   desc:'You explicitly waive the right to participate in any class action, collective action, or representative action. Claims can only be brought individually, making it economically impossible to challenge small-value wrongs.',
+   patterns:[/\bwaive.*right.*class.*action\b/i,/\bno.*class.*action.*permitted\b/i,/\bexplicitly.*waiv.*class\b/i,/\brepresentative.*action.*waived\b/i,/\byou.*waive.*participate.*class\b/i]},
+
+  {id:'third_party_beneficiary_no',level:'info',category:'Contracts',docCat:'rights',icon:'·',
+   title:'No third party can benefit from or enforce this contract',
+   desc:'This contract does not create rights for any third party. If you intended someone else to benefit from this agreement, they have no legal standing to enforce it.',
+   patterns:[/\bno.*third.*party.*beneficiary\b/i,/\bno.*right.*third.*party.*enforce\b/i,/\bthird.*party.*no.*right.*this.*agreement\b/i,/\bagreement.*not.*creat.*third.*party.*right\b/i]},
+
+  {id:'severance_release_requirement',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Must sign release of all claims to receive severance',
+   desc:'You can only receive severance pay if you sign a release waiving all legal claims against your employer. You typically have 21 days to consider this under the ADEA (US) and 7 days to revoke after signing.',
+   patterns:[/\bseverance.*conditioned.*release\b/i,/\breceive.*severance.*sign.*release\b/i,/\bseparation.*pay.*waiver.*claim\b/i,/\bseverance.*exchange.*release.*claim\b/i,/\bpayment.*severance.*requires.*sign\b/i]},
+
+  {id:'non_disparagement_forever',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Non-disparagement obligation has no end date',
+   desc:'The non-disparagement clause applies indefinitely with no time limit. You can never publicly criticise the company, even years after leaving and even if what you say is true.',
+   patterns:[/\bnon.disparagement.*perpetual\b/i,/\bnon.disparagement.*no.*time.*limit\b/i,/\bdisparage.*at.*any.*time.*future\b/i,/\bdisparage.*forever\b/i,/\bnon.disparagement.*survive.*termination\b/i]},
+
+  {id:'liquidated_damages_termination',level:'danger',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Fixed financial penalty for resigning early',
+   desc:'If you leave before a specified date or without giving full notice, you are required to pay a fixed sum as liquidated damages. This is in addition to losing any accrued benefits.',
+   patterns:[/\bliquidated.*damages.*resign\b/i,/\bpenalty.*leave.*before\b/i,/\bpay.*damages.*notice.*period\b/i,/\bfixed.*amount.*early.*departure\b/i,/\bfinancial.*penalty.*failure.*notice\b/i]},
+
+  {id:'monitoring_software',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Monitoring software installed on work devices',
+   desc:'The employer installs monitoring, keylogging, or surveillance software on devices you use for work. This may capture keystrokes, screenshots, emails, and browsing activity.',
+   patterns:[/\bmonitoring.*software.*install\b/i,/\bkeylogger\b/i,/\bemployee.*monitoring.*software\b/i,/\bactivity.*monitor.*device\b/i,/\bsurveillance.*software.*work.*device\b/i,/\bscreen.*capture.*employ.*software\b/i]},
+
+  {id:'gig_worker_independent',level:'warning',category:'Employment',docCat:'rights',icon:'·',
+   title:'Classified as independent contractor — no employee benefits',
+   desc:'You are classified as an independent contractor, not an employee. This means no employee benefits, no employer tax contributions, no right to unemployment insurance, and no legal employment protections in most jurisdictions.',
+   patterns:[/\bindependent.*contractor.*not.*employee\b/i,/\bno.*employee.*benefit.*contractor\b/i,/\bself.employed.*no.*benefit\b/i,/\bnot.*entitled.*employ.*benefit.*contractor\b/i,/\bgig.*worker.*independent.*contractor\b/i]},
+
+  {id:'tips_policy',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Tip pooling policy — tips shared with non-tipped staff',
+   desc:'Tips you receive may be pooled and redistributed among other staff, including back-of-house workers. Ensure the tip pooling policy complies with the Fair Labor Standards Act (US) or applicable local law.',
+   patterns:[/\btip.*pool\b/i,/\btips.*shared.*among\b/i,/\btip.*redistributed\b/i,/\bgratuity.*pool.*staff\b/i,/\btips.*collected.*distributed\b/i]},
+
+  {id:'non_compete_during_employment',level:'warning',category:'Employment',docCat:'rights',icon:'·',
+   title:'Non-compete applies while you are employed',
+   desc:'You cannot work for a competitor, consult, or provide services to any competing business even while employed here. This restricts any moonlighting or side income in your field.',
+   patterns:[/\bnot.*work.*competitor.*during.*employment\b/i,/\bwhile.*employed.*not.*engage.*compet\b/i,/\bduring.*term.*employment.*not.*compet\b/i,/\bprohibit.*compet.*during.*employ\b/i]},
+
+  {id:'social_media_ownership',level:'warning',category:'Employment',docCat:'rights',icon:'·',
+   title:'Work-related social media accounts belong to employer',
+   desc:'Social media accounts created or used for work purposes — including followers and content — may be considered company property. When you leave, you may have to hand over these accounts.',
+   patterns:[/\bsocial.*media.*account.*company.*property\b/i,/\bwork.*social.*media.*employer.*owns\b/i,/\blinkedin.*account.*company.*property\b/i,/\btwitter.*account.*belong.*employer\b/i,/\bsocial.*media.*account.*return.*terminat\b/i]},
+
+  {id:'dispute_resolution_panel',level:'info',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Disputes resolved by company-appointed panel or reviewer',
+   desc:'Disputes are resolved by a panel, reviewer, or expert appointed by the company rather than an independent third party. This creates a potential conflict of interest in dispute resolution.',
+   patterns:[/\bdispute.*panel.*appoint.*company\b/i,/\breviewer.*appoint.*us\b/i,/\bexpert.*determin.*appoint.*our\b/i,/\bdispute.*resolv.*our.*appoint.*panel\b/i,/\binternal.*appeals.*process.*binding\b/i]},
+
+  {id:'mandatory_mediation_first',level:'info',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Must attempt mediation before suing or arbitrating',
+   desc:'Before filing any legal claim, you must first attempt formal mediation. This adds time and cost to resolving disputes, and the mediation process itself may be controlled by the other party.',
+   patterns:[/\bmediation.*before.*arbitration\b/i,/\bmust.*attempt.*mediation.*first\b/i,/\bgood.*faith.*mediation.*required\b/i,/\bnegotiat.*mediat.*prior.*legal.*action\b/i,/\bescalation.*mediation.*prior.*claim\b/i]},
+
+  {id:'late_payment_interest',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Interest charged on late payments',
+   desc:'If you do not pay on time, interest accrues on the outstanding amount. The interest rate and compounding frequency determine how quickly the debt grows.',
+   patterns:[/\binterest.*late.*payment\b/i,/\bcharge.*interest.*overdue.*amount\b/i,/\blate.*payment.*interest.*rate\b/i,/\boverdue.*invoice.*interest\b/i,/\binterest.*accrue.*unpaid.*balance\b/i]},
+
+  {id:'right_of_first_refusal',level:'info',category:'Contracts',docCat:'rights',icon:'·',
+   title:'Right of first refusal — must offer to this party before others',
+   desc:'Before selling or transferring something covered by this agreement, you must first offer it to the other party on the same terms. This limits your freedom to deal with third parties.',
+   patterns:[/\bright.*of.*first.*refusal\b/i,/\bfirst.*refusal.*right\b/i,/\brofr\b/i,/\boffer.*first.*to.*company.*before\b/i,/\bpreemptive.*right.*purchas\b/i]},
+
+  {id:'exclusivity_obligation',level:'warning',category:'Contracts',docCat:'obligation',icon:'·',
+   title:'Exclusivity obligation — cannot work with competitors',
+   desc:'You are obligated to deal exclusively with this company for certain services or products. You cannot work with, purchase from, or refer business to any competitors during the contract term.',
+   patterns:[/\bexclusivity.*obligation\b/i,/\bexclusive.*arrangement\b/i,/\bnot.*deal.*with.*competitor.*exclusiv\b/i,/\bexclusive.*provider.*agreement\b/i,/\bsole.*supplier.*exclusive\b/i]},
+
+  {id:'step_in_rights',level:'warning',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Company has step-in rights — can take over your operations',
+   desc:'If you fail to perform your obligations, the company can "step in" and take over your operations, assets, or personnel to complete the contracted work. The costs may be charged back to you.',
+   patterns:[/\bstep.in.*rights\b/i,/\bright.*to.*step.*in.*perform\b/i,/\btake.*over.*operations.*fail.*perform\b/i,/\bcompany.*may.*perform.*your.*obligations\b/i]},
+
+  {id:'material_adverse_change',level:'warning',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Material adverse change can trigger termination',
+   desc:'If there is a significant negative change in your financial position, business, or circumstances, the other party may be able to terminate the contract or accelerate payment obligations.',
+   patterns:[/\bmaterial.*adverse.*change\b/i,/\bmaterial.*adverse.*effect\b/i,/\bmac.*clause\b/i,/\bsignificant.*adverse.*change.*terminat\b/i,/\badverse.*change.*accelerat.*payment\b/i]},
+
 ];
+
 
 
 
@@ -3033,31 +3546,69 @@ const OCR_SPACE_KEY='helloworld'; // 500/mo free — register at ocr.space for 2
 
 async function ocrSpaceFromDataUrl(dataUrl,onProgress){
   onProgress&&onProgress('Sending to OCR engine…',30);
+
+  // Compress aggressively to 400KB — fixes iOS FormData body truncation on large images
   let img64=dataUrl;
   const rawKB=Math.round(((dataUrl.split(',')[1]||'').length)*0.75/1024);
-  if(rawKB>900){onProgress&&onProgress('Compressing image…',20);img64=await compressImage(dataUrl,900);}
-  const fd=new FormData();
-  fd.append('apikey',OCR_SPACE_KEY);
-  fd.append('base64Image',img64.startsWith('data:')?img64:'data:image/jpeg;base64,'+img64);
-  fd.append('language','eng');
-  fd.append('isOverlayRequired','false');
-  fd.append('detectOrientation','true');
-  fd.append('scale','true');
-  fd.append('OCREngine','2');
-  onProgress&&onProgress('Reading text…',65);
-  // 15-second timeout — OCR.space is usually 1-3s; fail fast so Tesseract fallback kicks in
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),15000);
+  if(rawKB>400){
+    onProgress&&onProgress('Optimising image…',20);
+    img64=await compressImage(dataUrl,400);
+  }
+
+  const b64=img64.startsWith('data:')?img64:'data:image/jpeg;base64,'+img64;
+  onProgress&&onProgress('Reading text…',55);
+
+  // Primary: FormData POST (works on most browsers)
   try{
+    const fd=new FormData();
+    fd.append('apikey',OCR_SPACE_KEY);
+    fd.append('base64Image',b64);
+    fd.append('language','eng');
+    fd.append('isOverlayRequired','false');
+    fd.append('detectOrientation','true');
+    fd.append('scale','true');
+    fd.append('OCREngine','2');
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),15000);
     const resp=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:fd,signal:controller.signal});
     clearTimeout(timer);
-    if(!resp.ok)throw new Error('OCR.space error '+resp.status);
+    if(!resp.ok)throw new Error('status '+resp.status);
     const result=await resp.json();
-    if(result.IsErroredOnProcessing)throw new Error(result.ErrorMessage?.[0]||'OCR processing failed');
-    return(result.ParsedResults?.[0]?.ParsedText||'').trim();
-  }catch(e){
-    clearTimeout(timer);
-    throw e;
+    if(result.IsErroredOnProcessing)throw new Error(result.ErrorMessage?.[0]||'OCR error');
+    const text=(result.ParsedResults?.[0]?.ParsedText||'').trim();
+    if(text)return text;
+    throw new Error('empty result');
+  }catch(formErr){
+    // Fallback: URL-encoded POST — works when FormData is blocked by carrier/proxy
+    onProgress&&onProgress('Retrying with alternate method…',60);
+    try{
+      const body=new URLSearchParams({
+        apikey:OCR_SPACE_KEY,
+        base64Image:b64,
+        language:'eng',
+        isOverlayRequired:'false',
+        detectOrientation:'true',
+        scale:'true',
+        OCREngine:'2'
+      });
+      const controller2=new AbortController();
+      const timer2=setTimeout(()=>controller2.abort(),15000);
+      const resp2=await fetch('https://api.ocr.space/parse/image',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:body.toString(),
+        signal:controller2.signal
+      });
+      clearTimeout(timer2);
+      if(!resp2.ok)throw new Error('status '+resp2.status);
+      const result2=await resp2.json();
+      if(result2.IsErroredOnProcessing)throw new Error(result2.ErrorMessage?.[0]||'OCR error');
+      const text2=(result2.ParsedResults?.[0]?.ParsedText||'').trim();
+      if(text2)return text2;
+      throw new Error('empty result');
+    }catch(urlErr){
+      throw new Error('OCR.space unavailable ('+urlErr.message+')');
+    }
   }
 }
 
@@ -3094,10 +3645,24 @@ function loadScript(src){
 async function loadTesseract(statusEl){
   if(typeof Tesseract!=='undefined')return;
   if(statusEl)statusEl.textContent='Loading fallback OCR engine…';
-  for(const url of ['https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js','https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js']){
-    try{await loadScript(url);if(typeof Tesseract!=='undefined')return;}catch(e){}
+  // Three CDNs — if all fail, the browser is blocking external scripts
+  const cdns=[
+    'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js',
+    'https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js',
+  ];
+  for(const url of cdns){
+    try{
+      await loadScript(url);
+      if(typeof Tesseract!=='undefined')return;
+    }catch(e){}
   }
-  throw new Error('Could not load fallback OCR. Check your internet connection.');
+  // Detect Samsung Internet — it has known Worker/Blob issues
+  const isSamsung=/SamsungBrowser/i.test(navigator.userAgent);
+  const msg=isSamsung
+    ? 'OCR engine could not load. Samsung Internet has known issues with this feature — try opening in Chrome instead.'
+    : 'OCR engine could not load. This is usually caused by an ad blocker, VPN, or network restriction blocking external scripts. Try disabling any content blockers and refreshing, or use the Upload tab instead.';
+  throw new Error(msg);
 }
 
 let _tesseractWorker=null,_workerBusy=false;
@@ -3169,13 +3734,19 @@ async function runOCR(src){
     if(text.length<=20) throw new Error('Not enough text — try a clearer photo');
   }catch(ocrSpaceErr){
     // OCR.space failed — fall back to Tesseract
-    label.textContent='Cloud OCR unavailable, trying local engine…';
+    const isSamsung=/SamsungBrowser/i.test(navigator.userAgent);
+    label.textContent=isSamsung
+      ? 'Cloud OCR blocked — trying local engine (may be slow on Samsung Internet)…'
+      : 'Cloud OCR unavailable — trying local engine…';
     bar.style.width='15%';
 
     let timedOut=false;
     const timeout=setTimeout(()=>{
       timedOut=true;_workerBusy=false;_tesseractWorker=null;
-      label.textContent='OCR timed out. Check your connection and try again.';
+      const isSam=/SamsungBrowser/i.test(navigator.userAgent);
+      label.textContent=isSam
+        ? 'OCR timed out. Try opening in Chrome — Samsung Internet has known issues with this feature.'
+        : 'OCR timed out. If you have an ad blocker or VPN active, try disabling it and retaking the photo. Or use the Upload tab instead.';
       bar.style.width='0%';
     },120000);
     try{
@@ -3191,7 +3762,7 @@ async function runOCR(src){
       const text=(data.text||'').trim();
       if(text.length<30){
         bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-        label.textContent='Not enough text found. Try better lighting or the Upload tab.';
+        label.textContent='Not enough text found. Try better lighting, hold the camera steadier, or use the Upload tab.';
         return;
       }
       bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
@@ -3200,8 +3771,10 @@ async function runOCR(src){
       const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
     }catch(tessErr){
       clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
-      if(!timedOut){bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-        label.textContent='OCR failed: '+tessErr.message+'. Try the Upload tab.';}
+      if(!timedOut){
+        bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+        label.textContent=tessErr.message.length>80?tessErr.message:'OCR failed. '+tessErr.message+' Try the Upload tab instead.';
+      }
     }
   }
 }
