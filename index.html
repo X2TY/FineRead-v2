@@ -1494,7 +1494,7 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
         <input type="checkbox" id="remember-key" onchange="handleRememberKey()">
         Remember key in this browser
       </label>
-      <div class="ai-note" id="ai-key-note">Key sent only to api.anthropic.com. Never stored on any server. <span style="color:var(--text2);font-weight:500;">AI runs automatically when you click Analyze.</span> No key yet? <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--muted2);text-decoration:underline;text-underline-offset:2px;">Get one free at console.anthropic.com →</a></div>
+      <div class="ai-note" id="ai-key-note">Your key is sent directly to Anthropic — never stored on any server. AI analysis runs automatically on every scan once active. <strong style="color:var(--text2);">To get a free key:</strong> go to <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">console.anthropic.com</a> → sign up free → API Keys → Create Key. Paste it above and tick "Remember".</div>
     </div>
   </div>
 
@@ -3070,14 +3070,12 @@ function handleRememberKey(){
 }
 
 // Default API key — users can replace with their own in the AI panel
-const _DEFAULT_KEY='sk-ant-api03-tgOREXSdTzOfqPWBfG5x7anO0lQQBv1vZ_EQ7RjZHuiMSHgvHdDa1jTfpS_u1sOVp5ylJmVJ0Ic0mkh1blHlQ-_w08LwAA';
-
 function loadSavedKey(){
   try{
-    const k=localStorage.getItem('fr_key')||_DEFAULT_KEY;
+    const k=localStorage.getItem('fr_key');
     if(k){
       document.getElementById('api-key').value=k;
-      document.getElementById('remember-key').checked=!!localStorage.getItem('fr_key');
+      document.getElementById('remember-key').checked=true;
       aiOn=true;
       document.getElementById('ai-toggle').classList.add('on');
       const top=document.getElementById('ai-top');
