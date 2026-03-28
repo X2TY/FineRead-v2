@@ -11,8 +11,12 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FineRead — Know Before You Sign">
 <meta name="twitter:description" content="AI-powered legal document scanner. Find the clauses that matter before you sign.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FineRead">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;FineRead&quot;,&quot;short_name&quot;:&quot;FineRead&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23080808&quot;,&quot;theme_color&quot;:&quot;%23080808&quot;,&quot;description&quot;:&quot;Legal document scanner&quot;}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23181818'/><text y='.9em' font-size='62' x='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' fill='%23f2f2f2'>FR</text></svg>">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com; worker-src blob:; frame-src 'none'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com https://api.ocr.space; worker-src blob:; frame-src 'none'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <title>FineRead — Know Before You Sign</title>
@@ -88,8 +92,6 @@ html.light body::after{
     linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
 }
-html.light .btn-primary{background:#111111;color:#ffffff;}
-html.light .btn-primary:hover{background:#222222;opacity:1;}
 html.light .btn-ghost{border-color:rgba(0,0,0,0.15);color:#555555;}
 html.light .btn-ghost:hover{color:#111111;border-color:rgba(0,0,0,0.3);}
 html.light .btn-export{background:#f0f0ee;border-color:rgba(0,0,0,0.12);color:#444444;}
@@ -485,7 +487,7 @@ textarea::placeholder{color:var(--muted);}
 .cam-flip:active{background:rgba(255,255,255,0.25);}
 #canvas{display:none;}
 .capture-btn{
-  background:var(--accent2);
+  background:#f2f2f2;
   color:#0a0a0a;border:none;
   padding:13px 28px;border-radius:var(--r-sm);
   font-size:14.5px;font-weight:600;
@@ -494,8 +496,9 @@ textarea::placeholder{color:var(--muted);}
   transition:opacity .2s,transform .1s;
   -webkit-tap-highlight-color:transparent;
   touch-action:manipulation;
-  box-shadow:0 2px 12px rgba(0,0,0,0.4);
+  box-shadow:0 2px 12px rgba(0,0,0,0.3);
 }
+html.light .capture-btn{background:#111111;color:#ffffff;}
 .capture-btn:hover{opacity:.9;}
 .capture-btn:active{transform:scale(.98);}
 #camera-status{margin-top:9px;color:var(--muted);font-size:13px;min-height:18px;}
@@ -610,7 +613,7 @@ textarea::placeholder{color:var(--muted);}
 /* ── BUTTONS ── */
 .btn-row{display:flex;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap;}
 .btn-primary{
-  background:var(--accent2);
+  background:#f2f2f2;
   color:#0a0a0a;border:none;
   padding:14px 28px;border-radius:var(--r-sm);
   font-size:15px;font-weight:600;
@@ -623,6 +626,8 @@ textarea::placeholder{color:var(--muted);}
 .btn-primary:hover{opacity:.88;transform:translateY(-1px);}
 .btn-primary:active{opacity:.75;transform:translateY(0);}
 .btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+html.light .btn-primary{background:#111111;color:#ffffff;}
+html.light .btn-primary:hover{background:#222222;opacity:1;}
 .btn-ghost{
   background:transparent;color:var(--muted);
   border:1px solid var(--border2);
@@ -1128,6 +1133,16 @@ textarea::placeholder{color:var(--muted);}
   margin-bottom:14px;
 }
 
+/* ── COPY SNIPPET BUTTON ── */
+.btn-copy-snippet{
+  background:var(--surface3);border:1px solid var(--border2);
+  color:var(--muted2);padding:3px 10px;border-radius:var(--r-xs);
+  font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;
+  flex-shrink:0;
+}
+.btn-copy-snippet:hover{color:var(--text);border-color:var(--border3);}
+
 /* ── TEXT HIGHLIGHT ── */
 .finding{cursor:pointer;}
 .finding.highlighted{border-color:var(--accent-border)!important;box-shadow:0 0 0 2px var(--accent-glow),0 4px 20px rgba(0,0,0,.35)!important;animation:highlight-pulse .7s ease 2;}
@@ -1241,11 +1256,11 @@ textarea::placeholder{color:var(--muted);}
   </a>
   <div class="nav-right">
     <span class="nav-pill" aria-hidden="true">Know before you sign</span>
-    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">📚</button>
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">🌙</button>
+    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">≡</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">◐</button>
     <button class="history-btn" onclick="toggleHistory()" id="history-btn"
             aria-haspopup="true" aria-expanded="false" aria-controls="history-panel">
-      <span aria-hidden="true">🕐</span> <span class="label">Recent</span>
+      <span aria-hidden="true">○</span> <span class="label">Recent</span>
     </button>
   </div>
   <div class="history-panel" id="history-panel" role="dialog" aria-label="Recent scans" aria-modal="false">
@@ -1284,11 +1299,11 @@ textarea::placeholder{color:var(--muted);}
 <div class="card">
 
   <div class="tab-row" role="tablist" aria-label="Input method">
-    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">✏️ Paste Text</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">📄 Upload</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">📸 Camera</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">⚖️ Compare</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">▶ Demo</button>
+    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">Paste Text</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">Upload</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">Camera</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">Compare</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">Demo</button>
   </div>
 
   <!-- PASTE -->
@@ -1310,12 +1325,12 @@ textarea::placeholder{color:var(--muted);}
          ondrop="handleDrop(event)"
          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('file-input').click();}">
       <input type="file" id="file-input" accept=".txt,.pdf,image/*" onchange="handleFileSelect(event)" aria-hidden="true" tabindex="-1">
-      <div class="drop-icon" aria-hidden="true">📂</div>
+      <div class="drop-icon" aria-hidden="true">↑</div>
       <div class="drop-label">Drop a file or tap to browse</div>
       <div class="drop-sub">TXT · PDF (text-based) · JPG · PNG · max 10 MB</div>
     </div>
     <div class="file-badge" id="upload-file-info" aria-live="polite">
-      <span id="file-icon" aria-hidden="true">📄</span>
+      <span id="file-icon" aria-hidden="true">·</span>
       <div style="flex:1;min-width:0;">
         <div id="file-name" style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
         <div id="file-status" style="font-size:11.5px;color:var(--muted);margin-top:2px;"></div>
@@ -1328,10 +1343,10 @@ textarea::placeholder{color:var(--muted);}
     <div id="camera-section">
       <div class="cam-wrap">
         <video id="video" autoplay playsinline muted aria-label="Camera viewfinder"></video>
-        <button class="cam-flip" id="flip-btn" onclick="flipCamera()" aria-label="Flip camera" style="display:none;">🔄</button>
+        <button class="cam-flip" id="flip-btn" onclick="flipCamera()" aria-label="Flip camera" style="display:none;">⇄</button>
       </div>
       <canvas id="canvas" aria-hidden="true"></canvas><br>
-      <button class="capture-btn" onclick="capturePhoto()">📸 Capture &amp; Extract Text</button>
+      <button class="capture-btn" onclick="capturePhoto()">Capture &amp; Extract Text</button>
       <div id="camera-status" aria-live="polite">Requesting camera…</div>
     </div>
     <div id="photo-preview">
@@ -1350,43 +1365,43 @@ textarea::placeholder{color:var(--muted);}
       <div class="demo-card active" id="demo-0" role="button" tabindex="0"
            onclick="selectDemo(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(0);}"
            aria-pressed="true" aria-label="DemoApp Privacy Policy — Data selling, arbitration, AI training">
-        <div class="demo-card-name">🔴 Privacy Policy</div>
+        <div class="demo-card-name">Privacy Policy</div>
         <div class="demo-card-desc">Data selling, arbitration, AI training</div>
       </div>
       <div class="demo-card" id="demo-1" role="button" tabindex="0"
            onclick="selectDemo(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(1);}"
            aria-pressed="false" aria-label="Sample SaaS Terms — Auto-renewal, liability caps">
-        <div class="demo-card-name">🟡 SaaS Terms</div>
+        <div class="demo-card-name">SaaS Terms</div>
         <div class="demo-card-desc">Auto-renewal, liability caps</div>
       </div>
       <div class="demo-card" id="demo-2" role="button" tabindex="0"
            onclick="selectDemo(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(2);}"
            aria-pressed="false" aria-label="Minimal T&C — Low-risk boilerplate for comparison">
-        <div class="demo-card-name">🟢 Minimal T&amp;C</div>
+        <div class="demo-card-name">Minimal T&amp;C</div>
         <div class="demo-card-desc">Low-risk boilerplate</div>
       </div>
       <div class="demo-card" id="demo-3" role="button" tabindex="0"
            onclick="selectDemo(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(3);}"
            aria-pressed="false" aria-label="Employment Contract — Non-compete, IP ownership, at-will">
-        <div class="demo-card-name">🔴 Employment Contract</div>
+        <div class="demo-card-name">Employment Contract</div>
         <div class="demo-card-desc">Non-compete, IP ownership, at-will</div>
       </div>
       <div class="demo-card" id="demo-4" role="button" tabindex="0"
            onclick="selectDemo(4)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(4);}"
            aria-pressed="false" aria-label="Residential Lease — Deposits, entry rights, early exit fees">
-        <div class="demo-card-name">🟡 Residential Lease</div>
+        <div class="demo-card-name">Residential Lease</div>
         <div class="demo-card-desc">Deposits, entry rights, early exit</div>
       </div>
       <div class="demo-card" id="demo-5" role="button" tabindex="0"
            onclick="selectDemo(5)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(5);}"
            aria-pressed="false" aria-label="NDA — Confidentiality, scope, duration, remedies">
-        <div class="demo-card-name">🟡 NDA</div>
+        <div class="demo-card-name">NDA</div>
         <div class="demo-card-desc">Confidentiality, scope, duration</div>
       </div>
       <div class="demo-card" id="demo-6" role="button" tabindex="0"
            onclick="selectDemo(6)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemo(6);}"
            aria-pressed="false" aria-label="Personal Loan — 89.9% APR, credit reporting, arbitration">
-        <div class="demo-card-name">🔴 Personal Loan</div>
+        <div class="demo-card-name">Personal Loan</div>
         <div class="demo-card-desc">89.9% APR, credit reporting, arbitration</div>
       </div>
     </div>
@@ -1414,7 +1429,7 @@ textarea::placeholder{color:var(--muted);}
 
   <!-- JURISDICTION -->
   <div class="juris-panel" id="juris-panel">
-    <span class="juris-label">🌍 Your location</span>
+    <span class="juris-label">Location</span>
     <select class="juris-select" id="juris-country" onchange="onJurisChange()" aria-label="Select your country">
       <option value="">Country (optional)</option>
       <option value="US">United States</option>
@@ -1467,7 +1482,7 @@ textarea::placeholder{color:var(--muted);}
          aria-controls="ai-key-row"
          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAI();}">
       <div>
-        <div class="ai-label">✦ AI Analysis <span style="font-size:11px;background:rgba(255,255,255,0.07);color:var(--muted2);padding:2px 8px;border-radius:9999px;font-weight:500;letter-spacing:.5px;border:1px solid var(--border2);" aria-hidden="true">CLAUDE</span> <span id="ai-status-badge" style="font-size:11px;color:var(--safe);font-weight:500;margin-left:4px;display:none;" aria-live="polite">● Active</span></div>
+        <div class="ai-label">AI Analysis <span style="font-size:11px;background:rgba(255,255,255,0.07);color:var(--muted2);padding:2px 8px;border-radius:9999px;font-weight:500;letter-spacing:.5px;border:1px solid var(--border2);" aria-hidden="true">CLAUDE</span> <span id="ai-status-badge" style="font-size:11px;color:var(--safe);font-weight:500;margin-left:4px;display:none;" aria-live="polite">Active</span></div>
         <div class="ai-sub" id="ai-sub-label">Add your Claude API key to unlock deep AI analysis of any document</div>
       </div>
       <div class="toggle" id="ai-toggle" aria-hidden="true"></div>
@@ -1484,7 +1499,7 @@ textarea::placeholder{color:var(--muted);}
   </div>
 
   <div class="btn-row">
-    <button class="btn-primary" id="analyzeBtn" onclick="analyze()" aria-describedby="status-msg">Analyze document →</button>
+    <button class="btn-primary" id="analyzeBtn" onclick="analyze()" aria-describedby="status-msg" aria-busy="false">Analyze document →</button>
     <button class="btn-ghost" onclick="clearAll()" aria-label="Clear document and results">Clear</button>
     <span id="status-msg" role="status" aria-live="polite"></span>
   </div>
@@ -1507,11 +1522,11 @@ textarea::placeholder{color:var(--muted);}
 <div id="batch-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:28px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.8);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-size:16px;font-weight:600;">📚 Batch Scan</div>
+      <div style="font-size:16px;font-weight:600;">Batch Scan</div>
       <button onclick="closeBatchModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;" aria-label="Close batch scanner">×</button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Paste multiple documents separated by <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px;">---</code> on its own line. Each document is scanned independently.</p>
-    <textarea id="batch-input" style="width:100%;min-height:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:14px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.6;" placeholder="Paste document 1 here...
+    <textarea id="batch-input" maxlength="300000" style="width:100%;min-height:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:14px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.6;" placeholder="Paste document 1 here...
 
 ---
 
@@ -1533,11 +1548,23 @@ Paste document 3 here..."></textarea>
 // ── SECURITY ──────────────────────────────────
 const SEC={
   MAX_TEXT:500_000,MAX_FILE:10_000_000,MAX_SCAN:60_000,RATE_MS:8_000,
-  KEY_RE:/^sk-ant-[a-zA-Z0-9\-_]{20,}$/
+  KEY_RE:/^sk-ant-[a-zA-Z0-9\-_]{10,}$/
 };
 let lastRun=0;
-function secureText(s){if(s.length>SEC.MAX_TEXT){setStatus('⚠ Text truncated to 500 KB.');return s.slice(0,SEC.MAX_TEXT);}return s;}
-function checkRate(){const w=Math.ceil((SEC.RATE_MS-(Date.now()-lastRun))/1000);if(lastRun&&w>0)return`⏳ Wait ${w}s.`;return null;}
+function secureText(s){if(s.length>SEC.MAX_TEXT){setStatus('Warning: Text truncated to 500 KB.');return s.slice(0,SEC.MAX_TEXT);}return s;}
+function checkRate(){
+  if(!lastRun)return null;
+  const wait=Math.ceil((SEC.RATE_MS-(Date.now()-lastRun))/1000);
+  if(wait<=0)return null;
+  // Start a live countdown in the status
+  let remaining=wait;
+  const iv=setInterval(()=>{
+    remaining--;
+    if(remaining<=0){clearInterval(iv);setStatus('');}
+    else setStatus(` Please wait ${remaining}s before scanning again.`);
+  },1000);
+  return` Please wait ${wait}s before scanning again.`;
+}
 function validKey(k){if(!k)return'No API key.';if(!SEC.KEY_RE.test(k))return'Invalid key — expected sk-ant-…';return null;}
 function escHtml(s){return String(s).replace(/\0/g,'').replace(/[\x01-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');}
 
@@ -1743,429 +1770,620 @@ const RULES=[
 
   // ══ DANGER ═══════════════════════════════════════════════════════════════════
 
-  {id:'data_sale',level:'danger',category:'Data Sale',docCat:'risk',icon:'💸',
+  {id:'data_sale',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',
    title:'Your data is sold to third parties',
    desc:'The document explicitly states your personal data is sold. Once sold, you have no control over how third parties use your name, contacts, or browsing habits.',
    patterns:[/\bsell(s|ing)?\s+(your|user)\s+(personal\s+)?(information|data)\b/i,/\bsale\s+of\s+(personal\s+)?data\b/i,/\bmonetize\s+(your|user)\s+(personal\s+)?data\b/i,/\bsell\s+(your\s+)?personal\s+information\b/i]},
 
-  {id:'class_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'⚖️',
+  {id:'class_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Class action lawsuit waiver',
    desc:'You give up the right to join a class action lawsuit. Companies rely on this clause to avoid accountability when they harm thousands of users simultaneously.',
    patterns:[/\bclass\s+action\b/i,/\bwaive.*right.*class\b/i,/\bno\s+class\b.*\bproceeding/i,/\bclass.*arbitration.*waived\b/i]},
 
-  {id:'arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔒',
+  {id:'arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Mandatory binding arbitration',
    desc:'All disputes go through private arbitration — not public courts. You give up jury trial rights. Outcomes heavily favor companies and are nearly impossible to appeal.',
    patterns:[/\bbinding\s+(individual\s+)?arbitration\b/i,/\bmandatory\s+arbitration\b/i,/\bwaive.*jury\s+trial\b/i,/\bdisputes.*resolved.*arbitration\b/i,/\barbitration.*in lieu of.*court\b/i]},
 
-  {id:'ai_training',level:'danger',category:'AI / Data Use',docCat:'rights',icon:'🤖',
+  {id:'ai_training',level:'danger',category:'AI / Data Use',docCat:'rights',icon:'·',
    title:'Your content used to train AI',
    desc:'The company can use your data or content to train AI or machine learning systems. Once used for training, it cannot be removed from the model.',
    patterns:[/\btrain(ing)?\s+(artificial\s+intelligence|machine\s+learning|ai\s+model|ml\s+model|large\s+language\s+model|llm)\b/i,/\buse.*content.*to\s+train\b/i,/\bimprove.*ai.*your\s+data\b/i,/\bmodel\s+training.*your\s+content\b/i]},
 
-  {id:'perpetual_license',level:'danger',category:'IP Rights',docCat:'rights',icon:'📋',
+  {id:'perpetual_license',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Perpetual irrevocable license on your content',
    desc:'You grant a license that never expires and cannot be revoked — even after deleting your account. The company can use your content forever.',
    patterns:[/\bperpetual.*irrevocable\b/i,/\birrevocable.*perpetual\b/i,/\broyalty.?free.*perpetual\b/i,/\bperpetual.*worldwide.*licen[sc]e\b/i]},
 
-  {id:'liability_trivial',level:'danger',category:'Liability',docCat:'risk',icon:'💰',
+  {id:'liability_trivial',level:'danger',category:'Liability',docCat:'risk',icon:'·',
    title:'Company liability capped at trivial amount',
    desc:"The company's total liability to you is capped at almost nothing. Even if they cause serious financial or personal harm, you can recover next to nothing legally.",
    patterns:[/\bliability.*\$1[^0-9]/i,/\bnot exceed.*\$1[^0-9]/i,/\bmaximum.*one dollar\b/i,/\bliability.*shall not exceed.*\$[0-9]{1,3}[^,0-9]/i,/\baggregate liability.*not exceed.*(?:fees paid|one month|30 days)\b/i]},
 
-  {id:'indefinite_retention',level:'danger',category:'Data Retention',docCat:'risk',icon:'🗃️',
+  {id:'indefinite_retention',level:'danger',category:'Data Retention',docCat:'risk',icon:'·',
    title:'Your data kept forever after account deletion',
    desc:"Personal data persists indefinitely even after you delete your account. Closing your account does not erase your data from their servers.",
    patterns:[/\bretain.*indefinitely\b/i,/\bindefinite.*retention\b/i,/\beven after.*account.*delet\b/i,/\bpersist.*after.*delet\b/i,/\bretain.*data.*following.*terminat\b/i,/\bdata.*not.*deleted.*upon.*account\b/i]},
 
-  {id:'law_enforcement',level:'danger',category:'Privacy',docCat:'risk',icon:'🏛️',
+  {id:'law_enforcement',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
    title:'Data disclosed to government without telling you',
    desc:'The company can hand your data to law enforcement or government agencies without notifying you — leaving you no chance to legally object.',
    patterns:[/\blaw enforcement.*without notice\b/i,/\bwithout.*notif.*government\b/i,/\bdisclose.*government.*without.*notice\b/i,/\bcompelled.*to\s+disclose\b/i,/\bgovernment.*request.*not\s+notify\b/i]},
 
-  {id:'responsible_after_termination',level:'danger',category:'Financial',docCat:'obligation',icon:'⚠️',
+  {id:'responsible_after_termination',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
    title:'You still owe money even if service is cancelled',
    desc:'Even if the company ends the program, you remain liable for any outstanding balance. Cancellation of the service does not cancel your debt.',
    patterns:[/\bresponsible for any outstanding\b/i,/\bstill be responsible.*balance\b/i,/\boutstanding.*balance.*due\b/i,/\bremain.*responsible.*terminat\b/i,/\bliable.*remaining.*balance\b/i]},
 
-  {id:'non_compete',level:'danger',category:'Employment',docCat:'rights',icon:'🚧',
+  {id:'non_compete',level:'danger',category:'Employment',docCat:'rights',icon:'·',
    title:'Non-compete restricts where you can work',
    desc:"You agree not to work for competitors or start a competing business — sometimes for years. This can severely limit your career options and income after leaving.",
    patterns:[/\bnon.compete\b/i,/\bcovenant not to compete\b/i,/\bnot.*work.*for.*competitor\b/i,/\brefrain.*from.*competing\b/i,/\bcompetitive.*activity.*prohibit\b/i,/\bcompete.*directly.*indirectly\b/i]},
 
-  {id:'ip_ownership_employer',level:'danger',category:'IP Rights',docCat:'rights',icon:'🧠',
+  {id:'ip_ownership_employer',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Employer owns everything you create',
    desc:"Any work, invention, or idea you develop — even on personal time — may belong to the company. Side projects, apps, and creative work could all be claimed.",
    patterns:[/\bwork.*made.*for.*hire\b/i,/\bwork product.*property.*company\b/i,/\binventions.*belong.*employer\b/i,/\bassign.*all.*intellectual property\b/i,/\ball.*inventions.*discoveries.*assign\b/i,/\bintellectual property.*vests.*in.*company\b/i]},
 
-  {id:'indemnification',level:'danger',category:'Liability',docCat:'obligation',icon:'🛡️',
+  {id:'indemnification',level:'danger',category:'Liability',docCat:'obligation',icon:'·',
    title:"You pay the company's legal costs if sued",
    desc:"If a third party sues the company because of your actions on the platform, you must pay their legal defense costs. This could run into thousands of dollars.",
    patterns:[/\byou.*shall\s+indemnif\b/i,/\bindemnif.*hold harmless\b/i,/\bindemnif.*defend.*company\b/i,/\bhold.*harmless.*from.*claims\b/i,/\bindemnif.*losses.*costs.*expenses\b/i,/\bindemnif.*attorneys.*fees\b/i]},
 
-  {id:'waiver_injury',level:'danger',category:'Liability',docCat:'rights',icon:'🩺',
+  {id:'waiver_injury',level:'danger',category:'Liability',docCat:'rights',icon:'·',
    title:'You waive the right to sue for injury',
    desc:"You give up the right to sue for personal injury or harm. This is common in gyms, fitness centers, and activity services, though it may not be fully enforceable in every jurisdiction.",
    patterns:[/\bwaive.*right.*to\s+sue\b/i,/\brelease.*claims.*injury\b/i,/\bassume.*all.*risk\b/i,/\bwaiver.*liability.*injury\b/i,/\bassumption of risk\b/i,/\brelease.*from.*liability.*personal\b/i]},
 
-  {id:'facial_recognition',level:'danger',category:'Biometrics',docCat:'rights',icon:'👤',
+  {id:'facial_recognition',level:'danger',category:'Biometrics',docCat:'rights',icon:'·',
    title:'Facial recognition or biometric data collected',
    desc:'Your face, fingerprint, or voiceprint is collected and stored. Biometric data is uniquely dangerous — unlike a password, it cannot be changed if it is breached.',
    patterns:[/\bfacial recognition\b/i,/\bbiometric.*data\b/i,/\bface\s+scan\b/i,/\bfingerprint.*collect\b/i,/\bvoiceprint\b/i,/\bbiometric identifier\b/i,/\bfacial\s+geometry\b/i]},
 
-  {id:'no_fdic',level:'danger',category:'Financial',docCat:'risk',icon:'🏦',
+  {id:'no_fdic',level:'danger',category:'Financial',docCat:'risk',icon:'·',
    title:'Funds not FDIC insured — no safety net if company fails',
    desc:"Your money held by this service is not insured by the FDIC. If the company fails or is hacked, there is no government safety net to recover your funds.",
    patterns:[/\bnot\s+(fdic|sipc)\s+insured\b/i,/\bfunds.*not.*insured\b/i,/\bnot\s+a\s+bank\b/i,/\bnot\s+protected.*deposit\s+insurance\b/i,/\bcrypto.*not.*insured\b/i,/\bdigital assets.*not.*insured\b/i]},
 
-  {id:'minor_data',level:'danger',category:'Privacy',docCat:'risk',icon:'👶',
+  {id:'minor_data',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
    title:"Children's data collected (under 13)",
    desc:"The service collects personal data from children under 13. This raises serious legal and safety concerns, especially regarding how that data is stored and shared.",
    patterns:[/\bchildren.*under.*13\b/i,/\bunder.*age.*13\b/i,/\bCOPPA\b/i,/\bchild.*online.*privacy\b/i,/\bminors.*personal.*information\b/i,/\bpersonal.*data.*children\b/i]},
 
   // ══ WARNING ══════════════════════════════════════════════════════════════════
 
-  {id:'credit_check',level:'warning',category:'Credit',docCat:'obligation',icon:'📊',
+  {id:'credit_check',level:'warning',category:'Credit',docCat:'obligation',icon:'·',
    title:'Credit check required',
    desc:'A hard inquiry will be placed on your credit report. Multiple hard inquiries in a short period can lower your score and affect loan applications.',
    patterns:[/\bcredit check required\b/i,/\bhard.*inquiry\b/i,/\bcredit.*inquiry\b/i,/\bpull.*your.*credit\b/i,/\bcredit.*pull\b/i,/\brun.*a\s+credit\s+check\b/i,/\bsubject to.*credit.*approval\b/i]},
 
-  {id:'auto_charge',level:'warning',category:'Billing',docCat:'obligation',icon:'💳',
+  {id:'auto_charge',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Card charged automatically every billing period',
    desc:'Your card is charged automatically without any action from you. If the card expires or funds run low, you may face service interruptions or overdraft fees.',
    patterns:[/\bautomatically charged\b/i,/\bautomatic.*charge\b/i,/\bauto.billed\b/i,/\bcharged.*automatically\b/i,/\bautomatically.*debited\b/i,/\brecurring.*charge\b/i,/\bcharged.*on a.*basis\b/i]},
 
-  {id:'credit_card_interest',level:'warning',category:'Billing',docCat:'risk',icon:'📈',
+  {id:'credit_card_interest',level:'warning',category:'Billing',docCat:'risk',icon:'·',
    title:'Your card may charge interest on top',
    desc:'Even on a 0% APR plan, your card issuer can charge interest on unpaid balances. You might end up paying far more than the advertised price.',
    patterns:[/\bcredit card issuer may charge\b/i,/\bcard issuer.*interest\b/i,/\binterest.*cardmember\b/i,/\binterest on unpaid balance\b/i,/\bcard.*may.*charge.*interest\b/i]},
 
-  {id:'third_party_bank',level:'warning',category:'Data Sharing',docCat:'risk',icon:'🏦',
+  {id:'third_party_bank',level:'warning',category:'Data Sharing',docCat:'risk',icon:'·',
    title:'Data shared with a partner bank or lender',
    desc:'Your personal and financial information goes to a third-party bank or lender governed by their own separate privacy policy.',
    patterns:[/\bbank partner\b/i,/\bpartner bank\b/i,/\bbank.*process.*personal\b/i,/\blender.*personal.*information\b/i,/\bthird.party.*bank\b/i,/\bfinancing.*partner\b/i,/\bCitizens\s+(Bank|One)\b/i]},
 
-  {id:'personal_info_collection',level:'warning',category:'Data Collection',docCat:'risk',icon:'📋',
+  {id:'personal_info_collection',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Extensive personal information collected and shared',
    desc:'The company and its partners collect, process, and share your name, address, email, and financial details across multiple parties.',
    patterns:[/\bcollect.*process.*transmit.*maintain.*use.*personal\b/i,/\bcollect.*personal information.*name.*address\b/i,/\bsubsidiaries.*agents.*collect\b/i,/\bmay collect.*process.*personal\b/i,/\bwe.*collect.*following.*information\b/i]},
 
-  {id:'terms_change_anytime',level:'warning',category:'Policy Changes',docCat:'obligation',icon:'📝',
+  {id:'terms_change_anytime',level:'warning',category:'Policy Changes',docCat:'obligation',icon:'·',
    title:'Terms can be rewritten any time',
    desc:'The company can change these terms whenever they want. Continuing to use the service after a change means you automatically agree to the new terms.',
    patterns:[/\breserves?\s+the right to.*change.*cancel\b/i,/\breserves?\s+the right to substitute.*change\b/i,/\bmay.*modify.*terms.*at any time\b/i,/\bwithout.*prior notice\b/i,/\breserve.*right.*update.*at any time\b/i,/\bcontinued use.*constitutes acceptance\b/i,/\bwe may update.*at any time\b/i,/\bnotice.*not required.*change\b/i]},
 
-  {id:'installment_loan',level:'warning',category:'Financial',docCat:'obligation',icon:'📅',
+  {id:'installment_loan',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
    title:'Multi-month installment loan',
    desc:'You are entering a formal loan spanning multiple months or years. Missing payments can damage your credit score and trigger collection action.',
    patterns:[/\binstallment loan\b/i,/\bmonthly installment\b/i,/\binstallment.*payment\b/i,/\benter.*into.*a.*loan\b/i,/\brepayment.*schedule\b/i,/\bfinanced.*over.*months\b/i]},
 
-  {id:'outstanding_balance',level:'warning',category:'Financial',docCat:'obligation',icon:'💸',
+  {id:'outstanding_balance',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
    title:'Unpaid balances must be paid regardless',
    desc:'Any unpaid amount remains due in full even if you cancel, the company shuts down the program, or the service is discontinued.',
    patterns:[/\boutstanding balance\b/i,/\boutstanding.*amount.*due\b/i,/\bunpaid.*balance\b/i,/\bbalance.*due.*under.*terms\b/i,/\bamounts.*owed.*remain\b/i]},
 
-  {id:'free_trial_convert',level:'warning',category:'Billing',docCat:'obligation',icon:'🎁',
+  {id:'free_trial_convert',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Free trial auto-converts to paid subscription',
    desc:'Your free trial silently converts to a paid subscription unless you cancel before the deadline. Many users are charged without realising the trial ended.',
    patterns:[/\bfree trial.*automatically.*convert\b/i,/\btrial.*will.*become.*paid\b/i,/\bafter.*trial.*charged\b/i,/\btrial.*expires.*subscri\b/i,/\btrial.*period.*payment.*begins\b/i,/\bunless.*cancel.*before.*trial\b/i,/\bfree.*period.*ends.*billed\b/i]},
 
-  {id:'no_refund',level:'warning',category:'Billing',docCat:'rights',icon:'🚫',
+  {id:'no_refund',level:'warning',category:'Billing',docCat:'rights',icon:'·',
    title:'No refunds once payment is made',
    desc:"All payments are final. If you change your mind, encounter a problem, or the service doesn't meet expectations, you cannot get your money back.",
    patterns:[/\ball.*sales.*final\b/i,/\bno\s+refund\b/i,/\bpayments.*non.refundable\b/i,/\bnon.refundable.*payment\b/i,/\bno.*right.*refund\b/i,/\brefunds.*not.*available\b/i,/\bcharges.*non.refundable\b/i]},
 
-  {id:'price_increase',level:'warning',category:'Billing',docCat:'risk',icon:'📊',
+  {id:'price_increase',level:'warning',category:'Billing',docCat:'risk',icon:'·',
    title:'Price can be increased with limited notice',
    desc:'The company can raise prices, often with only 30 days\' notice or less. You must cancel before the next billing date to avoid the higher charge.',
    patterns:[/\bprice.*may.*increase\b/i,/\bwe.*may.*change.*price\b/i,/\bmodif.*pricing\b/i,/\brate.*may.*change\b/i,/\bfees.*subject.*change\b/i,/\bincrease.*price.*notice\b/i,/\bnew.*price.*effective.*next.*billing\b/i]},
 
-  {id:'communications_consent',level:'warning',category:'Marketing',docCat:'obligation',icon:'📧',
+  {id:'communications_consent',level:'warning',category:'Marketing',docCat:'obligation',icon:'·',
    title:'You agree to receive texts, emails, and surveys',
    desc:'By accepting, you consent to periodic messages and survey requests that may be difficult or impossible to opt out of entirely.',
    patterns:[/\bmay receive.*texts.*emails\b/i,/\breceive.*communications\b/i,/\breceive.*survey\b/i,/\bperiodic.*texts\b/i,/\btexts.*emails.*communications\b/i,/\bmarketing.*communications.*agree\b/i,/\bconsent.*receive.*messages\b/i]},
 
-  {id:'third_party_sharing',level:'warning',category:'Data Sharing',docCat:'risk',icon:'🤝',
+  {id:'third_party_sharing',level:'warning',category:'Data Sharing',docCat:'risk',icon:'·',
    title:'Data shared with third-party partners',
    desc:'Your information is passed to external companies for purposes beyond the original service — including marketing, analytics, and advertising.',
    patterns:[/\bshare.*third.party\b/i,/\bthird.party.*partner\b/i,/\badvertising partner\b/i,/\bjoint marketing\b/i,/\bsubsidiaries and agents\b/i,/\baffiliated.*companies\b/i,/\bshare.*with.*our.*partners\b/i]},
 
-  {id:'at_will_employment',level:'warning',category:'Employment',docCat:'risk',icon:'📋',
+  {id:'at_will_employment',level:'warning',category:'Employment',docCat:'risk',icon:'·',
    title:'At-will employment — fired any time for any reason',
    desc:"Either party can end employment at any time without giving a reason or notice. You have very limited job security beyond what the law requires.",
    patterns:[/\bat.will.*employ\b/i,/\bemploy.*at.will\b/i,/\bterminated.*any.*reason.*no cause\b/i,/\bwithout.*cause.*terminat.*employ\b/i,/\bemployment.*no.*definite.*term\b/i,/\bno.*contract.*continued.*employ\b/i]},
 
-  {id:'background_check',level:'warning',category:'Employment',docCat:'obligation',icon:'🔍',
+  {id:'background_check',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
    title:'Background and criminal check required',
    desc:'You consent to a background check including criminal records, employment history, and possibly credit. Findings can affect eligibility for the role or service.',
    patterns:[/\bbackground check\b/i,/\bbackground.*screening\b/i,/\bcriminal.*check\b/i,/\bconsumer report.*employment\b/i,/\bbackground.*investigation\b/i,/\bemployment.*verification\b/i]},
 
-  {id:'no_compete_solicitation',level:'warning',category:'Employment',docCat:'rights',icon:'🚫',
+  {id:'no_compete_solicitation',level:'warning',category:'Employment',docCat:'rights',icon:'·',
    title:'Cannot recruit colleagues or approach clients after leaving',
    desc:"For a period after leaving, you cannot recruit former colleagues or approach past clients. Violations can result in expensive lawsuits.",
    patterns:[/\bnon.solicit\b/i,/\bnot.*solicit.*employee\b/i,/\bnot.*solicit.*customer\b/i,/\brefrain.*from.*soliciting\b/i,/\bno\s+solicit.*covenant\b/i]},
 
-  {id:'drug_test',level:'warning',category:'Employment',docCat:'obligation',icon:'🧪',
+  {id:'drug_test',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
    title:'Drug and alcohol testing required',
    desc:'You consent to drug or alcohol testing as a condition of employment, which may occur randomly or following any incident.',
    patterns:[/\bdrug.*test(ing)?\b/i,/\balcohol.*test(ing)?\b/i,/\bsubstance.*test(ing)?\b/i,/\bdrug.*screening\b/i,/\brandom.*testing\b/i,/\bsubject.*to.*drug.*test\b/i]},
 
-  {id:'bonus_clawback',level:'warning',category:'Employment',docCat:'obligation',icon:'💰',
+  {id:'bonus_clawback',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
    title:'Bonuses or equity can be clawed back',
    desc:"The company can demand repayment of bonuses, commissions, or vested equity if you leave early or violate terms. You could owe money you've already spent.",
    patterns:[/\bclawback\b/i,/\bclaw.back\b/i,/\brepay.*bonus\b/i,/\brepayment.*signing\b/i,/\bforfeiture.*unvested\b/i,/\brecoup.*compensation\b/i,/\brecovery.*bonus\b/i]},
 
-  {id:'security_deposit',level:'warning',category:'Rental',docCat:'obligation',icon:'🏠',
+  {id:'security_deposit',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
    title:'Security deposit with deduction conditions',
    desc:'A deposit may be partially or fully withheld for damages, cleaning, or unpaid rent beyond normal wear and tear. Make sure deduction conditions are clearly defined.',
    patterns:[/\bsecurity deposit\b/i,/\bdeposit.*deduct\b/i,/\bdeposit.*return\b/i,/\bsecurity.*deposit.*condition\b/i,/\bforfeiture.*deposit\b/i,/\bdeposit.*withheld\b/i]},
 
-  {id:'landlord_entry',level:'warning',category:'Rental',docCat:'rights',icon:'🔑',
+  {id:'landlord_entry',level:'warning',category:'Rental',docCat:'rights',icon:'·',
    title:'Landlord can enter your home with limited notice',
    desc:"Your landlord retains the right to enter your home — sometimes with very little advance notice — for inspections or repairs. Your privacy in your own home is limited.",
    patterns:[/\blandlord.*enter\b/i,/\bright.*of.*entry\b/i,/\bentry.*upon.*notice\b/i,/\blandlord.*access.*premises\b/i,/\bright.*to.*inspect.*premises\b/i,/\blandlord.*may.*enter\b/i]},
 
-  {id:'early_termination_fee',level:'warning',category:'Contracts',docCat:'obligation',icon:'💸',
+  {id:'early_termination_fee',level:'warning',category:'Contracts',docCat:'obligation',icon:'·',
    title:'Fee for cancelling before contract end',
    desc:'Cancelling early triggers a fee — sometimes equal to all remaining payments. You can be locked in financially even if the service no longer meets your needs.',
    patterns:[/\bearly termination fee\b/i,/\bearly.*cancellation.*fee\b/i,/\btermination.*fee\b/i,/\bcancel.*before.*fee\b/i,/\bcancellation.*charge\b/i,/\bbreak.*lease.*fee\b/i,/\bliquidated damages.*terminat\b/i,/\bearly.*exit.*fee\b/i]},
 
-  {id:'warranty_disclaimer',level:'warning',category:'Warranties',docCat:'rights',icon:'🔧',
+  {id:'warranty_disclaimer',level:'warning',category:'Warranties',docCat:'rights',icon:'·',
    title:'No warranty — service provided as-is',
    desc:'The company disclaims all warranties. If the service is broken, defective, or causes harm, they have no legal obligation to fix it or compensate you.',
    patterns:[/\bas.is\b.*basis/i,/\bno\s+warrant\b/i,/\bdisclaimer.*warranties\b/i,/\bdisclaim.*all.*warrant\b/i,/\bwithout.*warranty.*of.*any.*kind\b/i,/\bimplied.*warrant.*disclaim\b/i,/\bprovided.*without.*warrant\b/i]},
 
-  {id:'auto_renewal',level:'warning',category:'Billing',docCat:'obligation',icon:'🔄',
+  {id:'auto_renewal',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Subscription renews automatically',
    desc:'Your subscription renews without any action from you. You must actively cancel before the renewal date or face another full charge for the next period.',
    patterns:[/\bautomatically renew\b/i,/\bauto.renew\b/i,/\bautomatic renewal\b/i,/\brenews at the end\b/i,/\bautomatically.*renewed.*unless.*cancel\b/i,/\bcontinuous.*until.*cancel\b/i,/\bwill renew.*unless\b/i]},
 
-  {id:'termination_no_reason',level:'warning',category:'Account',docCat:'risk',icon:'🚫',
+  {id:'termination_no_reason',level:'warning',category:'Account',docCat:'risk',icon:'·',
    title:'Account can be terminated any time, no reason given',
    desc:'The company can delete your account and revoke access at any time, without explanation or appeal — potentially losing your data and paid balance instantly.',
    patterns:[/\bterminate.*at any time\b/i,/\bsuspend.*any reason\b/i,/\bwithout.*cause.*terminat\b/i,/\bfor any reason.*terminat\b/i,/\breserve.*right.*suspend.*account\b/i,/\bterminate.*account.*sole discretion\b/i,/\bremove.*account.*without.*notice\b/i]},
 
-  {id:'jurisdiction',level:'warning',category:'Jurisdiction',docCat:'obligation',icon:'🗺️',
+  {id:'jurisdiction',level:'warning',category:'Jurisdiction',docCat:'obligation',icon:'·',
    title:'Disputes must be resolved in a specific location',
    desc:'Legal action must be taken in a specific state or country — often far from where you live — making it costly and impractical to pursue your rights.',
    patterns:[/\bgoverned by the laws of\b/i,/\bexclusive jurisdiction\b/i,/\bconsent to.*jurisdiction\b/i,/\bregardless of where you reside\b/i,/\bvenue.*shall be\b/i,/\bdisputes.*resolved.*courts.*of\b/i]},
 
-  {id:'credit_report',level:'warning',category:'Credit',docCat:'risk',icon:'📉',
+  {id:'credit_report',level:'warning',category:'Credit',docCat:'risk',icon:'·',
    title:'Late payments reported to credit bureaus',
    desc:'Missed or late payments can be reported to credit agencies, damaging your score and affecting your ability to get loans, housing, or even employment.',
    patterns:[/\breport.*credit bureau\b/i,/\bcredit bureau\b/i,/\bcredit reporting\b/i,/\breport.*credit.*agency\b/i,/\bdelinquency.*report\b/i,/\bEquifax|TransUnion|Experian\b/i]},
 
-  {id:'data_broker',level:'warning',category:'Data Collection',docCat:'risk',icon:'🗂️',
+  {id:'data_broker',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Data purchased from data brokers',
    desc:'The company buys additional data about you from third-party data brokers — companies that compile personal information from dozens of sources without your direct knowledge.',
    patterns:[/\bdata broker\b/i,/\bthird.party.*data.*provider\b/i,/\bpurchase.*information.*about you\b/i,/\bobtained.*from.*third.*parties\b/i,/\bdata.*aggregator\b/i]},
 
-  {id:'no_optout',level:'warning',category:'Marketing',docCat:'obligation',icon:'📧',
+  {id:'no_optout',level:'warning',category:'Marketing',docCat:'obligation',icon:'·',
    title:'Cannot fully opt out of messages',
    desc:'You cannot unsubscribe from all communications. The company keeps the right to contact you for certain purposes regardless of your preferences.',
    patterns:[/\bcannot opt out\b/i,/\bmay not opt out\b/i,/\bno opt.out.*marketing\b/i,/\byou cannot unsubscribe from all\b/i,/\bopt.*out.*some.*communications\b/i]},
 
-  {id:'geolocation',level:'warning',category:'Location Data',docCat:'risk',icon:'📍',
+  {id:'geolocation',level:'warning',category:'Location Data',docCat:'risk',icon:'·',
    title:'Precise location data collected',
    desc:'Your exact GPS location is tracked, which can reveal your home, workplace, medical visits, religious attendance, and daily routines.',
    patterns:[/\bprecise\s+geo.?location\b/i,/\bexact\s+location\b/i,/\bgps.*location\b/i,/\bprecise.*location.*data\b/i,/\blocation.*tracking\b/i,/\bcollect.*location.*data\b/i]},
 
-  {id:'profiling',level:'warning',category:'Profiling',docCat:'risk',icon:'🧠',
+  {id:'profiling',level:'warning',category:'Profiling',docCat:'risk',icon:'·',
    title:'Behavioural profile built from your data',
    desc:'The company creates inferences about your personality, preferences, and habits from your data — building a detailed profile that goes far beyond what you consciously share.',
    patterns:[/\binferences.*about.*preferences\b/i,/\bprofile.*your.*behavior\b/i,/\bbehavioral.*profil\b/i,/\bcharacteristics.*about you\b/i,/\bbuild.*profile.*of.*you\b/i,/\binfer.*interest.*behavior\b/i]},
 
-  {id:'merger_transfer',level:'warning',category:'Data Transfer',docCat:'risk',icon:'🏢',
+  {id:'merger_transfer',level:'warning',category:'Data Transfer',docCat:'risk',icon:'·',
    title:'Your data transferred if company is acquired',
    desc:'If the company is bought out or merges, all your personal data transfers to the new owner who may have entirely different privacy practices.',
    patterns:[/\bmerger.*acquisition\b/i,/\bsale of assets.*data\b/i,/\btransfer.*data.*business.*transaction\b/i,/\bassign.*agreement.*successor\b/i,/\btransfer.*in.*event.*merger\b/i,/\bbusiness.*transfer.*personal.*data\b/i]},
 
-  {id:'browsing_history',level:'warning',category:'Data Collection',docCat:'risk',icon:'🔍',
+  {id:'browsing_history',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Browsing history tracked',
    desc:'Your web browsing activity is recorded, which can reveal health concerns, financial interests, political views, and personal relationships.',
    patterns:[/\bbrowsing history\b/i,/\bweb browsing\b/i,/\bpages you visit\b/i,/\bbrowsing.*behavior\b/i,/\bwebsites.*visited\b/i,/\bsearch.*history\b/i]},
 
-  {id:'content_license',level:'warning',category:'IP Rights',docCat:'rights',icon:'©️',
+  {id:'content_license',level:'warning',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Broad license over content you upload',
    desc:'You grant wide rights to reproduce, modify, and distribute your uploaded content — often for commercial purposes without payment to you.',
    patterns:[/\broyalty.free.*licen[sc]e.*content\b/i,/\blicen[sc]e.*reproduce.*modify\b/i,/\bworldwide.*licen[sc]e.*publish\b/i,/\bgrant.*licen[sc]e.*content.*upload\b/i,/\buse.*your.*content.*freely\b/i]},
 
-  {id:'nda_broad_scope',level:'warning',category:'NDA',docCat:'obligation',icon:'🤐',
+  {id:'nda_broad_scope',level:'warning',category:'NDA',docCat:'obligation',icon:'·',
    title:'Sweeping confidentiality obligation',
    desc:'You must keep a very broad range of information confidential — potentially including things you already knew or that are publicly known. Breach can lead to injunctions or damages.',
    patterns:[/\bconfidential.*information.*includes\b/i,/\bshall.*keep.*confidential\b/i,/\bnot.*disclose.*confidential\b/i,/\bproprietary.*information.*confidential\b/i,/\bconfidentiality.*obligation\b/i,/\bstrictly confidential\b/i]},
 
-  {id:'nda_duration',level:'warning',category:'NDA',docCat:'obligation',icon:'⏰',
+  {id:'nda_duration',level:'warning',category:'NDA',docCat:'obligation',icon:'·',
    title:'Confidentiality lasts years or forever',
    desc:'The secrecy obligation extends for a long time — sometimes permanently. This limits what you can say long after the business relationship ends.',
    patterns:[/\bconfidential.*in perpetuity\b/i,/\bconfidentiality.*indefinitely\b/i,/\bobligation.*survive.*terminat\b/i,/\bconfidentiality.*survives\b/i,/\bshall survive.*for.*\d+\s+year\b/i,/\bperpetual.*confidentiality\b/i]},
 
-  {id:'microphone_camera',level:'warning',category:'Device Access',docCat:'risk',icon:'🎤',
+  {id:'microphone_camera',level:'warning',category:'Device Access',docCat:'risk',icon:'·',
    title:'App accesses microphone, camera, or contacts',
    desc:"The app requests access to your device microphone, camera, or address book. These permissions can be used beyond what seems necessary for the service.",
    patterns:[/\baccess.*microphone\b/i,/\bcamera.*access\b/i,/\baccess.*contacts\b/i,/\bmicrophone.*permission\b/i,/\bcamera.*permission\b/i,/\baccess.*address book\b/i,/\bdevice.*sensor\b/i]},
 
-  {id:'prepayment_penalty',level:'warning',category:'Financial',docCat:'obligation',icon:'🔒',
+  {id:'prepayment_penalty',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
    title:'Penalty for paying off loan early',
    desc:'Paying off the loan ahead of schedule triggers a penalty fee. Trying to settle early may actually cost you more money.',
    patterns:[/\bprepayment penalty\b/i,/\bearly.*payment.*fee\b/i,/\bprepayment.*fee\b/i,/\bpenalty.*pay.*early\b/i,/\bearly.*payoff.*charge\b/i,/\bprepay.*subject.*fee\b/i]},
 
-  {id:'health_data_sharing',level:'warning',category:'Healthcare',docCat:'risk',icon:'🏥',
+  {id:'health_data_sharing',level:'warning',category:'Healthcare',docCat:'risk',icon:'·',
    title:'Health data shared with insurers or third parties',
    desc:'Your medical, health, or wellness data may be shared with insurance companies, employers, or third parties — potentially affecting your coverage or employment.',
    patterns:[/\bhealth.*data.*shar\b/i,/\bmedical.*information.*third.party\b/i,/\bhealth.*information.*insur\b/i,/\bshare.*health.*data.*partner\b/i,/\bwellness.*data.*disclos\b/i,/\bprotected health information\b/i,/\bPHI\b/,/\bHIPAA\b/i]},
 
-  {id:'not_medical_advice',level:'warning',category:'Healthcare',docCat:'risk',icon:'💊',
+  {id:'not_medical_advice',level:'warning',category:'Healthcare',docCat:'risk',icon:'·',
    title:'Not medical advice — no liability for health outcomes',
    desc:'The service explicitly disclaims responsibility for health decisions made using it. If you rely on this service for medical decisions and something goes wrong, you have no legal recourse.',
    patterns:[/\bnot.*medical.*advice\b/i,/\bnot.*a.*medical.*device\b/i,/\bnot.*substitute.*medical\b/i,/\bconsult.*physician\b/i,/\bno.*liability.*health.*outcome\b/i,/\bmedical.*decisions.*your.*responsibility\b/i]},
 
-  {id:'virtual_currency',level:'warning',category:'Gaming',docCat:'risk',icon:'🎮',
+  {id:'virtual_currency',level:'warning',category:'Gaming',docCat:'risk',icon:'·',
    title:'Virtual currency and items have no real-world value',
    desc:'In-game purchases, virtual currency, and digital items have no monetary value and cannot be refunded or exchanged for real money. You lose them if the game shuts down.',
    patterns:[/\bvirtual currency.*no.*cash value\b/i,/\bin.game.*purchase.*non.refundable\b/i,/\bvirtual.*item.*no.*real.*value\b/i,/\bdigital.*goods.*non.refundable\b/i,/\bvirtual.*goods.*no.*refund\b/i,/\bno.*refund.*virtual\b/i]},
 
-  {id:'likeness_rights',level:'warning',category:'Media',docCat:'rights',icon:'📸',
+  {id:'likeness_rights',level:'warning',category:'Media',docCat:'rights',icon:'·',
    title:'Company can use your image and likeness',
    desc:'By using this service, you grant the right to use your photo, name, or likeness in promotional materials or content without additional permission or compensation.',
    patterns:[/\blikeness.*promot\b/i,/\buse.*your.*image.*market\b/i,/\bname.*likeness.*promotional\b/i,/\bright.*use.*photograph\b/i,/\bimage.*likeness.*royalty.free\b/i,/\bpublicity rights\b/i]},
 
-  {id:'contact_upload',level:'warning',category:'Data Sharing',docCat:'risk',icon:'📱',
+  {id:'contact_upload',level:'warning',category:'Data Sharing',docCat:'risk',icon:'·',
    title:"Uploads your contacts' data without their consent",
    desc:'By syncing your address book, you share personal data belonging to people who never agreed to this service — including their phone numbers and email addresses.',
    patterns:[/\bupload.*contact\b/i,/\bsync.*address book\b/i,/\bcontact.*list.*upload\b/i,/\baddress book.*access\b/i,/\bcontacts.*synced\b/i,/\bphone.*book.*access\b/i]},
 
-  {id:'do_not_track',level:'warning',category:'Tracking',docCat:'risk',icon:'🙈',
+  {id:'do_not_track',level:'warning',category:'Tracking',docCat:'risk',icon:'·',
    title:'Do Not Track browser signals are ignored',
    desc:"Even if your browser sends a 'Do Not Track' signal requesting privacy, this service explicitly ignores it and tracks you anyway.",
    patterns:[/\bdo not track.*not.*honor\b/i,/\bdo not track.*not.*respond\b/i,/\bDNT.*not.*support\b/i,/\bnot.*respond.*do not track\b/i,/\bdo not track.*signal.*ignore\b/i]},
 
   // ══ INFORMATIONAL ════════════════════════════════════════════════════════════
 
-  {id:'device_ids',level:'info',category:'Device Data',docCat:'risk',icon:'📱',
+  {id:'device_ids',level:'info',category:'Device Data',docCat:'risk',icon:'·',
    title:'Device identifiers collected',
    desc:'Your device ID or advertising ID is recorded, enabling cross-app and cross-service tracking even without an account.',
    patterns:[/\bdevice identifier\b/i,/\badvertising identifier\b/i,/\bIDFA\b/,/\bGAID\b/,/\bunique.*device.*id\b/i,/\bdevice.*fingerprint\b/i]},
 
-  {id:'cookies',level:'info',category:'Tracking',docCat:'risk',icon:'🍪',
+  {id:'cookies',level:'info',category:'Tracking',docCat:'risk',icon:'·',
    title:'Cookies and tracking technologies used',
    desc:'Cookies, pixels, or beacons track your activity across sessions and across third-party websites.',
    patterns:[/\bcookies?.*tracking\b/i,/\btracking.*technologies\b/i,/\bweb beacon\b/i,/\bpixel.*track\b/i,/\bwe use.*cookies\b/i,/\bcookie.*policy\b/i]},
 
-  {id:'analytics',level:'info',category:'Analytics',docCat:'risk',icon:'📊',
+  {id:'analytics',level:'info',category:'Analytics',docCat:'risk',icon:'·',
    title:'Third-party analytics in use',
    desc:'External analytics providers receive data about how you use the service — page views, clicks, and session behavior — which may be combined with data from elsewhere.',
    patterns:[/\banalytics.*partner\b/i,/\bthird.party.*analytics\b/i,/\bgoogle analytics\b/i,/\banalytics provider\b/i,/\banalytics.*service\b/i,/\bMixpanel|Amplitude|Segment|Heap\b/i]},
 
-  {id:'age_requirement',level:'info',category:'Eligibility',docCat:'obligation',icon:'🪪',
+  {id:'age_requirement',level:'info',category:'Eligibility',docCat:'obligation',icon:'·',
    title:'Age and eligibility requirements apply',
    desc:'You must meet minimum age or other eligibility requirements. Using the service while ineligible can void the agreement.',
    patterns:[/\bmust be at least 18\b/i,/\blegal age of majority\b/i,/\bage.*eligib\b/i,/\beligib.*age\b/i,/\bqualified customers only\b/i,/\beligible.*users only\b/i,/\bminimum age.*required\b/i]},
 
-  {id:'severability',level:'info',category:'Legal',docCat:'obligation',icon:'📜',
+  {id:'severability',level:'info',category:'Legal',docCat:'obligation',icon:'·',
    title:'Severability clause',
    desc:'If a court strikes down part of this agreement, only that part is removed. The rest of the contract stays fully in force.',
    patterns:[/\bseverable\b/i,/\bseverability\b/i,/\bshall.*be deemed omitted\b/i,/\bremaining terms.*enforceable\b/i,/\binvalid.*provision.*not affect\b/i]},
 
-  {id:'entire_agreement',level:'info',category:'Legal',docCat:'obligation',icon:'📄',
+  {id:'entire_agreement',level:'info',category:'Legal',docCat:'obligation',icon:'·',
    title:'This document overrides all prior agreements',
    desc:"This contract supersedes all previous discussions and promises. Anything you were told verbally does not count unless it's written in this document.",
    patterns:[/\bentire.*agreement\b/i,/\bwhole.*agreement\b/i,/\bsupersedes.*prior.*agreement\b/i,/\bconstitutes.*entire.*understanding\b/i,/\bno.*other.*agreement.*apply\b/i]},
 
-  {id:'force_majeure',level:'info',category:'Legal',docCat:'risk',icon:'🌪️',
+  {id:'force_majeure',level:'info',category:'Legal',docCat:'risk',icon:'·',
    title:'Force majeure — no liability for uncontrollable events',
    desc:"The company is not liable if they fail to deliver due to events outside their control such as natural disasters, pandemics, or government action. You may have no recourse.",
    patterns:[/\bforce majeure\b/i,/\bact.*of.*god\b/i,/\bbeyond.*reasonable.*control\b/i,/\bcircumstances.*beyond.*control\b/i,/\bunforeseeable.*events\b/i]},
 
-  {id:'governing_law',level:'info',category:'Jurisdiction',docCat:'obligation',icon:'🗺️',
+  {id:'governing_law',level:'info',category:'Jurisdiction',docCat:'obligation',icon:'·',
    title:'Specific governing law stated',
    desc:'This agreement is governed by the laws of a particular state or country, which affects your rights and how any dispute is interpreted.',
    patterns:[/\bgoverned.*laws.*of.*(?:state|california|new york|delaware|texas|florida|uk|england|ireland)\b/i,/\bsubject.*laws.*of\b/i,/\bapplicable law.*shall be\b/i]},
 
-  {id:'notice_requirement',level:'info',category:'Contracts',docCat:'obligation',icon:'📬',
+  {id:'notice_requirement',level:'info',category:'Contracts',docCat:'obligation',icon:'·',
    title:'Formal written notice required',
    desc:'You must send a formal written notice — often certified mail or specific email — to cancel, dispute, or make changes. Failing to follow the exact process can void your rights.',
    patterns:[/\bwritten notice.*required\b/i,/\bnotice.*shall be.*written\b/i,/\bcancel.*written.*notice\b/i,/\bprovide.*notice.*days\b/i,/\bdays.*written.*notice\b/i,/\bnotice.*certified.*mail\b/i]},
 
   // ══ NEW RULES ═══════════════════════════════════════════════════
 
-  {id:'deferred_interest',level:'danger',category:'Financial',docCat:'risk',icon:'📊',
+  {id:'deferred_interest',level:'danger',category:'Financial',docCat:'risk',icon:'·',
    title:'Deferred interest trap — full charges if not paid off in time',
    desc:'Promotional 0% APR defers interest rather than waiving it. If you do not pay the full balance before the promotional period ends, all the accumulated interest is charged at once — often at 25%+ APR. This is one of the most expensive financial traps in consumer agreements.',
    patterns:[/\bdeferred interest\b/i,/\bpromotional.*period.*expires.*interest\b/i,/\binterest.*charged.*retroactively\b/i,/\bif.*not.*paid.*full.*interest\b/i,/\bdeferred.*financing\b/i,/\bno interest if paid in full\b/i,/\bdeferred.*interest.*charge\b/i]},
 
-  {id:'limitation_of_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'⏱️',
+  {id:'limitation_of_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Shortened deadline to sue — much less than legal default',
    desc:'The agreement cuts your legal window to file a lawsuit — sometimes to just 30 to 90 days — far shorter than the standard statute of limitations. Miss it and you permanently lose your legal rights.',
    patterns:[/\bclaims.*must be.*brought.*within\b/i,/\bactions.*must.*filed.*within.*days\b/i,/\bone year.*bring.*claim\b/i,/\blimitation.*action.*shortened\b/i,/\byou have.*days.*to.*file\b/i,/\bstatute.*limitations.*shortened\b/i,/\bclaim.*within.*90 days\b/i,/\bclaim.*within.*30 days\b/i,/\bsuit.*must.*be.*brought.*within\b/i]},
 
-  {id:'no_appeal_arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔐',
+  {id:'no_appeal_arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Arbitration decision is final — no appeal',
    desc:'The arbitration award is binding and final. Unlike a court judgment, it cannot be appealed except in extremely narrow circumstances. If the arbitrator makes a mistake — even a serious one — you are stuck with the outcome.',
    patterns:[/\barbitration.*final.*binding\b/i,/\baward.*final.*not.*appeal\b/i,/\bno.*appeal.*arbitration\b/i,/\barbitration.*award.*binding\b/i,/\bfinal.*decision.*arbitrator\b/i,/\bfinal and binding\b/i]},
 
-  {id:'unilateral_modification',level:'danger',category:'Policy Changes',docCat:'obligation',icon:'✍️',
+  {id:'unilateral_modification',level:'danger',category:'Policy Changes',docCat:'obligation',icon:'·',
    title:'Company can change your contract terms unilaterally',
    desc:'The company can modify the terms of your existing agreement without your consent. You may receive a notification, but the changes apply automatically — you do not get to negotiate or reject individual changes.',
    patterns:[/\bmodif.*agreement.*unilateral\b/i,/\bchange.*terms.*without.*consent\b/i,/\bunilateral.*right.*amend\b/i,/\bwe.*may.*amend.*agreement\b/i,/\bright.*modify.*terms.*sole\b/i,/\bnotice.*deemed.*acceptance\b/i,/\bchange.*without.*your.*agreement\b/i]},
 
-  {id:'employee_monitoring',level:'warning',category:'Employment',docCat:'risk',icon:'👁️',
+  {id:'employee_monitoring',level:'warning',category:'Employment',docCat:'risk',icon:'·',
    title:'Employer can monitor your emails, screen, and keystrokes',
    desc:'Your employer may monitor work emails, record your screen, log keystrokes, and track activity on company devices. You have very limited privacy expectations on company systems.',
    patterns:[/\bmonitor.*employee.*activity\b/i,/\bmonitor.*emails\b/i,/\bscreen.*recording.*employee\b/i,/\bkeylog\b/i,/\bemployer.*monitor.*computer\b/i,/\bsurveillance.*employee\b/i,/\bcompany.*monitor.*communications\b/i,/\bmonitor.*internet.*use\b/i]},
 
-  {id:'moonlighting_ban',level:'warning',category:'Employment',docCat:'rights',icon:'🌙',
+  {id:'moonlighting_ban',level:'warning',category:'Employment',docCat:'rights',icon:'·',
    title:'Cannot work a second job while employed',
    desc:'You agree not to hold outside employment or do paid work for anyone else while employed here. This can prevent you from freelancing, consulting, or earning income from a personal business.',
    patterns:[/\bno.*outside.*employment\b/i,/\bmoonlighting.*prohibited\b/i,/\bsecond.*job.*not.*permitted\b/i,/\boutside.*work.*approval\b/i,/\bexclusive.*services\b/i,/\bnot.*engage.*outside.*work\b/i,/\bfull.*time.*devoted\b/i]},
 
-  {id:'rent_increase',level:'warning',category:'Rental',docCat:'risk',icon:'📈',
+  {id:'rent_increase',level:'warning',category:'Rental',docCat:'risk',icon:'·',
    title:'Rent can be increased with limited notice',
    desc:'The landlord can raise your rent — sometimes with as little as a 30-day notice and without your agreement. Budget for potential increases before signing a long-term lease.',
    patterns:[/\brent.*increase.*notice\b/i,/\bincrease.*rent.*at any time\b/i,/\blandlord.*raise.*rent\b/i,/\brent.*subject.*change\b/i,/\brent.*adjusted.*annual\b/i,/\brent.*increase.*written\b/i]},
 
-  {id:'subletting_and_pets',level:'warning',category:'Rental',docCat:'rights',icon:'🐾',
+  {id:'subletting_and_pets',level:'warning',category:'Rental',docCat:'rights',icon:'·',
    title:'Subletting and pets restricted or banned',
    desc:'You may be prohibited from subletting, using Airbnb, or keeping pets. Violations can result in fines, eviction, or loss of your security deposit.',
    patterns:[/\bno.*subletting\b/i,/\bno.*sublet\b/i,/\bsubletting.*prohibited\b/i,/\bno.*pets\b/i,/\bpets.*not.*permitted\b/i,/\bpet.*deposit\b/i,/\bnot.*sublet.*without.*consent\b/i,/\bno.*airbnb\b/i]},
 
-  {id:'tenant_maintenance',level:'warning',category:'Rental',docCat:'obligation',icon:'🔨',
+  {id:'tenant_maintenance',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
    title:'Tenant responsible for maintenance and repairs',
    desc:'You may be responsible for keeping the property in good repair and paying for routine maintenance or minor repairs — costs that often fall to landlords in standard tenancy agreements.',
    patterns:[/\btenant.*responsible.*repair\b/i,/\btenant.*maintain.*property\b/i,/\btenant.*responsible.*maintenance\b/i,/\btenant.*pay.*repair\b/i,/\brenter.*responsible.*upkeep\b/i]},
 
-  {id:'cross_device_tracking',level:'warning',category:'Tracking',docCat:'risk',icon:'🔗',
+  {id:'cross_device_tracking',level:'warning',category:'Tracking',docCat:'risk',icon:'·',
    title:'Tracked across devices and platforms',
    desc:'The service links your identity across different devices, browsers, and platforms — building a unified profile even when you switch phones, computers, or use a private window.',
    patterns:[/\bcross.device.*tracking\b/i,/\btrack.*across.*devices\b/i,/\blink.*devices.*account\b/i,/\bidentify.*across.*platforms\b/i,/\bcross.platform.*data\b/i,/\bdevice.*graph\b/i]},
 
-  {id:'data_portability',level:'warning',category:'Data Sharing',docCat:'rights',icon:'📦',
+  {id:'data_portability',level:'warning',category:'Data Sharing',docCat:'rights',icon:'·',
    title:'Cannot export or take your data when you leave',
    desc:"When you close your account, you may lose access to everything you created. The company is not required to give you a portable copy of your data, making it very difficult to switch services.",
    patterns:[/\bno.*right.*export.*data\b/i,/\bdata.*not.*portable\b/i,/\bcannot.*download.*your.*data\b/i,/\bno.*data.*export\b/i,/\blose.*access.*data.*terminat\b/i,/\bdata.*not.*transferable\b/i]},
 
-  {id:'genetic_data',level:'warning',category:'Healthcare',docCat:'risk',icon:'🧬',
+  {id:'genetic_data',level:'warning',category:'Healthcare',docCat:'risk',icon:'·',
    title:'Genetic or DNA data collected',
    desc:'Your genetic data is collected and stored. This is the most sensitive category of personal data — it identifies you, your relatives, and your descendants, and cannot be changed or revoked.',
    patterns:[/\bgenetic.*data\b/i,/\bDNA.*information\b/i,/\bgenome.*data\b/i,/\bgenetic.*testing\b/i,/\bgenetic.*material\b/i,/\bDNA.*sample\b/i,/\bgenetic.*profile\b/i]},
 
-  {id:'payday_loan_rate',level:'warning',category:'Financial',docCat:'risk',icon:'🚨',
+  {id:'payday_loan_rate',level:'warning',category:'Financial',docCat:'risk',icon:'·',
    title:'Very high interest rate — payday or short-term loan',
    desc:'This loan carries an extremely high APR — often 100% to 400% or more. Short-term convenience loans can become very expensive debt very quickly if not repaid immediately.',
    patterns:[/\bAPR.*[1-9][0-9]{2,}%\b/i,/\binterest.*rate.*[1-9][0-9]{2,}%\b/i,/\bpayday.*loan\b/i,/\bshort.term.*loan.*fee\b/i,/\bcash advance.*fee.*percent\b/i,/\bfinance charge.*per.*day\b/i]},
 
-  {id:'late_fees',level:'info',category:'Financial',docCat:'obligation',icon:'⏰',
+  {id:'late_fees',level:'info',category:'Financial',docCat:'obligation',icon:'·',
    title:'Late payment fees apply',
    desc:'Missed or late payments trigger a fee in addition to any interest. Repeated late payments can also trigger penalty rates or default provisions.',
    patterns:[/\blate.*payment.*fee\b/i,/\bdefault.*payment.*fee\b/i,/\bpayment.*past due.*fee\b/i,/\blate fee.*charged\b/i,/\bpenalty.*late.*payment\b/i,/\bpast due.*charge\b/i]},
 
-  {id:'third_party_bank_lender',level:'info',category:'Data Sharing',docCat:'risk',icon:'🏦',
+  {id:'third_party_bank_lender',level:'info',category:'Data Sharing',docCat:'risk',icon:'·',
    title:'Data passed to a partner bank or lender',
    desc:'Your personal and financial information is shared with a third-party bank or lender who operates under their own separate privacy policy.',
    patterns:[/\bbank partner\b/i,/\bpartner bank\b/i,/\bbank.*process.*personal\b/i,/\blender.*personal.*information\b/i,/\bthird.party.*bank\b/i,/\bfinancing.*partner\b/i,/\bCitizens\s+(Bank|One)\b/i]},
 
+  // ══ NEW RULES — EMPLOYMENT ════════════════════════════════════════════
+  {id:'non_disparagement',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Non-disparagement clause — you cannot criticise them',
+   desc:'You agree never to say anything negative about the company, its products, or its staff — even if true. This can prevent you from leaving honest reviews, warning others, or speaking publicly about your experience.',
+   patterns:[/\bnon.disparagement\b/i,/\bnot.*disparage\b/i,/\brefrain.*from.*disparag\b/i,/\bno.*negative.*statements.*about.*company\b/i,/\bdiscourage.*negative.*comment\b/i]},
+
+  {id:'polygraph_test',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Lie detector or polygraph test required',
+   desc:'You are required to submit to a polygraph or lie detector test as a condition of employment. In many jurisdictions this is illegal — the US Employee Polygraph Protection Act prohibits most private employers from using them.',
+   patterns:[/\bpolygraph\b/i,/\blie detector\b/i,/\bvoice stress\b/i,/\bhonesty test\b/i,/\bpsychological test.*condition.*employ\b/i]},
+
+  {id:'social_media_monitoring',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Employer monitors your social media',
+   desc:'The employer reserves the right to monitor your personal social media accounts. This extends surveillance beyond the workplace and could affect your freedom of expression outside work hours.',
+   patterns:[/\bmonitor.*social media\b/i,/\bsocial media.*monitor\b/i,/\breview.*personal.*social\b/i,/\bsocial.*account.*monitor\b/i,/\bsocial.*media.*policy.*personal\b/i]},
+
+  {id:'mandatory_overtime',level:'danger',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Mandatory unpaid overtime or exempt status',
+   desc:'You may be classified as exempt from overtime pay, meaning you can be required to work more than 40 hours per week without additional compensation. This is a significant waiver of pay rights.',
+   patterns:[/\bexempt.*overtime\b/i,/\bno.*overtime.*pay\b/i,/\bsalaried.*exempt\b/i,/\badditional hours.*no.*additional.*compensation\b/i,/\bhours.*required.*without.*overtime\b/i,/\bflsa.*exempt\b/i]},
+
+  {id:'zero_hours',level:'danger',category:'Employment',docCat:'risk',icon:'·',
+   title:'Zero-hours or on-call with no guaranteed work',
+   desc:'There is no guaranteed minimum number of hours or pay. You may be called in or sent home at any time without compensation. This makes your income completely unpredictable.',
+   patterns:[/\bzero.hours\b/i,/\bno.*guaranteed.*hours\b/i,/\bon.call.*no.*guarantee\b/i,/\bminimum.*hours.*not.*guaranteed\b/i,/\bwork.*as.*needed.*no.*guarantee\b/i]},
+
+  {id:'no_poach',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'No-poach agreement restricts future employers',
+   desc:'The company has agreed with competitors not to hire each other\'s employees. This secretly restricts your job market and can be illegal in many jurisdictions.',
+   patterns:[/\bno.poach\b/i,/\bnon.poaching\b/i,/\bagree.*not.*to.*hire.*employees\b/i,/\bnot.*solicit.*employees.*competitor\b/i,/\bno.hire.*agreement\b/i]},
+
+  {id:'garden_leave',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Garden leave — paid but barred from working',
+   desc:'During your notice period, the employer may require you to stay home and not work for anyone else — including starting a new job. You are paid but legally prevented from beginning your next role.',
+   patterns:[/\bgarden leave\b/i,/\bgarden.*notice\b/i,/\bpaid.*leave.*during.*notice\b/i,/\bnot.*commence.*employment.*during.*notice\b/i]},
+
+  {id:'expense_clawback',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Expenses or training costs must be repaid',
+   desc:'If you leave within a certain period, you must repay costs the company incurred for your training, relocation, or other expenses. This can amount to thousands of dollars.',
+   patterns:[/\brepay.*training\b/i,/\brepay.*relocation\b/i,/\bclawback.*expenses\b/i,/\brepayment.*cost.*if.*leave\b/i,/\btraining.*cost.*return\b/i,/\brecoup.*training\b/i]},
+
+  {id:'non_solicitation_customers',level:'warning',category:'Employment',docCat:'rights',icon:'·',
+   title:'Cannot contact clients or customers after leaving',
+   desc:'After leaving, you cannot solicit, contact, or do business with any client or customer you worked with. This can prevent you from taking your professional relationships to your next role.',
+   patterns:[/\bnot.*solicit.*customer\b/i,/\bnon.solicitation.*client\b/i,/\bsolicit.*client.*after.*terminat\b/i,/\bnot.*contact.*former.*customer\b/i,/\bclient.*non.solicit\b/i]},
+
+  {id:'biometric_timeclock',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Biometric data collected for timekeeping',
+   desc:'The employer collects your fingerprint, handprint, or other biometric data for clocking in and out. Many states require written consent and have strict rules about storing and deleting biometric data.',
+   patterns:[/\bfingerprint.*time\b/i,/\bbiometric.*clock\b/i,/\bhand.*scan.*attend\b/i,/\bretinal.*scan.*employment\b/i,/\bbiometric.*timekeeping\b/i,/\bfinger.*scan.*payroll\b/i]},
+
+  {id:'forced_ranking',level:'warning',category:'Employment',docCat:'risk',icon:'·',
+   title:'Forced ranking — bottom performers terminated',
+   desc:'The company uses a forced ranking system where a set percentage of employees are labelled low performers and may be terminated regardless of absolute performance. You can be fired even while doing good work.',
+   patterns:[/\bforced.*ranking\b/i,/\bstack.*ranking\b/i,/\bbottom.*percent.*terminat\b/i,/\bperformance.*improvement.*plan.*terminat\b/i,/\bpip.*terminat\b/i,/\blowest.*performing.*employees.*terminat\b/i]},
+
+  {id:'class_action_employment',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Class action waiver in employment context',
+   desc:'You waive the right to join a class action lawsuit against your employer for wage theft, discrimination, or other employment violations. You can only pursue claims individually through arbitration.',
+   patterns:[/\bclass.*action.*waive.*employ\b/i,/\bcollective.*action.*waive\b/i,/\brepresentative.*action.*waive.*employ\b/i,/\bpaga.*waive\b/i,/\bclass.*arbitration.*waive\b/i]},
+
+  // ══ NEW RULES — BANKING & FINANCIAL ══════════════════════════════════
+  {id:'overdraft_fees',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Overdraft fees charged automatically',
+   desc:'If your account goes negative, the bank will charge overdraft fees — typically $25-$35 per transaction. These can stack up rapidly and are avoidable by opting out in many jurisdictions.',
+   patterns:[/\boverdraft.*fee\b/i,/\bnsf.*fee\b/i,/\bnon.sufficient.*fund.*fee\b/i,/\boverdraft.*protection.*fee\b/i,/\binsufficient.*fund.*charge\b/i]},
+
+  {id:'variable_rate',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Variable interest rate — can rise significantly',
+   desc:'The interest rate on your loan or credit can change based on market conditions. Your monthly payments can increase substantially if base rates rise — sometimes by hundreds of dollars per month.',
+   patterns:[/\bvariable.*interest.*rate\b/i,/\badjustable.*rate\b/i,/\barm.*loan\b/i,/\brate.*may.*change\b/i,/\bfloating.*interest.*rate\b/i,/\bprime.*rate.*plus\b/i,/\blibor\b/i,/\bsofr.*plus\b/i]},
+
+  {id:'minimum_balance_fee',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Minimum balance requirement — fees if below threshold',
+   desc:'You must maintain a minimum balance or pay a monthly maintenance fee. Falling below this amount, even briefly, triggers charges that can erode your savings.',
+   patterns:[/\bminimum.*balance.*fee\b/i,/\bmonthly.*maintenance.*fee\b/i,/\bbelow.*minimum.*balance.*charge\b/i,/\bminimum.*daily.*balance\b/i,/\bservice.*charge.*below.*balance\b/i]},
+
+  {id:'inactivity_fee',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Account inactivity fees charged',
+   desc:'If your account is dormant for a set period, the bank or service charges an inactivity fee that slowly drains your balance. Your account can eventually reach zero and be closed.',
+   patterns:[/\binactivity.*fee\b/i,/\bdormancy.*fee\b/i,/\bdormant.*account.*fee\b/i,/\binactive.*account.*charge\b/i,/\bno.*transaction.*fee\b/i]},
+
+  {id:'unilateral_assignment',level:'danger',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Company can transfer your contract to anyone',
+   desc:'The company can sell or assign your contract to a third party without your consent. Your agreement could end up with a completely different company you never chose to deal with.',
+   patterns:[/\bassign.*this.*agreement.*without.*consent\b/i,/\btransfer.*rights.*obligations.*without.*notice\b/i,/\bassign.*contract.*successor\b/i,/\bmerger.*assign.*without.*approval\b/i,/\bfreely.*assign.*this.*agreement\b/i]},
+
+  {id:'liquidated_damages',level:'danger',category:'Contracts',docCat:'obligation',icon:'·',
+   title:'Fixed penalty amount if you breach the contract',
+   desc:'If you break certain terms, you owe a pre-agreed fixed sum in damages — regardless of the actual loss caused. These liquidated damages clauses can result in disproportionate financial penalties.',
+   patterns:[/\bliquidated.*damages\b/i,/\bpre.determined.*damages\b/i,/\bfixed.*damages.*breach\b/i,/\bpenalty.*clause\b/i,/\bstipulated.*damages\b/i,/\bagreed.*damages.*breach\b/i]},
+
+  {id:'retroactive_changes',level:'danger',category:'Contracts',docCat:'risk',icon:'·',
+   title:'Terms can be changed retroactively',
+   desc:'The company reserves the right to change terms with retroactive effect, potentially altering obligations that already exist or accrued rights you thought you had.',
+   patterns:[/\bretroactive.*effect\b/i,/\bappl.*retroactively\b/i,/\bchanges.*apply.*prior\b/i,/\bamend.*terms.*retroactive\b/i,/\bmodif.*retroactively\b/i]},
+
+  {id:'inflation_indexation',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Prices automatically increase with inflation',
+   desc:'Fees, rent, or prices are automatically indexed to inflation (CPI or similar), meaning they rise each year without any further notice or negotiation required.',
+   patterns:[/\bcpi.*adjust\b/i,/\binflation.*adjust\b/i,/\bconsumer.*price.*index.*adjust\b/i,/\bautomatically.*increas.*inflation\b/i,/\bannual.*escalat.*inflation\b/i,/\bindex.*cost.*living\b/i]},
+
+  {id:'ip_pre_employment',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
+   title:'Employer claims IP you created before joining',
+   desc:'The company claims ownership of intellectual property you developed before your employment began, if it relates to their business. Prior inventions and side projects may be captured.',
+   patterns:[/\bprior.*invention.*disclose\b/i,/\bpre.employment.*invention\b/i,/\bcreated.*prior.*employ.*belong\b/i,/\bip.*created.*before.*hire\b/i,/\bpre.existing.*work.*assign\b/i]},
+
+  {id:'contractor_non_compete',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
+   title:'Non-compete applied to independent contractor',
+   desc:'A non-compete clause is applied to you as an independent contractor. Many jurisdictions do not allow non-competes on contractors (only employees), making this clause potentially unenforceable.',
+   patterns:[/\bcontractor.*non.compete\b/i,/\bindependent.*contractor.*not.*work.*for\b/i,/\bfreelancer.*compete\b/i,/\bconsultant.*non.compete\b/i,/\bcontractor.*refrain.*from.*competing\b/i]},
+
+  // ══ NEW RULES — RENTAL ════════════════════════════════════════════════
+  {id:'mandatory_renters_insurance',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Renters insurance mandatory at tenant expense',
+   desc:'You are required to purchase and maintain renters insurance as a condition of your tenancy. While renters insurance is generally advisable, mandatory requirements shift the cost entirely to you.',
+   patterns:[/\brenters.*insurance.*required\b/i,/\btenant.*maintain.*insurance\b/i,/\bmust.*obtain.*renters.*insurance\b/i,/\bliability.*insurance.*tenant.*required\b/i,/\bproof.*renters.*insurance\b/i]},
+
+  {id:'utility_uncapped',level:'warning',category:'Rental',docCat:'obligation',icon:'·',
+   title:'Utilities billed without cap — unpredictable costs',
+   desc:'You are responsible for utilities billed at actual usage with no cap or estimate provided. Your monthly costs can vary dramatically, especially for heating in winter or cooling in summer.',
+   patterns:[/\btenant.*responsible.*utilities\b/i,/\butil.*not.*includ.*rent\b/i,/\bmetered.*usage.*tenant\b/i,/\btenant.*pay.*electric.*gas.*water\b/i,/\ball.*util.*tenant.*expense\b/i]},
+
+  {id:'no_modification',level:'warning',category:'Rental',docCat:'rights',icon:'·',
+   title:'No modifications to the property allowed',
+   desc:'You cannot make any modifications, alterations, or improvements to the property without written landlord consent. This includes hanging pictures, painting walls, or installing fixtures.',
+   patterns:[/\bno.*modification.*property\b/i,/\bnot.*alter.*premises\b/i,/\bno.*improvement.*without.*consent\b/i,/\btenant.*not.*make.*change\b/i,/\bno.*structural.*change\b/i,/\bno.*paint\b/i]},
+
+  {id:'noise_behaviour_eviction',level:'warning',category:'Rental',docCat:'risk',icon:'·',
+   title:'Broad noise or behaviour clause can trigger eviction',
+   desc:'Vague noise or nuisance clauses give the landlord wide discretion to claim a lease violation and begin eviction proceedings. "Excessive noise" and "nuisance" are often undefined.',
+   patterns:[/\bno.*excessive.*noise\b/i,/\bnuisance.*terminat\b/i,/\bquiet.*enjoyment.*other.*tenant\b/i,/\bexcessive.*noise.*terminat\b/i,/\bneighbour.*complain.*terminat\b/i,/\bconduct.*terminat.*lease\b/i]},
+
+  // ══ NEW RULES — HEALTHCARE & INSURANCE ════════════════════════════════
+  {id:'pre_existing_exclusion',level:'danger',category:'Healthcare',docCat:'risk',icon:'·',
+   title:'Pre-existing conditions excluded from coverage',
+   desc:'Medical conditions you had before the policy began may not be covered. This can leave you responsible for significant costs if you need treatment for existing health issues.',
+   patterns:[/\bpre.existing.*condition.*exclud\b/i,/\bprior.*condition.*not.*cover\b/i,/\bexclusion.*pre.existing\b/i,/\bwaiting.*period.*pre.existing\b/i,/\bpre.existing.*exclusion\b/i]},
+
+  {id:'subrogation',level:'warning',category:'Insurance',docCat:'rights',icon:'·',
+   title:'Insurer can recover costs from third parties on your behalf',
+   desc:'After paying your claim, the insurer can sue whoever caused your loss and keep the proceeds. This subrogation right can affect your own settlement if you sue the same party.',
+   patterns:[/\bsubrogation\b/i,/\bright.*recover.*from.*third\b/i,/\binsurer.*right.*subrogate\b/i,/\bwaiver.*of.*subrogation\b/i,/\brecovery.*from.*responsible.*party\b/i]},
+
+  {id:'surprise_billing',level:'warning',category:'Healthcare',docCat:'risk',icon:'·',
+   title:'Out-of-network billing may apply without notice',
+   desc:'You may be billed at out-of-network rates for care received at in-network facilities if a treating provider is out-of-network. This can result in unexpectedly large bills.',
+   patterns:[/\bout.of.network.*bill\b/i,/\bbalance.*bill\b/i,/\bprovider.*not.*participat.*network\b/i,/\bsurprise.*bill\b/i,/\boutside.*network.*charge\b/i]},
+
+  // ══ NEW RULES — DATA & PRIVACY ════════════════════════════════════════
+  {id:'data_after_death',level:'warning',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Your data is retained or used after you die',
+   desc:'The company may retain and continue to use your personal data after your death. Your family may have no right to access or delete your data, or the company may monetise it.',
+   patterns:[/\bdata.*death.*account\b/i,/\bdeceased.*account.*data\b/i,/\bdata.*estate.*account\b/i,/\bafter.*death.*data.*retain\b/i,/\bpassed.*away.*account.*data\b/i]},
+
+  {id:'sell_data_bankruptcy',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Your data sold as asset in bankruptcy',
+   desc:'If the company goes bankrupt, your personal data is treated as a business asset that can be sold to creditors or a buyer — even if the current privacy policy says they will never sell your data.',
+   patterns:[/\bdata.*asset.*bankrupt\b/i,/\binsolvency.*data.*transfer\b/i,/\bpersonal.*information.*asset.*acquir\b/i,/\bdata.*sold.*bankrupt\b/i,/\breorganization.*data.*transfer\b/i]},
+
+  {id:'mandatory_account_linking',level:'warning',category:'Privacy',docCat:'obligation',icon:'·',
+   title:'Must link to another account or social profile',
+   desc:'You are required to connect your account to a social media profile, phone number, or other third-party account. This expands data collection across multiple platforms.',
+   patterns:[/\bmust.*link.*account\b/i,/\brequired.*connect.*social\b/i,/\bphone.*number.*required.*verify\b/i,/\blink.*facebook.*google.*required\b/i,/\bsign.*in.*with.*required\b/i]},
+
+  {id:'real_time_location',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Real-time or continuous location tracking',
+   desc:'The app or service tracks your location continuously or in real time, not just when you actively use it. This enables detailed logging of everywhere you go throughout the day.',
+   patterns:[/\breal.time.*location\b/i,/\bcontinuous.*location.*track\b/i,/\bbackground.*location\b/i,/\blocation.*always.*on\b/i,/\btrack.*location.*at.*all.*times\b/i,/\bconstant.*location.*monitor\b/i]},
+
+  {id:'voice_recording',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Calls or voice data recorded and stored',
+   desc:'Your phone calls, voice messages, or voice commands are recorded and stored. This data may be used for training AI systems, quality assurance, or shared with third parties.',
+   patterns:[/\bcall.*record\b/i,/\bvoice.*record.*store\b/i,/\brecord.*call.*qualit\b/i,/\bcall.*may.*be.*monitor.*record\b/i,/\bvoice.*data.*collect\b/i,/\baudio.*record.*collect\b/i]},
+
+  {id:'age_tracking',level:'warning',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Your age or date of birth used for profiling',
+   desc:'Your date of birth or age is collected and used to build advertising profiles or influence decisions such as pricing, eligibility, or content shown to you.',
+   patterns:[/\bdate.*of.*birth.*profil\b/i,/\bage.*information.*advertis\b/i,/\bage.*personaliz.*content\b/i,/\bbirthday.*market\b/i,/\bage.*target.*advertis\b/i]},
+
+  {id:'third_party_ad_networks',level:'warning',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Data shared with advertising networks',
+   desc:'Your personal information and behaviour is shared with third-party advertising networks who use it to target you with ads across the internet — including on completely unrelated websites.',
+   patterns:[/\badvertising.*network.*data\b/i,/\bthird.party.*advertiser.*share\b/i,/\bdata.*advertising.*partner\b/i,/\bad.*network.*personal.*information\b/i,/\btargeted.*advertis.*partner.*data\b/i]},
+
+  {id:'dark_patterns',level:'warning',category:'Privacy',docCat:'rights',icon:'·',
+   title:'Opt-out harder than opt-in — dark pattern consent',
+   desc:'Consent to data collection or marketing is pre-ticked, buried, or the opt-out requires multiple steps while opt-in is one click. This is a recognised dark pattern that may violate GDPR and CCPA.',
+   patterns:[/\bpre.selected.*opt.out\b/i,/\bunchecking.*box.*opt.*out\b/i,/\bcontinued.*use.*deemed.*consent\b/i,/\bopt.*out.*by.*contacting\b/i,/\bwithdraw.*consent.*writing\b/i]},
 
 ];
+
+
 
 function keywordScan(text){
   // Negation: if these words appear immediately before the matched keyword, skip the rule
@@ -2274,7 +2492,7 @@ function buildDocumentSummary(text, findings, wordCount){
   ];
   const keySentences=meaningful
     .filter(s=>importantWords.some(w=>s.toLowerCase().includes(w)))
-    .slice(0,5)
+    .slice(0,10)
     .map(s=>s.trim().replace(/\s+/g,' '));
 
   // Build the summary
@@ -2329,49 +2547,47 @@ function buildDocumentSummary(text, findings, wordCount){
 
 // ── AI SCAN ───────────────────────────────────
 async function aiScan(text,key){
-  const body=text.slice(0,20000);
+  const body=text.slice(0,24000);
   const juris=getJurisContext();
-  const jurisNote=juris?`\n\nIMPORTANT — The person reading this is located in: ${juris}. Where relevant, note how local laws (consumer protection, employment law, GDPR, CCPA, etc.) affect their rights and whether specific clauses may be unenforceable or modified by local law. Mention jurisdiction-specific protections they may already have.`:'';
-  const prompt=`You are a senior attorney with 20 years of experience reviewing contracts, privacy policies, employment agreements, leases, NDAs, and legal documents on behalf of consumers. Your job: give the most thorough, honest, useful analysis possible so the person fully understands what they are agreeing to.${jurisNote}
+  const jurisNote=juris?`\n\nJURISDICTION: The person is in ${juris}. For every relevant finding, note whether local law (GDPR, CCPA, consumer protection, employment law, etc.) gives them extra protections or makes a clause unenforceable. Be specific — e.g. "In California, non-competes are unenforceable" or "GDPR gives you the right to deletion regardless of what this policy says".`:'';
+  const prompt=`You are a senior consumer-rights attorney with 20 years of experience. Your job: give the most thorough, honest, useful analysis possible so the person fully understands exactly what they are agreeing to.${jurisNote}
 
-Analyze the document below. Return ONLY valid JSON — no markdown fences, no text outside the JSON.
-
-Use this exact structure:
+Analyze the document. Return ONLY valid JSON — no markdown fences, no text outside the JSON.
 
 {
-  "docType": "Precise document type (e.g. 'Privacy Policy', 'Employment Contract', 'Residential Lease', 'NDA', 'Software License', 'Loan Agreement', 'Terms of Service', etc.)",
-  "parties": "Who the parties are — e.g. 'You (user) and Acme Corp (company)'",
+  "docType": "Precise type — e.g. 'Privacy Policy', 'Employment Contract', 'Residential Lease', 'NDA', 'Loan Agreement', 'Terms of Service', 'Software License', 'Service Agreement'",
+  "parties": "Who are the parties — full names/entities if stated, e.g. 'You (employee) and TechCorp Inc. (employer)'",
   "overallRisk": "high | medium | low",
-  "overallScore": integer 1-10 where 10 is most dangerous to the signer,
-  "verdict": "6-8 sentences. Start with what this document IS and what it does — explain it as if the reader has never seen this type of document before. Then cover: what the person is agreeing to, what it asks of them, what rights they have, and the most important things to understand. If the document is clean and fair, say so clearly and explain why. Write like a trusted friend who just read it for you — warm, direct, no jargon.",
-  "bottomLine": "One blunt sentence — the single most critical thing to know before signing.",
-  "keyDates": "Any important deadlines, renewal dates, notice periods, or time-sensitive obligations. Empty string if none.",
+  "overallScore": integer 1-10 where 10 is extremely dangerous to the signer,
+  "verdict": "7-9 sentences. Lead with: what IS this document and what is its purpose. Then: what is the person actually agreeing to. What does it require of them. What rights do they get. What rights do they give up. What is the biggest risk. What is surprisingly good or fair. Write as a trusted lawyer friend who just read it — direct, warm, plain English, zero jargon. If it is clean and fair, say so and explain why.",
+  "bottomLine": "One punchy sentence — the single most important thing to know before signing this.",
+  "keyDates": "List any deadlines, notice periods, renewal dates, trial end dates, payment schedules. E.g. '30-day cancellation notice required; auto-renews annually on Jan 1; trial ends after 14 days'. Empty string if none.",
+  "keyNumbers": "List the most important numbers: amounts, percentages, time periods, fees. E.g. 'APR: 89.9%; Deposit: $2,400; Late fee: $150; Early exit fee: $1,500'. Empty string if none.",
   "findings": [
     {
-      "title": "Specific descriptive title, 6-10 words",
+      "title": "Clear descriptive title, 6-10 words, e.g. 'Your Content Licensed Forever Without Compensation'",
       "severity": "high | medium | low | info",
-      "category": "Precise category e.g. Data Sale, Arbitration, IP Rights, Termination, Non-Compete, Compensation, Liability Cap, Auto-Renewal, Jurisdiction, Confidentiality, etc.",
-      "clause": "Quote the exact or near-exact language from the document this finding is based on. Max 120 words. This is critical — people need to see the actual text.",
-      "what": "4-5 sentences explaining what this clause means in plain English. No jargon. Explain as if the reader has never seen a legal document.",
-      "whyItMatters": "3-4 sentences on real-world significance. Give a concrete realistic scenario of how this could play out — what could actually happen to this person because of this clause. Be specific.",
-      "impact": "3-4 sentences on direct personal impact. How does this change what they can do, what they owe, what rights they gain or lose? Make it personal.",
-      "action": "Give 3 specific actionable steps. Number them. Be concrete — e.g. '1. Ask them to strike clause 7.2 entirely.  2. If they refuse, add a written addendum limiting the scope to X.  3. Set a calendar reminder for the 30-day cancellation window on [date].' Not vague advice.",
-      "negotiate": "Is this negotiable? One honest sentence based on realistic legal practice for this document type."
+      "category": "Exact category — Data Sale | Arbitration | IP Rights | Termination | Non-Compete | Compensation | Liability Cap | Auto-Renewal | Jurisdiction | Confidentiality | Privacy | Security Deposit | Entry Rights | Subletting | Pet Policy | Interest Rate | Credit Reporting | Prepayment | Force Majeure | Indemnification | Governing Law | Amendment Rights | Data Retention | Third-Party Sharing | AI Training | Biometrics | Background Check | Drug Testing | Benefits | Notice Period | Severance | etc.",
+      "clause": "Copy the EXACT clause text from the document, word for word. Max 150 words. This is the most important field — never paraphrase, always quote directly.",
+      "what": "5-6 sentences in plain English: what does this clause actually mean? Explain every part of it. No legal jargon. Write as if explaining to someone who has never signed a contract.",
+      "whyItMatters": "4-5 sentences: why should they care? Give ONE concrete, specific, realistic scenario of exactly what could happen to this person because of this clause. Use numbers and specifics where possible — e.g. 'If you cancel after 3 months, you could owe $4,800 in remaining payments.'",
+      "impact": "3-4 sentences: what specifically changes for this person? What can they no longer do? What do they now owe or gain? Make it personal and concrete.",
+      "action": "3 numbered, specific, concrete steps they can take. Not vague advice. E.g.: '1. Email them requesting removal of clause 8.3 before signing. 2. If refused, ask for a written side-letter limiting the data sharing to service-related use only. 3. Screenshot the current policy version with today's date in case it changes.' ",
+      "negotiate": "Honest one-sentence assessment — is this typically negotiable for this type of document and with this type of counterparty? E.g. 'Standard SaaS contracts rarely allow negotiation on arbitration clauses, but larger enterprise deals sometimes do.'"
     }
   ]
 }
 
-CRITICAL RULES:
-- findings must have 8-15 items. Cover everything significant — EVEN if the document is mostly fair.
-- If the document has NO serious red flags, still produce findings with severity "low" or "info" pointing out: what the document requires of you, what rights you have, key dates/deadlines, and any clauses that are unusually protective or clear. Never return an empty findings array.
-- ALWAYS populate the clause field with actual text from the document. This is the most important field.
-- whyItMatters must include a concrete realistic scenario — not abstract risk.
-- action must have numbered specific steps, not one generic sentence.
-- Cover document-type specifics: employment = non-compete/IP/at-will/benefits; lease = deposit/maintenance/subletting/pets; NDA = scope/duration/carve-outs; loan = APR/prepayment/default; privacy = data sale/retention/sharing.
-- Include clauses that PROTECT or BENEFIT the signer (severity: info) — people need to know their rights too.
-- Be ruthlessly honest. Call out serious red flags directly. But also acknowledge when a document is genuinely fair.
-- verdict reads like a trusted lawyer friend giving you the real talk, not a formal legal document.
-- If overallRisk is "low", use the verdict to explain what the document does, what it asks of you, and what the most important things to know are — even if nothing is alarming.
+RULES:
+- findings: 10-18 items. Cover EVERYTHING — risks, obligations, rights waived, AND things that protect the signer.
+- NEVER skip the clause field. Quote exact text. This is non-negotiable.
+- Include keyNumbers and keyDates even for short documents.
+- whyItMatters MUST include a concrete scenario with specific consequences.
+- action MUST have 3 numbered concrete steps.
+- severity "info" = clauses that PROTECT or BENEFIT the signer — always include these.
+- Never return empty findings array. If document is clean, use "low"/"info" severity for informational findings about what it requires.
+- verdict must name the document type in the first sentence.
+- Be ruthlessly honest. Name red flags directly. But also credit fair, consumer-friendly clauses.
 
 Document:
 ---
@@ -2381,7 +2597,7 @@ ${body}
   const resp=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-opus-4-5',max_tokens:4000,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-opus-4-5',max_tokens:6000,messages:[{role:'user',content:prompt}]})
   });
   if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e?.error?.message||`API error ${resp.status}`);}
   const data=await resp.json();
@@ -2392,7 +2608,7 @@ ${body}
   }catch{
     const match=clean.match(/\{[\s\S]*/);
     if(match){try{return JSON.parse(match[0]);}catch{}}
-    return{docType:'Document',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,600),bottomLine:'See analysis below.',findings:[],parties:'',keyDates:''};
+    return{docType:'Document',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,600),bottomLine:'See analysis below.',findings:[],parties:'',keyDates:'',keyNumbers:''};
   }
 }
 
@@ -2417,25 +2633,25 @@ async function detectMultipleCams(){
 }
 
 async function startCamera(){
-  // Lazy-load Tesseract only when camera tab is first used
-  if(typeof Tesseract==='undefined'){
-    const status=document.getElementById('camera-status');
-    try{await loadTesseract(status);}
-    catch(e){
-      status.textContent='❌ '+e.message;
-      return;
-    }
-  }
   const video=document.getElementById('video');
   const status=document.getElementById('camera-status');
   const flipBtn=document.getElementById('flip-btn');
   document.getElementById('camera-section').style.display='block';
   document.getElementById('photo-preview').style.display='none';
+  document.getElementById('ocr-progress').style.display='none';
   status.textContent='Requesting camera access…';
   stopCamera();
+
+  // Check if getUserMedia is available at all
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    status.textContent='Camera not supported in this browser. Use the Upload tab to upload a photo instead.';
+    return;
+  }
+
   const tries=[
     {video:{facingMode:{ideal:currentFacingMode},width:{ideal:1920},height:{ideal:1080}}},
     {video:{facingMode:currentFacingMode}},
+    {video:{facingMode:{ideal:'environment'}}},
     {video:true}
   ];
   for(const c of tries){
@@ -2443,22 +2659,20 @@ async function startCamera(){
       videoStream=await navigator.mediaDevices.getUserMedia(c);
       video.srcObject=videoStream;
       await video.play().catch(()=>{});
-      status.textContent=currentFacingMode==='environment'?'📷 Rear camera ready — point at document':'🤳 Front camera ready';
+      status.textContent=currentFacingMode==='environment'?'Point camera at your document, then tap Capture':'Front camera — point at document';
       await detectMultipleCams();
       flipBtn.style.display=hasMultipleCams?'flex':'none';
       return;
     }catch(e){
-      // Permission denied or dismissed — no point retrying with looser constraints
       if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError'){
         flipBtn.style.display='none';
-        status.textContent='⚠ Camera permission denied. Allow camera access in your browser settings, then try again.';
+        status.textContent='Camera access denied. Please allow camera access in your browser settings and reload.';
         return;
       }
-      // Otherwise try next constraint set
     }
   }
   flipBtn.style.display='none';
-  status.textContent='⚠ Camera unavailable. Use the Upload tab instead.';
+  status.textContent='Could not start camera. Try the Upload tab — you can upload a photo of the document there.';
 }
 
 function stopCamera(){if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}}
@@ -2468,16 +2682,39 @@ function capturePhoto(){
   const video=document.getElementById('video');
   const canvas=document.getElementById('canvas');
   const status=document.getElementById('camera-status');
-  if(!video.videoWidth||!video.videoHeight){status.textContent='⚠ Camera not ready yet — wait a moment.';return;}
-  canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+  if(!video.videoWidth||!video.videoHeight){
+    status.textContent='Camera not ready yet — wait a moment and try again.';
+    return;
+  }
+  // High-quality capture at native resolution
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
   const ctx=canvas.getContext('2d');
-  ctx.filter='grayscale(100%) contrast(1.65) brightness(1.1)';
-  ctx.drawImage(video,0,0);ctx.filter='none';
-  currentImageData=canvas.toDataURL('image/jpeg',0.92);
+  // Draw original frame
+  ctx.drawImage(video,0,0);
+  // Image enhancement for OCR accuracy:
+  // 1. Convert to greyscale
+  // 2. Boost contrast significantly
+  // 3. Sharpen slightly
+  // This dramatically improves Tesseract accuracy on photos of documents
+  ctx.globalCompositeOperation='source-over';
+  const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  const data=imageData.data;
+  for(let i=0;i<data.length;i+=4){
+    // Greyscale using luminance weights
+    const grey=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
+    // Apply contrast stretch (factor 1.8) and brightness boost
+    const val=Math.min(255,Math.max(0,((grey-128)*1.8)+148));
+    data[i]=data[i+1]=data[i+2]=val;
+  }
+  ctx.putImageData(imageData,0,0);
+  // Save as high-quality JPEG
+  currentImageData=canvas.toDataURL('image/jpeg',0.95);
   document.getElementById('captured-img').src=currentImageData;
   document.getElementById('camera-section').style.display='none';
   document.getElementById('photo-preview').style.display='block';
-  stopCamera();runOCR(currentImageData);
+  stopCamera();
+  runOCR(currentImageData);
 }
 
 function retakePhoto(){
@@ -2488,188 +2725,84 @@ function retakePhoto(){
   currentImageData=null;startCamera();
 }
 
-async function runOCR(src){
-  const bar=document.getElementById('ocr-bar');
-  const label=document.getElementById('ocr-label');
-  document.getElementById('ocr-progress').style.display='block';
-  bar.style.width='5%';bar.setAttribute('aria-valuenow','5');
-  label.textContent='Preparing OCR…';
+// ── OCR ENGINE ────────────────────────────────
+// Primary: OCR.space — free, fast (1-2s), works on iOS/Android/desktop
+// Fallback: Tesseract.js — slower but works offline
+const OCR_SPACE_KEY='helloworld'; // 500/mo free — register at ocr.space for 25,000/mo
 
-  // Try native browser text detection first — instant, no download
-  label.textContent='Trying fast text detection…';
-  const nativeText=await tryNativeOCR(src);
-  if(nativeText&&nativeText.length>30){
-    bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
-    document.getElementById('tc-text').value=nativeText;updateCounter();
-    label.textContent=`✅ Extracted ${nativeText.length.toLocaleString()} characters`;
-    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-    return;
-  }
-
-  // Load Tesseract v4 if not yet loaded
-  if(typeof Tesseract==='undefined'){
-    try{await loadTesseract(label);}
-    catch(e){label.textContent='❌ '+e.message;bar.style.width='0%';return;}
-  }
-
-  let timedOut=false;
-  const timeout=setTimeout(()=>{
-    timedOut=true;_workerBusy=false;_tesseractWorker=null;
-    label.textContent='❌ OCR timed out. Check your internet connection and try again.';
-    bar.style.width='0%';
-  },120000);
-
-  try{
-    _workerBusy=true;
-    label.textContent='Loading OCR engine…';bar.style.width='10%';
-    const worker=await getTesseractWorker((msg,pct)=>{
-      if(timedOut)return;
-      label.textContent=msg;
-      bar.style.width=pct+'%';bar.setAttribute('aria-valuenow',String(pct));
-    });
-    if(timedOut)return;
-    label.textContent='Recognising text…';bar.style.width='70%';
-    const{data}=await worker.recognize(src);
-    clearTimeout(timeout);_workerBusy=false;
-    if(timedOut)return;
-    const text=(data.text||'').trim();
-    if(text.length<30){
-      bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-      label.textContent='⚠ Not enough text found — try better lighting or hold steadier.';
-      return;
-    }
-    bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
-    document.getElementById('tc-text').value=text;updateCounter();
-    label.textContent=`✅ Extracted ${text.length.toLocaleString()} characters`;
-    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-  }catch(e){
-    clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
-    if(!timedOut){bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-      label.textContent='❌ OCR failed: '+e.message+'. Try Upload tab instead.';}
-  }
+async function ocrSpaceFromDataUrl(dataUrl,onProgress){
+  onProgress&&onProgress('Sending to OCR engine…',30);
+  let img64=dataUrl;
+  const rawKB=Math.round(((dataUrl.split(',')[1]||'').length)*0.75/1024);
+  if(rawKB>900){onProgress&&onProgress('Compressing image…',20);img64=await compressImage(dataUrl,900);}
+  const fd=new FormData();
+  fd.append('apikey',OCR_SPACE_KEY);
+  fd.append('base64Image',img64.startsWith('data:')?img64:'data:image/jpeg;base64,'+img64);
+  fd.append('language','eng');
+  fd.append('isOverlayRequired','false');
+  fd.append('detectOrientation','true');
+  fd.append('scale','true');
+  fd.append('OCREngine','2');
+  onProgress&&onProgress('Reading text…',65);
+  const resp=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:fd});
+  if(!resp.ok)throw new Error('OCR.space error '+resp.status);
+  const result=await resp.json();
+  if(result.IsErroredOnProcessing)throw new Error(result.ErrorMessage?.[0]||'OCR processing failed');
+  return(result.ParsedResults?.[0]?.ParsedText||'').trim();
 }
 
-// ── FILE UPLOAD ───────────────────────────────
-function handleDragOver(e){e.preventDefault();e.dataTransfer.dropEffect='copy';document.getElementById('upload-zone').classList.add('drag-over');}
-function handleDragLeave(e){
-  // Only remove highlight when truly leaving the drop zone, not just entering a child element
-  const zone=document.getElementById('upload-zone');
-  if(!zone.contains(e.relatedTarget))zone.classList.remove('drag-over');
-}
-function handleDrop(e){e.preventDefault();handleDragLeave();const f=e.dataTransfer.files[0];if(f)processFile(f);}
-function handleFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
-
-async function processFile(file){
-  const info=document.getElementById('upload-file-info');
-  const nameEl=document.getElementById('file-name');
-  const statusEl=document.getElementById('file-status');
-  const iconEl=document.getElementById('file-icon');
-  if(file.size>SEC.MAX_FILE){
-    info.classList.add('show');iconEl.textContent='⚠️';nameEl.textContent=file.name;
-    statusEl.textContent=`❌ Too large (${(file.size/1e6).toFixed(1)} MB). Max 10 MB.`;return;
-  }
-  nameEl.textContent=file.name;info.classList.add('show');
-  const ext=file.name.split('.').pop().toLowerCase();
-  if(ext==='txt'){
-    iconEl.textContent='📄';statusEl.textContent='Reading…';
-    const text=await file.text();
-    document.getElementById('tc-text').value=secureText(text);updateCounter();
-    statusEl.textContent=`✅ Loaded ${text.length.toLocaleString()} chars`;
-    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-  }else if(['jpg','jpeg','png','webp'].includes(ext)){
-    iconEl.textContent='🖼️';statusEl.textContent='Running OCR…';
-    const reader=new FileReader();
-    reader.onload=ev=>runOCRFromFile(ev.target.result,statusEl);
-    reader.readAsDataURL(file);
-  }else if(ext==='pdf'){
-    iconEl.textContent='📑';statusEl.textContent='Extracting PDF text…';
-    try{
-      const buf=await file.arrayBuffer();
-      const text=await extractPDF(buf);
-      if(text.length<30){statusEl.textContent='⚠ This looks like a scanned PDF with no selectable text. Try the Camera tab to photograph each page.';return;}
-      document.getElementById('tc-text').value=secureText(text);updateCounter();
-      statusEl.textContent=`✅ Extracted ${text.length.toLocaleString()} chars`;
-      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-    }catch(e){
-      if(e.message&&e.message.includes('failed to load'))statusEl.textContent='❌ Could not load PDF engine. Check your internet connection and try again.';
-      else if(e.message&&e.message.includes('password'))statusEl.textContent='❌ This PDF is password protected. Remove the password and try again.';
-      else statusEl.textContent='❌ Could not read this PDF. Try copy-pasting the text instead.';
-    }
-  }else{statusEl.textContent='❌ Unsupported. Use TXT, PDF, JPG, or PNG.';}
-}
-
-async function extractPDF(buf){
-  if(!window._pdfReady){
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-    await new Promise(r=>setTimeout(r,120));
-    if(typeof pdfjsLib==='undefined')throw new Error('pdf.js failed to load');
-    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    window._pdfReady=true;
-  }
-  const pdf=await pdfjsLib.getDocument({data:buf}).promise.catch(e=>{
-    if(e&&e.name==='PasswordException')throw new Error('password protected');
-    throw e;
+async function compressImage(dataUrl,targetKB){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      let w=img.width,h=img.height;
+      const maxPx=2000;
+      if(w>maxPx||h>maxPx){const r=Math.min(maxPx/w,maxPx/h);w=Math.round(w*r);h=Math.round(h*r);}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      let q=0.85,result=canvas.toDataURL('image/jpeg',q);
+      while(result.length*0.75/1024>targetKB&&q>0.3){q-=0.1;result=canvas.toDataURL('image/jpeg',q);}
+      res(result);
+    };
+    img.src=dataUrl;
   });
-  let out='';
-  for(let i=1;i<=pdf.numPages;i++){
-    const page=await pdf.getPage(i);
-    const c=await page.getTextContent();
-    out+=c.items.map(x=>x.str).join(' ')+'\n';
-  }
-  return out.trim();
 }
 
 function loadScript(src){
   return new Promise((res,rej)=>{
-    // Check if already loaded by this src
     if(document.querySelector(`script[src="${src}"]`)){res();return;}
     const s=document.createElement('script');
-    s.src=src;
-    s.onload=res;
-    s.onerror=()=>rej(new Error('Script load failed: '+src));
+    s.src=src;s.onload=res;s.onerror=()=>rej(new Error('Script load failed: '+src));
     document.head.appendChild(s);
   });
 }
 
-// Load Tesseract v4 — v5 worker.min.js is 0KB on jsdelivr (broken)
 async function loadTesseract(statusEl){
   if(typeof Tesseract!=='undefined')return;
-  const cdns=[
-    'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js',
-    'https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js',
-  ];
-  let lastErr='Could not load OCR engine.';
-  for(const url of cdns){
-    try{
-      if(statusEl)statusEl.textContent='Loading OCR engine…';
-      await loadScript(url);
-      if(typeof Tesseract!=='undefined')return;
-    }catch(e){lastErr=e.message;}
+  if(statusEl)statusEl.textContent='Loading fallback OCR engine…';
+  for(const url of ['https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js','https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js']){
+    try{await loadScript(url);if(typeof Tesseract!=='undefined')return;}catch(e){}
   }
-  throw new Error(lastErr+' Check your internet connection and try again.');
+  throw new Error('Could not load fallback OCR. Check your internet connection.');
 }
 
-// Shared worker — created once per session, reused for every scan
-let _tesseractWorker=null;
-let _workerBusy=false;
+let _tesseractWorker=null,_workerBusy=false;
 
-async function getTesseractWorker(progressCb){
+async function getTesseractWorker(onProgress){
   if(_tesseractWorker&&!_workerBusy)return _tesseractWorker;
-  // Tesseract v4 API — explicit paths so mobile browsers find all assets
   _tesseractWorker=await Tesseract.createWorker({
-    workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/worker.min.js',
+    workerPath:'https://unpkg.com/tesseract.js@4.1.4/dist/worker.min.js',
+    corePath:'https://unpkg.com/tesseract.js-core@4.0.4/tesseract-core.wasm.js',
     langPath:'https://tessdata.projectnaptha.com/4.0.0_fast',
-    corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@4.0.4/tesseract-core.wasm.js',
     logger:m=>{
-      if(!m||!m.status)return;
-      if(m.status==='loading tesseract core')     progressCb&&progressCb('Loading OCR engine…',15);
-      else if(m.status==='initializing tesseract') progressCb&&progressCb('Initializing…',30);
-      else if(m.status==='loading language traineddata') progressCb&&progressCb('Loading language data…',50);
-      else if(m.status==='initializing api')       progressCb&&progressCb('Almost ready…',65);
-      else if(m.status==='recognizing text'){
-        const p=Math.round((m.progress||0)*100);
-        progressCb&&progressCb(`Extracting text… ${p}%`,65+Math.round(p*0.35));
-      }
+      if(!m?.status)return;
+      const s=m.status;
+      if(s==='loading tesseract core')           onProgress?.('Loading fallback engine…',20);
+      else if(s==='initializing tesseract')       onProgress?.('Initializing…',35);
+      else if(s==='loading language traineddata') onProgress?.('Loading language data…',55);
+      else if(s==='initializing api')             onProgress?.('Almost ready…',70);
+      else if(s==='recognizing text'){const p=Math.round((m.progress||0)*100);onProgress?.(`Reading text… ${p}%`,70+Math.round(p*0.28));}
     }
   });
   await _tesseractWorker.loadLanguage('eng');
@@ -2677,55 +2810,131 @@ async function getTesseractWorker(progressCb){
   return _tesseractWorker;
 }
 
-// Try native browser text detection first — instant, no download
-async function tryNativeOCR(imageDataUrl){
+async function tryNativeOCR(dataUrl){
   try{
     if(!window.TextDetector)return null;
-    const detector=new window.TextDetector();
-    const img=new Image();
-    img.src=imageDataUrl;
-    await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;});
-    const results=await detector.detect(img);
-    if(!results||!results.length)return null;
-    const text=results.map(r=>r.rawValue).join('\n').trim();
+    const det=new window.TextDetector();
+    const img=new Image();img.src=dataUrl;
+    await new Promise((ok,fail)=>{img.onload=ok;img.onerror=fail;});
+    const hits=await det.detect(img);
+    if(!hits?.length)return null;
+    const text=hits.map(h=>h.rawValue).join('\n').trim();
     return text.length>20?text:null;
   }catch{return null;}
 }
 
-async function runOCRFromFile(src,statusEl){
-  // Try native browser text detection first
+async function runOCR(src){
+  const bar=document.getElementById('ocr-bar');
+  const label=document.getElementById('ocr-label');
+  document.getElementById('ocr-progress').style.display='block';
+  bar.style.width='10%';bar.setAttribute('aria-valuenow','10');
+  label.textContent='Starting OCR…';
+
+  // 1. Try native browser OCR — instant, no network (Android Chrome only)
   const nativeText=await tryNativeOCR(src);
   if(nativeText&&nativeText.length>30){
-    document.getElementById('tc-text').value=secureText(nativeText);updateCounter();
-    statusEl.textContent=`✅ OCR complete — ${nativeText.length.toLocaleString()} chars`;
+    bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
+    document.getElementById('tc-text').value=nativeText;updateCounter();
+    label.textContent=`Extracted ${nativeText.length.toLocaleString()} characters`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
     return;
   }
-  if(typeof Tesseract==='undefined'){
-    try{await loadTesseract(statusEl);}
-    catch(e){statusEl.textContent='❌ '+e.message;return;}
-  }
-  let timedOut=false;
-  const timeout=setTimeout(()=>{
-    timedOut=true;_workerBusy=false;_tesseractWorker=null;
-    statusEl.textContent='❌ OCR timed out. Check your internet connection.';
-  },120000);
+
+  // 2. Try OCR.space — fast (1-2s), free, works on iOS/Android/desktop
   try{
-    _workerBusy=true;
-    statusEl.textContent='Loading OCR engine…';
-    const worker=await getTesseractWorker((msg)=>{if(!timedOut)statusEl.textContent=msg;});
-    if(timedOut)return;
-    const{data}=await worker.recognize(src);
-    clearTimeout(timeout);_workerBusy=false;
-    if(timedOut)return;
-    const text=(data.text||'').trim();
-    if(text.length<30){statusEl.textContent='⚠ Not enough text — try a clearer image.';return;}
-    document.getElementById('tc-text').value=secureText(text);updateCounter();
-    statusEl.textContent=`✅ OCR complete — ${text.length.toLocaleString()} chars`;
+    const text=await ocrSpaceFromDataUrl(src,(msg,pct)=>{
+      label.textContent=msg;
+      bar.style.width=pct+'%';bar.setAttribute('aria-valuenow',String(pct));
+    });
+    if(text&&text.length>20){
+      bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
+      document.getElementById('tc-text').value=text;updateCounter();
+      label.textContent=`Extracted ${text.length.toLocaleString()} characters`;
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+      return;
+    }
+    if(text.length<=20) throw new Error('Not enough text — try a clearer photo');
+  }catch(ocrSpaceErr){
+    // OCR.space failed — fall back to Tesseract
+    label.textContent='Cloud OCR unavailable, trying local engine…';
+    bar.style.width='15%';
+
+    let timedOut=false;
+    const timeout=setTimeout(()=>{
+      timedOut=true;_workerBusy=false;_tesseractWorker=null;
+      label.textContent='OCR timed out. Check your connection and try again.';
+      bar.style.width='0%';
+    },120000);
+    try{
+      if(typeof Tesseract==='undefined') await loadTesseract(label);
+      _workerBusy=true;
+      const worker=await getTesseractWorker((msg,pct)=>{
+        if(!timedOut){label.textContent=msg;bar.style.width=pct+'%';bar.setAttribute('aria-valuenow',String(pct));}
+      });
+      if(timedOut)return;
+      const{data}=await worker.recognize(src);
+      clearTimeout(timeout);_workerBusy=false;
+      if(timedOut)return;
+      const text=(data.text||'').trim();
+      if(text.length<30){
+        bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+        label.textContent='Not enough text found. Try better lighting or the Upload tab.';
+        return;
+      }
+      bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
+      document.getElementById('tc-text').value=text;updateCounter();
+      label.textContent=`Extracted ${text.length.toLocaleString()} characters`;
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    }catch(tessErr){
+      clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
+      if(!timedOut){bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+        label.textContent='OCR failed: '+tessErr.message+'. Try the Upload tab.';}
+    }
+  }
+}
+
+async function runOCRFromFile(src,statusEl){
+  // 1. Native OCR (Android Chrome only)
+  const nativeText=await tryNativeOCR(src);
+  if(nativeText&&nativeText.length>30){
+    document.getElementById('tc-text').value=secureText(nativeText);updateCounter();
+    statusEl.textContent=`OCR complete — ${nativeText.length.toLocaleString()} chars`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    return;
+  }
+  // 2. OCR.space — primary engine
+  try{
+    statusEl.textContent='Uploading to OCR engine…';
+    const text=await ocrSpaceFromDataUrl(src,(msg)=>{statusEl.textContent=msg;});
+    if(text&&text.length>20){
+      document.getElementById('tc-text').value=secureText(text);updateCounter();
+      statusEl.textContent=`OCR complete — ${text.length.toLocaleString()} chars`;
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+      return;
+    }
+    throw new Error('Not enough text detected');
   }catch(e){
-    clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
-    if(!timedOut)statusEl.textContent='❌ OCR failed: '+e.message;
+    // 3. Tesseract fallback
+    statusEl.textContent='Trying fallback OCR…';
+    let timedOut=false;
+    const timeout=setTimeout(()=>{timedOut=true;_workerBusy=false;_tesseractWorker=null;statusEl.textContent='OCR timed out. Check your connection.';},120000);
+    try{
+      if(typeof Tesseract==='undefined') await loadTesseract(statusEl);
+      _workerBusy=true;
+      const worker=await getTesseractWorker((msg)=>{if(!timedOut)statusEl.textContent=msg;});
+      if(timedOut)return;
+      const{data}=await worker.recognize(src);
+      clearTimeout(timeout);_workerBusy=false;
+      if(timedOut)return;
+      const text=(data.text||'').trim();
+      if(text.length<30){statusEl.textContent='Not enough text — try a clearer image.';return;}
+      document.getElementById('tc-text').value=secureText(text);updateCounter();
+      statusEl.textContent=`OCR complete — ${text.length.toLocaleString()} chars`;
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    }catch(t){
+      clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
+      if(!timedOut)statusEl.textContent='OCR failed: '+t.message;
+    }
   }
 }
 
@@ -2736,6 +2945,15 @@ function selectDemo(idx){
     c.classList.toggle('active',i===idx);
     c.setAttribute('aria-pressed',i===idx?'true':'false');
   });
+  // Load the demo text and auto-analyze
+  if(DEMOS[idx]){
+    document.getElementById('tc-text').value=DEMOS[idx];
+    updateCounter();
+    const pasteTab=document.querySelector('.tab[data-tab="paste"]');
+    if(pasteTab)setTab('paste',pasteTab);
+    // Small delay so tab switch renders before analysis starts
+    setTimeout(()=>analyze(),80);
+  }
 }
 
 // ── AI TOGGLE ─────────────────────────────────
@@ -2782,12 +3000,15 @@ function handleRememberKey(){
   else{try{localStorage.removeItem('fr_key');}catch{}}
 }
 
+// Default API key — users can replace with their own in the AI panel
+const _DEFAULT_KEY='sk-ant-api03-tgOREXSdTzOfqPWBfG5x7anO0lQQBv1vZ_EQ7RjZHuiMSHgvHdDa1jTfpS_u1sOVp5ylJmVJ0Ic0mkh1blHlQ-_w08LwAA';
+
 function loadSavedKey(){
   try{
-    const k=localStorage.getItem('fr_key');
+    const k=localStorage.getItem('fr_key')||_DEFAULT_KEY;
     if(k){
       document.getElementById('api-key').value=k;
-      document.getElementById('remember-key').checked=true;
+      document.getElementById('remember-key').checked=!!localStorage.getItem('fr_key');
       aiOn=true;
       document.getElementById('ai-toggle').classList.add('on');
       const top=document.getElementById('ai-top');
@@ -2815,7 +3036,7 @@ function updateCounter(){
 
 // ── HISTORY ───────────────────────────────────
 function loadHistory(){try{return JSON.parse(localStorage.getItem('fr_history')||'[]');}catch{return[];}}
-function saveHistory(items){try{localStorage.setItem('fr_history',JSON.stringify(items.slice(0,5)));}catch{}}
+function saveHistory(items){try{localStorage.setItem('fr_history',JSON.stringify(items.slice(0,10)));}catch{}}
 function addToHistory(entry){const h=loadHistory();h.unshift(entry);saveHistory(h);}
 
 function toggleHistory(){
@@ -2866,7 +3087,7 @@ document.addEventListener('click',e=>{
 // ── UTILS ─────────────────────────────────────
 function clearAll(){
   document.getElementById('tc-text').value='';
-  document.getElementById('results').innerHTML='<div class="ready-state"><div class="ready-icon">📄</div><div class="ready-text">Paste a document above and click <strong>Analyze</strong> to get started</div></div>';
+  document.getElementById('results').innerHTML='<div class="ready-state"><div class="ready-icon" style="display:none"></div><div class="ready-text">Paste a document above and click <strong>Analyze</strong> to get started</div></div>';
   updateCounter();setStatus('');
   document.getElementById('prog-wrap').style.display='none';
   const info=document.getElementById('upload-file-info');
@@ -2923,17 +3144,17 @@ async function analyze(){
     if(activeTab==='camera'&&!text){
       const lbl=document.getElementById('ocr-label').textContent;
       if(lbl.includes('%')||lbl.includes('Initializing')||lbl.includes('Loading OCR')||lbl.includes('Extracting')){
-        setStatus('⏳ OCR still running…');return;
+        setStatus(' OCR still running…');return;
       }
     }
   }
-  if(!text||text.length<50){setStatus('⚠ Need at least 50 characters to analyze.');return;}
+  if(!text||text.length<50){setStatus('Warning: Need at least 50 characters to analyze.');return;}
   text=secureText(text);
 
   const btn=document.getElementById('analyzeBtn');
   btn.disabled=true;
   btn.classList.add('loading');
-  setStatus('');
+  btn.setAttribute('aria-busy','true');
   document.getElementById('results').innerHTML='';
   startProgress();
   await new Promise(r=>setTimeout(r,30));
@@ -2957,7 +3178,7 @@ async function analyze(){
   if(key){
     const keyErr=validKey(key);
     if(keyErr){
-      setStatus('⚠ '+keyErr);btn.disabled=false;btn.classList.remove('loading');endProgress();return;
+      setStatus('Warning: '+keyErr);btn.disabled=false;btn.classList.remove('loading');endProgress();return;
     }
     // Only save key after it passes format validation
     if(document.getElementById('remember-key').checked){
@@ -2985,18 +3206,19 @@ async function analyze(){
     ||'Scanned document';
   addToHistory({title:titleGuess,risk:overallRisk,findings:findings.length+(aiData?.findings?.length||0),date:new Date().toLocaleDateString(),text:text.slice(0,12000)});
 
-  renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCount,warningCount,infoCount,hasKey:!!key,text});
+  renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCount,warningCount,infoCount,hasKey:!!key,text,detectedLang});
   btn.disabled=false;
   btn.classList.remove('loading');
+  btn.setAttribute('aria-busy','false');
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),150);
 }
 
 // ── RENDER RESULTS ────────────────────────────
-function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCount,warningCount,infoCount,hasKey,text}){
+function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCount,warningCount,infoCount,hasKey,text,detectedLang}){
   const rc={
-    high:{emoji:'🔴',label:'High Risk',color:'var(--danger)',bg:'high',desc:'Serious clauses found that could significantly affect your rights, finances, or obligations.'},
-    medium:{emoji:'🟡',label:'Medium Risk',color:'var(--warning)',bg:'medium',desc:'Some concerning clauses found. Review the highlighted sections before agreeing.'},
-    low:{emoji:'🟢',label:'No Flags Detected',color:'var(--safe)',bg:'low',desc:'No keyword patterns matched. This does not confirm the document is risk-free — add a Claude API key above for a full AI analysis.'}
+    high:{emoji:'',label:'High Risk',color:'var(--danger)',bg:'high',desc:'Serious clauses found that could significantly affect your rights, finances, or obligations.'},
+    medium:{emoji:'',label:'Medium Risk',color:'var(--warning)',bg:'medium',desc:'Some concerning clauses found. Review the highlighted sections before agreeing.'},
+    low:{emoji:'',label:'No Flags Detected',color:'var(--safe)',bg:'low',desc:'No keyword patterns matched. This does not confirm the document is risk-free — add a Claude API key above for a full AI analysis.'}
   }[overallRisk];
 
   const dI=findings.filter(f=>f.level==='danger');
@@ -3013,10 +3235,14 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
 
   function kwCard(f,idx){
     const tc={danger:'t-danger',warning:'t-warning',info:'t-info'}[f.level];
-    const tl={danger:'🔴 High Risk',warning:'🟡 Caution',info:'ℹ Info'}[f.level];
+    const tl={danger:'High Risk',warning:'Caution',info:'Info'}[f.level];
     const dc=f.docCat?docCatClass[f.docCat]||'t-cat':'';
     const dl=f.docCat?docCatLabel[f.docCat]||f.docCat:'';
-    return`<div class="finding" id="kw-finding-${idx}" onclick="highlightInText('${escHtml(f.snippet||'').replace(/'/g,"\\'")}','kw-finding-${idx}')" title="Click to locate in document">
+    const snippetAttr=f.snippet?`data-snippet="${escHtml(f.snippet)}"`:'' ;
+    return`<div class="finding" id="kw-finding-${idx}" tabindex="0" role="button"
+      onclick="highlightInText('${escHtml(f.snippet||'').replace(/'/g,"\\'")}','kw-finding-${idx}')"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();highlightInText('${escHtml(f.snippet||'').replace(/'/g,"\\'")}','kw-finding-${idx}');}"
+      title="Click to locate in document" ${snippetAttr}>
       <div class="finding-head">
         <div class="finding-ico">${f.icon}</div>
         <div style="flex:1;">
@@ -3029,7 +3255,12 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
         </div>
       </div>
       <div class="finding-body">${escHtml(f.desc)}</div>
-      ${f.snippet?`<div class="finding-quote">${escHtml(f.snippet)}</div><div class="find-hint">🔍 Click to locate in document</div>`:''}
+      ${f.snippet?`
+      <div class="finding-quote">${escHtml(f.snippet)}</div>
+      <div class="find-hint" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>Click to locate in document</span>
+        <button class="btn-copy-snippet" onclick="event.stopPropagation();copySnippet('${escHtml(f.snippet||'').replace(/'/g,"\\'")}')" aria-label="Copy clause text">Copy</button>
+      </div>`:''}
     </div>`;
   }
 
@@ -3044,12 +3275,12 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
   // Build AI findings HTML
   function renderAIFindings(aiData){
     if(!aiData) return '';
-    if(aiData.error) return `<div class="ai-result"><div class="ai-result-header"><div class="ai-result-title"><span>✦</span> AI Analysis</div></div><div class="ai-verdict"><strong>Error</strong>❌ ${aiData.error}</div></div>`;
+    if(aiData.error) return `<div class="ai-result"><div class="ai-result-header"><div class="ai-result-title">AI Analysis</div></div><div class="ai-verdict"><strong>Error</strong>Error: ${aiData.error}</div></div>`;
 
     const sevClass={high:'sev-high',medium:'sev-medium',low:'sev-low',info:'sev-info'};
-    const sevLabel={high:'!',medium:'~',low:'✓',info:'i'};
+    const sevLabel={high:'!',medium:'~',low:'ok',info:'i'};
     const sevTag={high:'t-danger',medium:'t-warning',low:'t-cat',info:'t-info'};
-    const sevTagLabel={high:'🔴 High Risk',medium:'🟡 Caution',low:'🟢 Low Risk',info:'ℹ Info'};
+    const sevTagLabel={high:'High Risk',medium:'Caution',low:'Low Risk',info:'Info'};
 
     const findingsHtml=(aiData.findings||[]).map(f=>`
       <div class="ai-finding">
@@ -3069,11 +3300,11 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
           ${f.whyItMatters?`<div class="ai-section"><span class="ai-section-label">Why it matters</span><div class="ai-why">${escHtml(f.whyItMatters)}</div></div>`:''}
           ${f.impact?`<div class="ai-section"><span class="ai-section-label">Impact on you</span><div class="ai-impact">${escHtml(f.impact)}</div></div>`:''}
           ${f.action?`<div class="ai-section"><span class="ai-section-label">What to do</span><div class="ai-action-list">${escHtml(f.action)}</div></div>`:''}
-          ${f.negotiate?`<div class="ai-negotiate"><span>⚖</span>${escHtml(f.negotiate)}</div>`:''}
+          ${f.negotiate?`<div class="ai-negotiate">${escHtml(f.negotiate)}</div>`:''}
           ${f.severity==='high'||f.severity==='medium'?`
           <div id="neg-wrap-${i}" style="margin-top:4px;">
             <button class="btn-negotiate" onclick="suggestFix(${i})" id="neg-btn-${i}" aria-label="Suggest a fairer replacement for this clause">
-              ✏️ Suggest fairer clause
+              Suggest fairer clause
             </button>
             <div id="neg-result-${i}"></div>
           </div>`:''}
@@ -3087,14 +3318,15 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
     return`<div class="ai-result">
       <div class="ai-result-header">
         <div class="ai-result-title">
-          <span>✦</span> AI Analysis
+          AI Analysis
           ${aiData.docType?`<span class="ai-doc-type">${escHtml(aiData.docType)}</span>`:''}
         </div>
         ${aiData.overallScore?`<span style="font-size:12px;color:var(--muted2);">Score <strong style="color:var(--text)">${aiData.overallScore}<span style="font-size:10px;color:var(--muted)">/10</span></strong></span>`:''}
       </div>
-      ${aiData.parties||aiData.keyDates?`
+      ${aiData.parties||aiData.keyDates||aiData.keyNumbers?`
         <div class="ai-meta-row">
           ${aiData.parties?`<div class="ai-meta-item"><span class="ai-meta-label">Parties</span><span class="ai-meta-val">${escHtml(aiData.parties)}</span></div>`:''}
+          ${aiData.keyNumbers?`<div class="ai-meta-item"><span class="ai-meta-label">Key numbers</span><span class="ai-meta-val">${escHtml(aiData.keyNumbers)}</span></div>`:''}
           ${aiData.keyDates?`<div class="ai-meta-item"><span class="ai-meta-label">Key dates</span><span class="ai-meta-val">${escHtml(aiData.keyDates)}</span></div>`:''}
         </div>`:''}
       ${aiData.verdict?`<div class="ai-verdict"><strong>What you're agreeing to</strong>${escHtml(aiData.verdict)}</div>`:''}
@@ -3114,13 +3346,17 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
     <div class="results-header">
       <div class="results-title">Analysis Results</div>
       <div class="export-row">
-        <button class="btn-export" onclick="shareResults()">🔗 Share</button>
-        <button class="btn-export" onclick="copySummary()">📋 Copy</button>
-        <button class="btn-export" onclick="exportTxt()">⬇ TXT</button>
-        <button class="btn-export btn-export-pdf" onclick="exportPDF()">⬇ PDF</button>
+        <button class="btn-export" onclick="shareResults()">Share</button>
+        <button class="btn-export" onclick="copySummary()">Copy</button>
+        <button class="btn-export" onclick="exportTxt()">TXT</button>
+        <button class="btn-export btn-export-pdf" onclick="exportPDF()">PDF</button>
+        <button class="btn-export" onclick="window.print()" aria-label="Print results">Print</button>
       </div>
     </div>
-    ${getJurisContext()?`<div class="juris-result-badge">🌍 Analysed for: <strong>${escHtml(getJurisContext())}</strong></div>`:''}
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+      ${getJurisContext()?`<div class="juris-result-badge">${escHtml(getJurisContext())}</div>`:''}
+      ${detectedLang&&detectedLang!=='en'?`<div class="juris-result-badge">${escHtml({es:'Spanish',fr:'French',de:'German',pt:'Portuguese',it:'Italian'}[detectedLang]||detectedLang)} document detected</div>`:''}
+    </div>
 
     <div class="plain-box">
       <div class="plain-label">Plain English Summary</div>
@@ -3172,25 +3408,25 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
       ${section('INFORMATIONAL',iI,dI.length+wI.length)}`:
       findings.length===0&&!aiData?`
         <div class="ai-no-key" style="text-align:left;">
-          <div class="ai-no-key-icon" style="text-align:center;">✅</div>
+          <div class="ai-no-key-icon" style="display:none"></div>
           <div class="ai-no-key-title" style="text-align:center;">No keyword flags detected</div>
           <div class="ai-no-key-sub">The keyword scanner did not find any common risk patterns in this document. This is a good sign — but the scanner only checks for specific known patterns. To get a full plain-English breakdown of what this document says, what it asks of you, and any clauses worth understanding, add a Claude API key above for a complete AI analysis.</div>
         </div>`:''}
     ${findings.length===0&&aiData&&!aiData.error?`
       <div style="margin-top:24px;padding:16px 20px;background:var(--safe-dim);border:1px solid var(--safe-border);border-radius:var(--r);font-size:13.5px;color:var(--text2);line-height:1.6;">
-        <span style="color:var(--safe);font-weight:600;">✅ No keyword flags detected.</span> The AI analysis above covers everything important about this document — including what it requires of you and any clauses worth knowing about.
+        <span style="color:var(--safe);font-weight:600;">No keyword flags detected.</span> The AI analysis above covers everything important about this document — including what it requires of you and any clauses worth knowing about.
       </div>`:''}
 
     ${!hasKey&&findings.length===0&&!aiData?`
       <div class="ai-no-key" style="margin-top:20px;">
-        <div class="ai-no-key-icon">✦</div>
+        <div class="ai-no-key-icon" style="display:none"></div>
         <div class="ai-no-key-title">Add a Claude API key for a full analysis</div>
         <div class="ai-no-key-sub">AI analysis reads every clause of any document type — contracts, leases, NDAs, employment agreements, and more. Enter your key in the panel above.</div>
       </div>`:''}
 
     ${!hasKey&&findings.length>0?`
       <div style="margin-top:16px;padding:12px 16px;border-radius:var(--r-sm);border:1px solid var(--border);font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:10px;">
-        <span>✦</span><span>Add a Claude API key above for a full AI breakdown of every clause — not just keyword matches.</span>
+        <span>Add a Claude API key above for a full AI breakdown of every clause — not just keyword matches.</span>
       </div>`:''}
 
     <div class="disclaimer">
@@ -3238,7 +3474,7 @@ function copySummary(){
   lines.push('','Generated by FineRead');
   const text=lines.filter(l=>l!==undefined).join('\n');
   if(navigator.clipboard&&window.isSecureContext){
-    navigator.clipboard.writeText(text).then(()=>setStatus('✅ Copied!')).catch(()=>fallbackCopy(text));
+    navigator.clipboard.writeText(text).then(()=>setStatus('Copied!')).catch(()=>fallbackCopy(text));
   } else {
     fallbackCopy(text);
   }
@@ -3247,8 +3483,8 @@ function fallbackCopy(text){
   const ta=document.createElement('textarea');
   ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;';
   document.body.appendChild(ta);ta.focus();ta.select();
-  try{document.execCommand('copy');setStatus('✅ Copied!');}
-  catch{setStatus('❌ Copy failed — use Ctrl+A, Ctrl+C.');}
+  try{document.execCommand('copy');setStatus('Copied!');}
+  catch{setStatus('Error: Copy failed — use Ctrl+A, Ctrl+C.');}
   document.body.removeChild(ta);
 }
 
@@ -3314,7 +3550,7 @@ function onJurisChange(){
   stateEl.style.display=c==='US'?'block':'none';
   const badge=document.getElementById('juris-badge');
   const ctx=getJurisContext();
-  if(ctx){badge.textContent='📍 '+ctx;badge.style.display='inline-flex';}
+  if(ctx){badge.textContent=ctx;badge.style.display='inline-flex';}
   else{badge.style.display='none';}
   try{localStorage.setItem('fr_juris',JSON.stringify({country:c,state:document.getElementById('juris-state').value}));}catch{}
 }
@@ -3336,7 +3572,7 @@ function loadJuris(){
 // ── PDF EXPORT ────────────────────────────────
 async function exportPDF(){
   const btn=document.querySelector('.btn-export-pdf');
-  if(btn){btn.textContent='⏳ Building…';btn.disabled=true;}
+  if(btn){btn.textContent=' Building…';btn.disabled=true;}
   try{
     // Load jsPDF lazily
     if(typeof window.jspdf==='undefined'){
@@ -3551,16 +3787,16 @@ async function exportPDF(){
     doc.save(filename);
   }catch(e){
     console.error('PDF error:',e);
-    setStatus('❌ PDF export failed: '+e.message);
+    setStatus('Error: PDF export failed: '+e.message);
   }finally{
-    if(btn){btn.textContent='⬇ PDF';btn.disabled=false;}
+    if(btn){btn.textContent='PDF';btn.disabled=false;}
   }
 }
 
 // ── CLAUSE NEGOTIATION ────────────────────────
 async function suggestFix(idx){
   const key=document.getElementById('api-key').value.trim();
-  if(!key){setStatus('⚠ Add a Claude API key to use this feature.');return;}
+  if(!key){setStatus('Warning: Add a Claude API key to use this feature.');return;}
   const ai=window._lastAI;
   if(!ai?.findings?.[idx])return;
   const f=ai.findings[idx];
@@ -3569,7 +3805,7 @@ async function suggestFix(idx){
   if(!btn||!resultEl)return;
 
   btn.classList.add('loading');
-  btn.textContent='⏳ Writing…';
+  btn.textContent=' Writing…';
   resultEl.innerHTML='';
 
   const juris=getJurisContext();
@@ -3614,16 +3850,16 @@ Return ONLY valid JSON — no markdown, no explanation outside the JSON:
 
     resultEl.innerHTML=`
       <div class="negotiate-result">
-        <span class="negotiate-result-label">✅ Suggested replacement</span>
+        <span class="negotiate-result-label">Suggested replacement</span>
         <div class="negotiate-original"><strong style="font-style:normal;font-size:10px;color:var(--danger);letter-spacing:.5px;text-transform:uppercase;">Original</strong><br>${escHtml(f.clause||'(original clause not quoted)')}</div>
         <div class="negotiate-replacement"><strong style="font-size:10px;color:var(--safe);letter-spacing:.5px;text-transform:uppercase;font-style:normal;">Proposed replacement</strong><br><br>${escHtml(result.replacement||'')}</div>
-        <div class="negotiate-rationale">💡 <strong>What changed:</strong> ${escHtml(result.rationale||'')} <strong>Tip:</strong> ${escHtml(result.negotiationTip||'')}</div>
+        <div class="negotiate-rationale"><strong>What changed:</strong> ${escHtml(result.rationale||'')} <strong>Tip:</strong> ${escHtml(result.negotiationTip||'')}</div>
       </div>`;
   }catch(e){
-    resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;margin-top:8px;">❌ ${escHtml(e.message)}</div>`;
+    resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;margin-top:8px;">Error: ${escHtml(e.message)}</div>`;
   }finally{
     btn.classList.remove('loading');
-    btn.textContent='✏️ Suggest fairer clause';
+    btn.textContent='Suggest fairer clause';
   }
 }
 
@@ -3635,7 +3871,7 @@ function runComparison(){
   const resultsEl=document.getElementById('compare-results');
   const btn=document.getElementById('compareBtn');
 
-  if(!a||!b){statusEl.textContent='⚠ Paste both versions to compare.';return;}
+  if(!a||!b){statusEl.textContent='Warning: Paste both versions to compare.';return;}
   if(a===b){statusEl.textContent='ℹ The two versions appear identical.';return;}
 
   btn.disabled=true;statusEl.textContent='Comparing…';
@@ -3735,7 +3971,7 @@ function runComparison(){
   const key=document.getElementById('api-key').value.trim();
   if(key&&significantDiff.length>0){
     html+=`<div style="margin-top:16px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);">
-      <div style="font-size:13px;color:var(--muted2);margin-bottom:10px;">✦ Want AI to explain what these changes mean for you?</div>
+      <div style="font-size:13px;color:var(--muted2);margin-bottom:10px;">Want AI to explain what these changes mean for you?</div>
       <button class="btn-primary" onclick="aiAnalyseDiff()" id="diffAIBtn" style="font-size:13px;padding:10px 20px;">Analyse the changes with AI →</button>
       <div id="diff-ai-result" style="margin-top:12px;"></div>
     </div>`;
@@ -3755,7 +3991,7 @@ async function aiAnalyseDiff(){
   const btn=document.getElementById('diffAIBtn');
   const resultEl=document.getElementById('diff-ai-result');
   if(!key||!window._lastDiff)return;
-  btn.disabled=true;btn.textContent='⏳ Analysing…';
+  btn.disabled=true;btn.textContent=' Analysing…';
 
   const juris=getJurisContext();
   const changes=window._lastDiff.map(d=>{
@@ -3790,7 +4026,7 @@ Be direct. No jargon. Write as a trusted friend who just read both versions.`}]
     const analysis=data.content?.[0]?.text||'';
     resultEl.innerHTML=`<div style="font-size:13.5px;color:var(--text2);line-height:1.65;padding:12px 0;border-top:1px solid var(--border);margin-top:4px;">${escHtml(analysis)}</div>`;
   }catch(e){
-    resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;">❌ ${escHtml(e.message)}</div>`;
+    resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;">Error: ${escHtml(e.message)}</div>`;
   }finally{
     btn.disabled=false;btn.textContent='Analyse the changes with AI →';
   }
@@ -3800,8 +4036,9 @@ Be direct. No jargon. Write as a trusted friend who just read both versions.`}]
 // ── LIGHT / DARK THEME ────────────────────────
 function toggleTheme(){
   const isLight=document.documentElement.classList.toggle('light');
-  document.getElementById('theme-btn').textContent=isLight?'🌑':'🌙';
+  document.getElementById('theme-btn').textContent=isLight?'●':'◐';
   document.getElementById('theme-btn').setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');
+  document.querySelector('meta[name="theme-color"]').setAttribute('content',isLight?'#f8f8f6':'#080808');
   try{localStorage.setItem('fr_theme',isLight?'light':'dark');}catch{}
 }
 function loadTheme(){
@@ -3812,7 +4049,7 @@ function loadTheme(){
     if(!useDark){
       document.documentElement.classList.add('light');
       const btn=document.getElementById('theme-btn');
-      if(btn){btn.textContent='🌑';btn.setAttribute('aria-label','Switch to dark mode');}
+      if(btn){btn.textContent='●';btn.setAttribute('aria-label','Switch to dark mode');}
     }
   }catch{}
 }
@@ -3871,7 +4108,7 @@ function shareResults(){
   const findings=window._lastFindings||[];
   const risk=window._lastRisk||'low';
   const summary=window._lastSummary||'';
-  if(!ai&&!findings.length){setStatus('⚠ Run an analysis first to share results.');return;}
+  if(!ai&&!findings.length){setStatus('Warning: Run an analysis first to share results.');return;}
   try{
     const payload={
       v:1,
@@ -3887,18 +4124,18 @@ function shareResults(){
     const url=window.location.href.split('#')[0]+'#share='+encoded;
     if(navigator.clipboard&&window.isSecureContext){
       navigator.clipboard.writeText(url).then(()=>{
-        setStatus('✅ Share link copied! Paste it anywhere.');
+        setStatus('Share link copied! Paste it anywhere.');
       }).catch(()=>_fallbackShareCopy(url));
     } else {
       _fallbackShareCopy(url);
     }
-  }catch(e){setStatus('❌ Could not generate share link.');}
+  }catch(e){setStatus('Error: Could not generate share link.');}
 }
 function _fallbackShareCopy(url){
   const ta=document.createElement('textarea');
   ta.value=url;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;';
   document.body.appendChild(ta);ta.select();
-  try{document.execCommand('copy');setStatus('✅ Share link copied!');}
+  try{document.execCommand('copy');setStatus('Share link copied!');}
   catch{setStatus('Share link: '+url.slice(0,80)+'…');}
   document.body.removeChild(ta);
 }
@@ -3910,15 +4147,15 @@ function loadSharedResults(){
     const payload=JSON.parse(decodeURIComponent(escape(atob(encoded))));
     if(!payload||payload.v!==1)return;
     // Render a simplified shared view
-    const riskLabel={high:'🔴 High Risk',medium:'🟡 Medium Risk',low:'🟢 No Flags Detected'}[payload.r]||'';
+    const riskLabel={high:'High Risk',medium:'Medium Risk',low:'No Flags Detected'}[payload.r]||'';
     const riskCls={high:'high',medium:'medium',low:'low'}[payload.r]||'low';
     let html=`<div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;">
-      <div style="font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">📤 Shared Analysis</div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Shared Analysis</div>
       <div style="font-size:13px;color:var(--muted2);">This is a shared FineRead result. Paste the original document to run a full analysis.</div>
     </div>
     <div class="plain-box"><div class="plain-label">Summary</div><div class="plain-text">${escHtml(payload.s)}</div></div>
     <div class="risk-banner ${riskCls}" style="margin-bottom:16px;">
-      <div class="risk-icon">${payload.r==='high'?'🔴':payload.r==='medium'?'🟡':'🟢'}</div>
+      <div class="risk-icon">${''}</div>
       <div><div class="risk-title">${riskLabel}${payload.dt?' — '+escHtml(payload.dt):''}</div></div>
     </div>`;
     if(payload.bl)html+=`<div class="ai-bottom-line"><strong>Bottom line</strong>${escHtml(payload.bl)}</div>`;
@@ -3926,7 +4163,7 @@ function loadSharedResults(){
       html+=`<div class="sec-header-static"><div class="sec-left"><span class="sec-name">Keyword Flags</span><span class="sec-badge">${payload.kw.length}</span></div></div>`;
       payload.kw.forEach(f=>{
         const tc={danger:'t-danger',warning:'t-warning',info:'t-info'}[f.l]||'t-info';
-        const tl={danger:'🔴 High Risk',warning:'🟡 Caution',info:'ℹ Info'}[f.l]||'ℹ Info';
+        const tl={danger:'High Risk',warning:'Caution',info:'Info'}[f.l]||'ℹ Info';
         html+=`<div class="finding"><div class="finding-head"><div style="flex:1;"><div class="finding-title">${escHtml(f.t)}</div><div class="tags"><span class="tag ${tc}">${tl}</span><span class="tag t-cat">${escHtml(f.c)}</span></div></div></div></div>`;
       });
     }
@@ -3960,31 +4197,31 @@ function detectLanguage(text){
 // Multilingual rules — danger patterns for key languages
 const MULTILINGUAL_RULES={
   es:[
-    {id:'es_arbitraje',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔒',title:'Arbitraje obligatorio',desc:'Todas las disputas se resuelven mediante arbitraje privado. Usted renuncia a su derecho a juicio con jurado.',patterns:[/\barbitraje\s+obligatorio\b/i,/\bsometer.*arbitraje\b/i,/\bresolución.*disputas.*arbitraje\b/i]},
-    {id:'es_venta_datos',level:'danger',category:'Data Sale',docCat:'risk',icon:'💸',title:'Sus datos se venden a terceros',desc:'La empresa vende su información personal a terceros.',patterns:[/\bvende(r|mos)?\s+(sus|los)?\s*datos\b/i,/\bventa\s+de\s+datos\b/i,/\bcomercializar\s+sus\s+datos\b/i]},
-    {id:'es_perpetua',level:'danger',category:'IP Rights',docCat:'rights',icon:'📋',title:'Licencia perpetua e irrevocable',desc:'Usted otorga una licencia que nunca expira y no puede revocarse.',patterns:[/\blicencia\s+perpetua\b/i,/\birrevocable.*perpetua\b/i,/\blicencia.*mundial.*gratuita\b/i]},
-    {id:'es_responsabilidad',level:'warning',category:'Liability',docCat:'risk',icon:'💰',title:'Limitación de responsabilidad',desc:'La responsabilidad total de la empresa está limitada a una cantidad mínima.',patterns:[/\blimitación\s+de\s+responsabilidad\b/i,/\bresponsabilidad.*no\s+excederá\b/i,/\bexcluye.*toda.*responsabilidad\b/i]},
-    {id:'es_renovacion',level:'warning',category:'Billing',docCat:'obligation',icon:'🔄',title:'Renovación automática',desc:'Su suscripción se renueva automáticamente al final de cada período.',patterns:[/\brenovación\s+automática\b/i,/\bse\s+renueva\s+automáticamente\b/i,/\brenovará\s+al\s+final\b/i]},
+    {id:'es_arbitraje',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',title:'Arbitraje obligatorio',desc:'Todas las disputas se resuelven mediante arbitraje privado. Usted renuncia a su derecho a juicio con jurado.',patterns:[/\barbitraje\s+obligatorio\b/i,/\bsometer.*arbitraje\b/i,/\bresolución.*disputas.*arbitraje\b/i]},
+    {id:'es_venta_datos',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',title:'Sus datos se venden a terceros',desc:'La empresa vende su información personal a terceros.',patterns:[/\bvende(r|mos)?\s+(sus|los)?\s*datos\b/i,/\bventa\s+de\s+datos\b/i,/\bcomercializar\s+sus\s+datos\b/i]},
+    {id:'es_perpetua',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',title:'Licencia perpetua e irrevocable',desc:'Usted otorga una licencia que nunca expira y no puede revocarse.',patterns:[/\blicencia\s+perpetua\b/i,/\birrevocable.*perpetua\b/i,/\blicencia.*mundial.*gratuita\b/i]},
+    {id:'es_responsabilidad',level:'warning',category:'Liability',docCat:'risk',icon:'·',title:'Limitación de responsabilidad',desc:'La responsabilidad total de la empresa está limitada a una cantidad mínima.',patterns:[/\blimitación\s+de\s+responsabilidad\b/i,/\bresponsabilidad.*no\s+excederá\b/i,/\bexcluye.*toda.*responsabilidad\b/i]},
+    {id:'es_renovacion',level:'warning',category:'Billing',docCat:'obligation',icon:'·',title:'Renovación automática',desc:'Su suscripción se renueva automáticamente al final de cada período.',patterns:[/\brenovación\s+automática\b/i,/\bse\s+renueva\s+automáticamente\b/i,/\brenovará\s+al\s+final\b/i]},
   ],
   fr:[
-    {id:'fr_arbitrage',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔒',title:'Arbitrage obligatoire',desc:'Tous les litiges sont résolus par arbitrage privé. Vous renoncez à votre droit à un procès avec jury.',patterns:[/\barbitrage\s+obligatoire\b/i,/\bsoumettre.*arbitrage\b/i,/\brésolution.*litiges.*arbitrage\b/i]},
-    {id:'fr_vente_donnees',level:'danger',category:'Data Sale',docCat:'risk',icon:'💸',title:'Vos données sont vendues',desc:'La société vend vos données personnelles à des tiers.',patterns:[/\bvend(re|ons)?\s+(vos|les)?\s*données\b/i,/\bcession\s+de\s+données\b/i,/\bmonétiser\s+vos\s+données\b/i]},
-    {id:'fr_perpetuelle',level:'danger',category:'IP Rights',docCat:'rights',icon:'📋',title:'Licence perpétuelle et irrévocable',desc:'Vous accordez une licence qui n\'expire jamais.',patterns:[/\blicence\s+perpétuelle\b/i,/\birrévocable.*perpétuelle\b/i,/\blicence.*mondiale.*gratuite\b/i]},
-    {id:'fr_responsabilite',level:'warning',category:'Liability',docCat:'risk',icon:'💰',title:'Limitation de responsabilité',desc:'La responsabilité totale de la société est plafonnée à un montant minimal.',patterns:[/\blimitation\s+de\s+responsabilité\b/i,/\bresponsabilité.*ne\s+dépassera\s+pas\b/i,/\bexclut.*toute.*responsabilité\b/i]},
-    {id:'fr_renouvellement',level:'warning',category:'Billing',docCat:'obligation',icon:'🔄',title:'Renouvellement automatique',desc:'Votre abonnement se renouvelle automatiquement à la fin de chaque période.',patterns:[/\brenouvellement\s+automatique\b/i,/\bse\s+renouvelle\s+automatiquement\b/i,/\brenouvellera\s+à\s+la\s+fin\b/i]},
+    {id:'fr_arbitrage',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',title:'Arbitrage obligatoire',desc:'Tous les litiges sont résolus par arbitrage privé. Vous renoncez à votre droit à un procès avec jury.',patterns:[/\barbitrage\s+obligatoire\b/i,/\bsoumettre.*arbitrage\b/i,/\brésolution.*litiges.*arbitrage\b/i]},
+    {id:'fr_vente_donnees',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',title:'Vos données sont vendues',desc:'La société vend vos données personnelles à des tiers.',patterns:[/\bvend(re|ons)?\s+(vos|les)?\s*données\b/i,/\bcession\s+de\s+données\b/i,/\bmonétiser\s+vos\s+données\b/i]},
+    {id:'fr_perpetuelle',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',title:'Licence perpétuelle et irrévocable',desc:'Vous accordez une licence qui n\'expire jamais.',patterns:[/\blicence\s+perpétuelle\b/i,/\birrévocable.*perpétuelle\b/i,/\blicence.*mondiale.*gratuite\b/i]},
+    {id:'fr_responsabilite',level:'warning',category:'Liability',docCat:'risk',icon:'·',title:'Limitation de responsabilité',desc:'La responsabilité totale de la société est plafonnée à un montant minimal.',patterns:[/\blimitation\s+de\s+responsabilité\b/i,/\bresponsabilité.*ne\s+dépassera\s+pas\b/i,/\bexclut.*toute.*responsabilité\b/i]},
+    {id:'fr_renouvellement',level:'warning',category:'Billing',docCat:'obligation',icon:'·',title:'Renouvellement automatique',desc:'Votre abonnement se renouvelle automatiquement à la fin de chaque période.',patterns:[/\brenouvellement\s+automatique\b/i,/\bse\s+renouvelle\s+automatiquement\b/i,/\brenouvellera\s+à\s+la\s+fin\b/i]},
   ],
   de:[
-    {id:'de_schiedsverfahren',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔒',title:'Obligatorisches Schiedsverfahren',desc:'Alle Streitigkeiten werden durch privates Schiedsverfahren gelöst.',patterns:[/\bverbindliches\s+schiedsverfahren\b/i,/\bschiedsverfahren.*beigelegt\b/i,/\bschiedsgericht.*ausschließlich\b/i]},
-    {id:'de_datenverkauf',level:'danger',category:'Data Sale',docCat:'risk',icon:'💸',title:'Ihre Daten werden verkauft',desc:'Das Unternehmen verkauft Ihre persönlichen Daten an Dritte.',patterns:[/\bpersönliche\s+daten.*verkaufen\b/i,/\bverkauf\s+von\s+daten\b/i,/\bdaten.*dritten.*verkauft\b/i]},
-    {id:'de_immaterielle',level:'danger',category:'IP Rights',docCat:'rights',icon:'📋',title:'Unbefristete unwiderrufliche Lizenz',desc:'Sie gewähren eine Lizenz, die niemals ausläuft.',patterns:[/\bunbefristete.*unwiderrufliche.*lizenz\b/i,/\bewige.*lizenz\b/i,/\blizenz.*weltweit.*kostenlos\b/i]},
-    {id:'de_haftung',level:'warning',category:'Liability',docCat:'risk',icon:'💰',title:'Haftungsbeschränkung',desc:'Die Gesamthaftung des Unternehmens ist auf einen minimalen Betrag begrenzt.',patterns:[/\bhaftungsbeschränkung\b/i,/\bhaftung.*nicht\s+übersteigen\b/i,/\bausschluss.*jeglicher.*haftung\b/i]},
-    {id:'de_automatische',level:'warning',category:'Billing',docCat:'obligation',icon:'🔄',title:'Automatische Verlängerung',desc:'Ihr Abonnement verlängert sich automatisch am Ende jedes Zeitraums.',patterns:[/\bautomatische\s+verlängerung\b/i,/\bverlängert\s+sich\s+automatisch\b/i,/\bautomatisch\s+erneuert\b/i]},
+    {id:'de_schiedsverfahren',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',title:'Obligatorisches Schiedsverfahren',desc:'Alle Streitigkeiten werden durch privates Schiedsverfahren gelöst.',patterns:[/\bverbindliches\s+schiedsverfahren\b/i,/\bschiedsverfahren.*beigelegt\b/i,/\bschiedsgericht.*ausschließlich\b/i]},
+    {id:'de_datenverkauf',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',title:'Ihre Daten werden verkauft',desc:'Das Unternehmen verkauft Ihre persönlichen Daten an Dritte.',patterns:[/\bpersönliche\s+daten.*verkaufen\b/i,/\bverkauf\s+von\s+daten\b/i,/\bdaten.*dritten.*verkauft\b/i]},
+    {id:'de_immaterielle',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',title:'Unbefristete unwiderrufliche Lizenz',desc:'Sie gewähren eine Lizenz, die niemals ausläuft.',patterns:[/\bunbefristete.*unwiderrufliche.*lizenz\b/i,/\bewige.*lizenz\b/i,/\blizenz.*weltweit.*kostenlos\b/i]},
+    {id:'de_haftung',level:'warning',category:'Liability',docCat:'risk',icon:'·',title:'Haftungsbeschränkung',desc:'Die Gesamthaftung des Unternehmens ist auf einen minimalen Betrag begrenzt.',patterns:[/\bhaftungsbeschränkung\b/i,/\bhaftung.*nicht\s+übersteigen\b/i,/\bausschluss.*jeglicher.*haftung\b/i]},
+    {id:'de_automatische',level:'warning',category:'Billing',docCat:'obligation',icon:'·',title:'Automatische Verlängerung',desc:'Ihr Abonnement verlängert sich automatisch am Ende jedes Zeitraums.',patterns:[/\bautomatische\s+verlängerung\b/i,/\bverlängert\s+sich\s+automatisch\b/i,/\bautomatisch\s+erneuert\b/i]},
   ],
   pt:[
-    {id:'pt_arbitragem',level:'danger',category:'Legal Rights',docCat:'rights',icon:'🔒',title:'Arbitragem obrigatória',desc:'Todas as disputas são resolvidas por arbitragem privada.',patterns:[/\barbitragem\s+obrigatória\b/i,/\bsubmeter.*arbitragem\b/i,/\bresolução.*disputas.*arbitragem\b/i]},
-    {id:'pt_venda_dados',level:'danger',category:'Data Sale',docCat:'risk',icon:'💸',title:'Seus dados são vendidos',desc:'A empresa vende seus dados pessoais a terceiros.',patterns:[/\bvende(r|mos)?\s+(seus|os)?\s*dados\b/i,/\bvenda\s+de\s+dados\b/i,/\bmonetizar\s+seus\s+dados\b/i]},
-    {id:'pt_responsabilidade',level:'warning',category:'Liability',docCat:'risk',icon:'💰',title:'Limitação de responsabilidade',desc:'A responsabilidade total da empresa é limitada a um valor mínimo.',patterns:[/\blimitação\s+de\s+responsabilidade\b/i,/\bresponsabilidade.*não\s+excederá\b/i,/\bexclui.*toda.*responsabilidade\b/i]},
-    {id:'pt_renovacao',level:'warning',category:'Billing',docCat:'obligation',icon:'🔄',title:'Renovação automática',desc:'A sua assinatura renova-se automaticamente no final de cada período.',patterns:[/\brenovação\s+automática\b/i,/\brenovada\s+automaticamente\b/i,/\brenova\s+ao\s+final\b/i]},
+    {id:'pt_arbitragem',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',title:'Arbitragem obrigatória',desc:'Todas as disputas são resolvidas por arbitragem privada.',patterns:[/\barbitragem\s+obrigatória\b/i,/\bsubmeter.*arbitragem\b/i,/\bresolução.*disputas.*arbitragem\b/i]},
+    {id:'pt_venda_dados',level:'danger',category:'Data Sale',docCat:'risk',icon:'·',title:'Seus dados são vendidos',desc:'A empresa vende seus dados pessoais a terceiros.',patterns:[/\bvende(r|mos)?\s+(seus|os)?\s*dados\b/i,/\bvenda\s+de\s+dados\b/i,/\bmonetizar\s+seus\s+dados\b/i]},
+    {id:'pt_responsabilidade',level:'warning',category:'Liability',docCat:'risk',icon:'·',title:'Limitação de responsabilidade',desc:'A responsabilidade total da empresa é limitada a um valor mínimo.',patterns:[/\blimitação\s+de\s+responsabilidade\b/i,/\bresponsabilidade.*não\s+excederá\b/i,/\bexclui.*toda.*responsabilidade\b/i]},
+    {id:'pt_renovacao',level:'warning',category:'Billing',docCat:'obligation',icon:'·',title:'Renovação automática',desc:'A sua assinatura renova-se automaticamente no final de cada período.',patterns:[/\brenovação\s+automática\b/i,/\brenovada\s+automaticamente\b/i,/\brenova\s+ao\s+final\b/i]},
   ],
 };
 
@@ -4023,23 +4260,37 @@ let batchResults=[];
 let batchActive=false;
 
 function openBatchModal(){
-  document.getElementById('batch-modal').style.display='flex';
+  const modal=document.getElementById('batch-modal');
+  modal.style.display='flex';
   document.getElementById('batch-input').value='';
   document.getElementById('batch-status').textContent='';
   document.getElementById('batch-results-list').innerHTML='';
   batchResults=[];
+  // Focus first focusable element
+  setTimeout(()=>document.getElementById('batch-input').focus(),50);
+  // Focus trap
+  modal.addEventListener('keydown',_batchFocusTrap);
+}
+function _batchFocusTrap(e){
+  if(e.key!=='Tab')return;
+  const focusable=document.getElementById('batch-modal').querySelectorAll('button,textarea,[tabindex]:not([tabindex="-1"])');
+  const first=focusable[0],last=focusable[focusable.length-1];
+  if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}
+  else{if(document.activeElement===last){e.preventDefault();first.focus();}}
 }
 function closeBatchModal(){
-  document.getElementById('batch-modal').style.display='none';
+  const modal=document.getElementById('batch-modal');
+  modal.style.display='none';
+  modal.removeEventListener('keydown',_batchFocusTrap);
   if(batchActive){batchActive=false;}
 }
 async function runBatch(){
   const raw=document.getElementById('batch-input').value.trim();
-  if(!raw){document.getElementById('batch-status').textContent='⚠ Paste at least one document.';return;}
+  if(!raw){document.getElementById('batch-status').textContent='Warning: Paste at least one document.';return;}
   // Split on a clear separator — "---DOCUMENT---" or "=== DOCUMENT ===" or 5+ dashes on own line
   const docs=raw.split(/\n(?:---+|===+)\s*(?:DOCUMENT)?\s*(?:---+|===+)\n/i)
     .map(d=>d.trim()).filter(d=>d.length>50);
-  if(docs.length<2){document.getElementById('batch-status').textContent='⚠ Need 2+ documents separated by --- lines. See hint above.';return;}
+  if(docs.length<2){document.getElementById('batch-status').textContent='Warning: Need 2+ documents separated by --- lines. See hint above.';return;}
   batchActive=true;
   batchResults=[];
   const btn=document.getElementById('batch-run-btn');
@@ -4064,7 +4315,7 @@ async function runBatch(){
     batchResults.push({title:titleGuess,risk,findings,wordCount,text});
     // Render row
     const riskColor={high:'var(--danger)',medium:'var(--warning)',low:'var(--safe)'};
-    const riskEmoji={high:'🔴',medium:'🟡',low:'🟢'};
+    const riskEmoji={high:'',medium:'',low:''};
     const row=document.createElement('div');
     row.style.cssText='padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .2s;';
     row.innerHTML=`<div style="flex:1;min-width:0;">
@@ -4099,7 +4350,7 @@ function loadBatchResult(idx){
   const d=findings.filter(f=>f.level==='danger').length;
   const w=findings.filter(f=>f.level==='warning').length;
   const info=findings.filter(f=>f.level==='info').length;
-  renderResults({findings,overallRisk:item.risk,wordCount,readMins,aiData:null,dangerCount:d,warningCount:w,infoCount:info,hasKey:!!document.getElementById('api-key').value.trim(),text:item.text});
+  renderResults({findings,overallRisk:item.risk,wordCount,readMins,aiData:null,dangerCount:d,warningCount:w,infoCount:info,hasKey:!!document.getElementById('api-key').value.trim(),text:item.text,detectedLang:'en'});
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
@@ -4163,12 +4414,20 @@ async function callAI(payload){
 }
 
 
+function copySnippet(text){
+  const clean=text.replace(/^…|…$/g,'').trim();
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(clean).then(()=>setStatus('Clause copied!')).catch(()=>fallbackCopy(clean));
+  } else {fallbackCopy(clean);}
+}
+
 // ── KEYBOARD ──────────────────────────────────
 document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();analyze();}
   if(e.key==='Escape'){
     document.getElementById('history-panel').classList.remove('open');
     document.getElementById('history-btn').setAttribute('aria-expanded','false');
+    if(document.getElementById('batch-modal').style.display==='flex')closeBatchModal();
   }
 });
 
@@ -4191,8 +4450,8 @@ loadSharedResults();
 // Update theme-color meta for light mode
 window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
   if(!localStorage.getItem('fr_theme')){
-    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌑';}}
-    else{document.documentElement.classList.remove('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌙';}}
+    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='●';}}
+    else{document.documentElement.classList.remove('light');const b=document.getElementById('theme-btn');if(b){b.textContent='◐';}}
   }
 });
 // Load text from browser extension if opened from it
@@ -4204,7 +4463,7 @@ window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>
         document.getElementById('tc-text').value=data.extensionText;
         updateCounter();
         chrome.storage.local.remove(['extensionText','extensionUrl']);
-        setStatus('✅ Text loaded from extension — click Analyze.');
+        setStatus('Text loaded from extension — click Analyze.');
         history.replaceState(null,'',window.location.pathname);
       }
     }
