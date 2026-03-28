@@ -3340,47 +3340,14 @@ function buildDocumentSummary(text, findings, wordCount){
 
 // ── AI SCAN ───────────────────────────────────
 async function aiScan(text,key){
-  const body=text.slice(0,24000);
+  const body=text.slice(0,12000); // halved — enough for any real document
   const juris=getJurisContext();
-  const jurisNote=juris?`\n\nJURISDICTION: The person is in ${juris}. For every relevant finding, note whether local law (GDPR, CCPA, consumer protection, employment law, etc.) gives them extra protections or makes a clause unenforceable. Be specific — e.g. "In California, non-competes are unenforceable" or "GDPR gives you the right to deletion regardless of what this policy says".`:'';
-  const prompt=`You are a senior consumer-rights attorney with 20 years of experience. Your job: give the most thorough, honest, useful analysis possible so the person fully understands exactly what they are agreeing to.${jurisNote}
+  const jurisNote=juris?` The person is in ${juris} — note any local laws that affect their rights.`:'';
+  const prompt=`You are a consumer-rights attorney.${jurisNote} Analyze this document. Return ONLY valid JSON, no markdown.
 
-Analyze the document. Return ONLY valid JSON — no markdown fences, no text outside the JSON.
+{"docType":"document type","parties":"who the parties are","overallRisk":"high|medium|low","overallScore":1-10,"verdict":"4-5 sentences: what is this document, what does it require, biggest risk, is it fair. Plain English, no jargon.","bottomLine":"one sentence — most important thing to know.","keyDates":"deadlines/renewals or empty string","keyNumbers":"key amounts/rates/fees or empty string","findings":[{"title":"6-8 word title","severity":"high|medium|low|info","category":"category","clause":"exact quote max 80 words","what":"2-3 sentences plain English explanation","whyItMatters":"1-2 sentences with a concrete real scenario","action":"1 concrete step to take","negotiate":"one sentence on negotiability"}]}
 
-{
-  "docType": "Precise type — e.g. 'Privacy Policy', 'Employment Contract', 'Residential Lease', 'NDA', 'Loan Agreement', 'Terms of Service', 'Software License', 'Service Agreement'",
-  "parties": "Who are the parties — full names/entities if stated, e.g. 'You (employee) and TechCorp Inc. (employer)'",
-  "overallRisk": "high | medium | low",
-  "overallScore": integer 1-10 where 10 is extremely dangerous to the signer,
-  "verdict": "7-9 sentences. Lead with: what IS this document and what is its purpose. Then: what is the person actually agreeing to. What does it require of them. What rights do they get. What rights do they give up. What is the biggest risk. What is surprisingly good or fair. Write as a trusted lawyer friend who just read it — direct, warm, plain English, zero jargon. If it is clean and fair, say so and explain why.",
-  "bottomLine": "One punchy sentence — the single most important thing to know before signing this.",
-  "keyDates": "List any deadlines, notice periods, renewal dates, trial end dates, payment schedules. E.g. '30-day cancellation notice required; auto-renews annually on Jan 1; trial ends after 14 days'. Empty string if none.",
-  "keyNumbers": "List the most important numbers: amounts, percentages, time periods, fees. E.g. 'APR: 89.9%; Deposit: $2,400; Late fee: $150; Early exit fee: $1,500'. Empty string if none.",
-  "findings": [
-    {
-      "title": "Clear descriptive title, 6-10 words, e.g. 'Your Content Licensed Forever Without Compensation'",
-      "severity": "high | medium | low | info",
-      "category": "Exact category — Data Sale | Arbitration | IP Rights | Termination | Non-Compete | Compensation | Liability Cap | Auto-Renewal | Jurisdiction | Confidentiality | Privacy | Security Deposit | Entry Rights | Subletting | Pet Policy | Interest Rate | Credit Reporting | Prepayment | Force Majeure | Indemnification | Governing Law | Amendment Rights | Data Retention | Third-Party Sharing | AI Training | Biometrics | Background Check | Drug Testing | Benefits | Notice Period | Severance | etc.",
-      "clause": "Copy the EXACT clause text from the document, word for word. Max 150 words. This is the most important field — never paraphrase, always quote directly.",
-      "what": "5-6 sentences in plain English: what does this clause actually mean? Explain every part of it. No legal jargon. Write as if explaining to someone who has never signed a contract.",
-      "whyItMatters": "4-5 sentences: why should they care? Give ONE concrete, specific, realistic scenario of exactly what could happen to this person because of this clause. Use numbers and specifics where possible — e.g. 'If you cancel after 3 months, you could owe $4,800 in remaining payments.'",
-      "impact": "3-4 sentences: what specifically changes for this person? What can they no longer do? What do they now owe or gain? Make it personal and concrete.",
-      "action": "3 numbered, specific, concrete steps they can take. Not vague advice. E.g.: '1. Email them requesting removal of clause 8.3 before signing. 2. If refused, ask for a written side-letter limiting the data sharing to service-related use only. 3. Screenshot the current policy version with today's date in case it changes.' ",
-      "negotiate": "Honest one-sentence assessment — is this typically negotiable for this type of document and with this type of counterparty? E.g. 'Standard SaaS contracts rarely allow negotiation on arbitration clauses, but larger enterprise deals sometimes do.'"
-    }
-  ]
-}
-
-RULES:
-- findings: 10-18 items. Cover EVERYTHING — risks, obligations, rights waived, AND things that protect the signer.
-- NEVER skip the clause field. Quote exact text. This is non-negotiable.
-- Include keyNumbers and keyDates even for short documents.
-- whyItMatters MUST include a concrete scenario with specific consequences.
-- action MUST have 3 numbered concrete steps.
-- severity "info" = clauses that PROTECT or BENEFIT the signer — always include these.
-- Never return empty findings array. If document is clean, use "low"/"info" severity for informational findings about what it requires.
-- verdict must name the document type in the first sentence.
-- Be ruthlessly honest. Name red flags directly. But also credit fair, consumer-friendly clauses.
+Rules: 6-10 findings. Quote clause exactly. severity info = things that protect the signer. Be direct and honest.
 
 Document:
 ---
@@ -3388,13 +3355,12 @@ ${body}
 ---`;
 
   const controller=new AbortController();
-  // 90 second timeout — large documents with 6000 tokens can take 30-60s
-  const aiTimer=setTimeout(()=>controller.abort(),90000);
+  const aiTimer=setTimeout(()=>controller.abort(),60000);
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:6000,messages:[{role:'user',content:prompt}]}),
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,messages:[{role:'user',content:prompt}]}),
       signal:controller.signal
     });
     clearTimeout(aiTimer);
@@ -3402,16 +3368,34 @@ ${body}
     const data=await resp.json();
     const raw=data.content?.[0]?.text||'';
     const clean=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();
-    try{
-      return JSON.parse(clean);
-    }catch{
+    try{return JSON.parse(clean);}
+    catch{
+      // Try to extract partial JSON — Haiku/Sonnet sometimes truncates mid-response
       const match=clean.match(/\{[\s\S]*/);
-      if(match){try{return JSON.parse(match[0]);}catch{}}
-      return{docType:'Document',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,600),bottomLine:'See analysis below.',findings:[],parties:'',keyDates:'',keyNumbers:''};
+      if(match){
+        try{return JSON.parse(match[0]);}catch{}
+        // JSON truncated — try to salvage findings array
+        const partial=match[0];
+        const docType=(partial.match(/"docType"\s*:\s*"([^"]+)"/))||['','Document'];
+        const risk=(partial.match(/"overallRisk"\s*:\s*"([^"]+)"/))||['','medium'];
+        const verdict=(partial.match(/"verdict"\s*:\s*"([^"]+)"/))||['',''];
+        const bottomLine=(partial.match(/"bottomLine"\s*:\s*"([^"]+)"/))||['',''];
+        // Extract any complete finding objects
+        const findingMatches=[...partial.matchAll(/\{[^{}]*"title"\s*:\s*"[^"]+[^{}]*"severity"\s*:\s*"[^"]+[^{}]*\}/g)];
+        const findings=findingMatches.map(m=>{try{return JSON.parse(m[0]);}catch{return null;}}).filter(Boolean);
+        return{
+          docType:docType[1],overallRisk:risk[1],overallScore:5,
+          verdict:verdict[1]||'Analysis incomplete — document may be too long. The keyword scan results below show the main flags found.',
+          bottomLine:bottomLine[1]||'',findings,parties:'',keyDates:'',keyNumbers:''
+        };
+      }
+      return{docType:'Document',overallRisk:'medium',overallScore:5,
+        verdict:'AI response could not be parsed. Check the keyword scan results below for the main flags found.',
+        bottomLine:'',findings:[],parties:'',keyDates:'',keyNumbers:''};
     }
   }catch(e){
     clearTimeout(aiTimer);
-    if(e.name==='AbortError')throw new Error('AI analysis timed out after 90 seconds. The document may be too long — try with a shorter section.');
+    if(e.name==='AbortError')throw new Error('AI analysis timed out. Try with a shorter document.');
     throw e;
   }
 }
@@ -4153,6 +4137,7 @@ async function analyze(){
   }
   if(!text||text.length<50){setStatus('Warning: Need at least 50 characters to analyze.');return;}
   text=secureText(text);
+  setStatus(''); // clear any previous warning
 
   const btn=document.getElementById('analyzeBtn');
   btn.disabled=true;
@@ -4417,28 +4402,9 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
       ${section('HIGH RISK',dI,0)}
       ${section('CAUTION',wI,dI.length)}
       ${section('INFORMATIONAL',iI,dI.length+wI.length)}`:
-      findings.length===0&&!aiData?`
-        <div class="ai-no-key" style="text-align:left;">
-          <div class="ai-no-key-icon" style="display:none"></div>
-          <div class="ai-no-key-title" style="text-align:center;">No keyword flags detected</div>
-          <div class="ai-no-key-sub">The keyword scanner did not find any common risk patterns in this document. This is a good sign — but the scanner only checks for specific known patterns. To get a full plain-English breakdown of what this document says, what it asks of you, and any clauses worth understanding, add a Claude API key above for a complete AI analysis.</div>
-        </div>`:''}
-    ${findings.length===0&&aiData&&!aiData.error?`
-      <div style="margin-top:24px;padding:16px 20px;background:var(--safe-dim);border:1px solid var(--safe-border);border-radius:var(--r);font-size:13.5px;color:var(--text2);line-height:1.6;">
-        <span style="color:var(--safe);font-weight:600;">No keyword flags detected.</span> The AI analysis above covers everything important about this document — including what it requires of you and any clauses worth knowing about.
-      </div>`:''}
-
-    ${!hasKey&&findings.length===0&&!aiData?`
-      <div class="ai-no-key" style="margin-top:20px;">
-        <div class="ai-no-key-icon" style="display:none"></div>
-        <div class="ai-no-key-title">Add a Claude API key for a full analysis</div>
-        <div class="ai-no-key-sub">AI analysis reads every clause of any document type — contracts, leases, NDAs, employment agreements, and more. Enter your key in the panel above.</div>
-      </div>`:''}
-
-    ${!hasKey&&findings.length>0?`
-      <div style="margin-top:16px;padding:12px 16px;border-radius:var(--r-sm);border:1px solid var(--border);font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:10px;">
-        <span>Add a Claude API key above for a full AI breakdown of every clause — not just keyword matches.</span>
-      </div>`:''}
+      `<div style="margin-top:20px;padding:14px 18px;background:var(--surface2);border-radius:var(--r-sm);font-size:13px;color:var(--muted);line-height:1.5;">
+        No keyword pattern matches found. ${aiData&&!aiData.error?'See the AI analysis above for a full breakdown.':'Add a Claude API key above for a complete AI analysis.'}
+      </div>`}
 
     <div class="disclaimer">
       <strong>Disclaimer:</strong> FineRead is an automated tool for informational purposes only — not legal advice. AI analysis may miss nuances or make errors. Consult a qualified attorney before signing anything with significant legal or financial consequences.
