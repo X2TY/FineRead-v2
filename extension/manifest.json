@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "FineRead — Legal Document Scanner",
+  "version": "1.0.0",
+  "description": "Scan any Terms & Conditions, privacy policy, or legal document on any page. Powered by Claude AI.",
+  "permissions": ["activeTab", "contextMenus", "storage", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "FineRead — Scan this page",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;"
+  }
+}
