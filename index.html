@@ -12,7 +12,7 @@
 <meta name="twitter:title" content="FineRead — Know Before You Sign">
 <meta name="twitter:description" content="AI-powered legal document scanner. Find the clauses that matter before you sign.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23181818'/><text y='.9em' font-size='62' x='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' fill='%23f2f2f2'>FR</text></svg>">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; worker-src blob:; frame-src 'none'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com; worker-src blob:; frame-src 'none'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <title>FineRead — Know Before You Sign</title>
@@ -1241,11 +1241,11 @@ textarea::placeholder{color:var(--muted);}
   </a>
   <div class="nav-right">
     <span class="nav-pill" aria-hidden="true">Know before you sign</span>
-    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">≡</button>
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">◐</button>
+    <button class="theme-btn" onclick="openBatchModal()" aria-label="Batch scan multiple documents" title="Batch scan" style="font-size:13px;padding:7px 10px;">📚</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">🌙</button>
     <button class="history-btn" onclick="toggleHistory()" id="history-btn"
             aria-haspopup="true" aria-expanded="false" aria-controls="history-panel">
-      <span aria-hidden="true">⏱</span> <span class="label">Recent</span>
+      <span aria-hidden="true">🕐</span> <span class="label">Recent</span>
     </button>
   </div>
   <div class="history-panel" id="history-panel" role="dialog" aria-label="Recent scans" aria-modal="false">
@@ -1284,11 +1284,11 @@ textarea::placeholder{color:var(--muted);}
 <div class="card">
 
   <div class="tab-row" role="tablist" aria-label="Input method">
-    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">Paste Text</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">Upload</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">Camera</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">Compare</button>
-    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">Demo</button>
+    <button class="tab on" role="tab" aria-selected="true"  aria-controls="tab-paste"   data-tab="paste"   onclick="setTab('paste',this)">✏️ Paste Text</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-upload"  data-tab="upload"  onclick="setTab('upload',this)">📄 Upload</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-camera"  data-tab="camera"  onclick="setTab('camera',this)">📸 Camera</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-compare" data-tab="compare" onclick="setTab('compare',this)">⚖️ Compare</button>
+    <button class="tab"    role="tab" aria-selected="false" aria-controls="tab-demo"    data-tab="demo"    onclick="setTab('demo',this)">▶ Demo</button>
   </div>
 
   <!-- PASTE -->
@@ -1331,7 +1331,7 @@ textarea::placeholder{color:var(--muted);}
         <button class="cam-flip" id="flip-btn" onclick="flipCamera()" aria-label="Flip camera" style="display:none;">🔄</button>
       </div>
       <canvas id="canvas" aria-hidden="true"></canvas><br>
-      <button class="capture-btn" onclick="capturePhoto()">Capture &amp; Extract Text</button>
+      <button class="capture-btn" onclick="capturePhoto()">📸 Capture &amp; Extract Text</button>
       <div id="camera-status" aria-live="polite">Requesting camera…</div>
     </div>
     <div id="photo-preview">
@@ -1507,7 +1507,7 @@ textarea::placeholder{color:var(--muted);}
 <div id="batch-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:28px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.8);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-size:16px;font-weight:600;">Batch Scan</div>
+      <div style="font-size:16px;font-weight:600;">📚 Batch Scan</div>
       <button onclick="closeBatchModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;" aria-label="Close batch scanner">×</button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Paste multiple documents separated by <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px;">---</code> on its own line. Each document is scanned independently.</p>
@@ -2417,6 +2417,15 @@ async function detectMultipleCams(){
 }
 
 async function startCamera(){
+  // Lazy-load Tesseract only when camera tab is first used
+  if(typeof Tesseract==='undefined'){
+    const status=document.getElementById('camera-status');
+    try{await loadTesseract(status);}
+    catch(e){
+      status.textContent='❌ '+e.message;
+      return;
+    }
+  }
   const video=document.getElementById('video');
   const status=document.getElementById('camera-status');
   const flipBtn=document.getElementById('flip-btn');
@@ -2483,61 +2492,50 @@ async function runOCR(src){
   const bar=document.getElementById('ocr-bar');
   const label=document.getElementById('ocr-label');
   document.getElementById('ocr-progress').style.display='block';
-  bar.style.width='0%';
-  bar.setAttribute('aria-valuenow','0');
-  label.textContent='Loading OCR engine…';
+  bar.style.width='5%';bar.setAttribute('aria-valuenow','5');
+  label.textContent='Preparing OCR…';
 
-  // Load Tesseract at capture time — not camera open time
-  if(typeof Tesseract==='undefined'){
-    try{await loadTesseract(label);}
-    catch(e){
-      label.textContent='❌ '+e.message;return;
-    }
+  // Try native browser text detection first — instant, no download
+  label.textContent='Trying fast text detection…';
+  const nativeText=await tryNativeOCR(src);
+  if(nativeText&&nativeText.length>30){
+    bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
+    document.getElementById('tc-text').value=nativeText;updateCounter();
+    label.textContent=`✅ Extracted ${nativeText.length.toLocaleString()} characters`;
+    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    return;
   }
 
-  // Timeout safety — if OCR hangs for 60s, show an error
+  // Load Tesseract v4 if not yet loaded
+  if(typeof Tesseract==='undefined'){
+    try{await loadTesseract(label);}
+    catch(e){label.textContent='❌ '+e.message;bar.style.width='0%';return;}
+  }
+
   let timedOut=false;
   const timeout=setTimeout(()=>{
-    timedOut=true;
-    label.textContent='❌ OCR timed out — try Upload tab or a clearer photo.';
+    timedOut=true;_workerBusy=false;_tesseractWorker=null;
+    label.textContent='❌ OCR timed out. Check your internet connection and try again.';
     bar.style.width='0%';
-  },60000);
+  },120000);
 
   try{
-    label.textContent='Initializing OCR engine…';
-    bar.style.width='5%';
-
-    // Tesseract.js v5 correct API — no second numeric argument
-    const worker=await Tesseract.createWorker('eng',Tesseract.OEM?.LSTM_ONLY??1,{
-      logger:m=>{
-        if(timedOut)return;
-        if(m.status==='loading tesseract core'){
-          label.textContent='Loading OCR engine…';bar.style.width='15%';
-        } else if(m.status==='initializing tesseract'){
-          label.textContent='Initializing OCR…';bar.style.width='30%';
-        } else if(m.status==='loading language traineddata'){
-          label.textContent='Loading English language data…';bar.style.width='50%';
-        } else if(m.status==='initializing api'){
-          label.textContent='Starting OCR…';bar.style.width='65%';
-        } else if(m.status==='recognizing text'){
-          const p=Math.round(m.progress*100);
-          bar.style.width=(65+Math.round(p*0.35))+'%';
-          bar.setAttribute('aria-valuenow',String(65+Math.round(p*0.35)));
-          label.textContent=`Extracting text… ${p}%`;
-        }
-      }
+    _workerBusy=true;
+    label.textContent='Loading OCR engine…';bar.style.width='10%';
+    const worker=await getTesseractWorker((msg,pct)=>{
+      if(timedOut)return;
+      label.textContent=msg;
+      bar.style.width=pct+'%';bar.setAttribute('aria-valuenow',String(pct));
     });
-
-    if(timedOut){await worker.terminate();return;}
-    const result=await worker.recognize(src);
-    await worker.terminate();
-    clearTimeout(timeout);
-
     if(timedOut)return;
-    const text=result.data.text.trim();
+    label.textContent='Recognising text…';bar.style.width='70%';
+    const{data}=await worker.recognize(src);
+    clearTimeout(timeout);_workerBusy=false;
+    if(timedOut)return;
+    const text=(data.text||'').trim();
     if(text.length<30){
       bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-      label.textContent='⚠ Not enough text — try a clearer photo or better lighting.';
+      label.textContent='⚠ Not enough text found — try better lighting or hold steadier.';
       return;
     }
     bar.style.width='100%';bar.setAttribute('aria-valuenow','100');
@@ -2545,10 +2543,9 @@ async function runOCR(src){
     label.textContent=`✅ Extracted ${text.length.toLocaleString()} characters`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
   }catch(e){
-    clearTimeout(timeout);
-    if(timedOut)return;
-    bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
-    label.textContent='❌ OCR failed — '+e.message+'. Try Upload tab instead.';
+    clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
+    if(!timedOut){bar.style.width='0%';bar.setAttribute('aria-valuenow','0');
+      label.textContent='❌ OCR failed: '+e.message+'. Try Upload tab instead.';}
   }
 }
 
@@ -2634,54 +2631,101 @@ function loadScript(src){
   });
 }
 
-// Load Tesseract trying multiple CDNs in order
+// Load Tesseract v4 — v5 worker.min.js is 0KB on jsdelivr (broken)
 async function loadTesseract(statusEl){
-  if(typeof Tesseract!=='undefined')return; // already loaded
+  if(typeof Tesseract!=='undefined')return;
   const cdns=[
-    'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js',
-    'https://unpkg.com/tesseract.js@5.1.0/dist/tesseract.min.js',
+    'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js',
+    'https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js',
   ];
   let lastErr='Could not load OCR engine.';
   for(const url of cdns){
     try{
       if(statusEl)statusEl.textContent='Loading OCR engine…';
       await loadScript(url);
-      if(typeof Tesseract!=='undefined')return; // success
+      if(typeof Tesseract!=='undefined')return;
     }catch(e){lastErr=e.message;}
   }
   throw new Error(lastErr+' Check your internet connection and try again.');
 }
 
+// Shared worker — created once per session, reused for every scan
+let _tesseractWorker=null;
+let _workerBusy=false;
+
+async function getTesseractWorker(progressCb){
+  if(_tesseractWorker&&!_workerBusy)return _tesseractWorker;
+  // Tesseract v4 API — explicit paths so mobile browsers find all assets
+  _tesseractWorker=await Tesseract.createWorker({
+    workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/worker.min.js',
+    langPath:'https://tessdata.projectnaptha.com/4.0.0_fast',
+    corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@4.0.4/tesseract-core.wasm.js',
+    logger:m=>{
+      if(!m||!m.status)return;
+      if(m.status==='loading tesseract core')     progressCb&&progressCb('Loading OCR engine…',15);
+      else if(m.status==='initializing tesseract') progressCb&&progressCb('Initializing…',30);
+      else if(m.status==='loading language traineddata') progressCb&&progressCb('Loading language data…',50);
+      else if(m.status==='initializing api')       progressCb&&progressCb('Almost ready…',65);
+      else if(m.status==='recognizing text'){
+        const p=Math.round((m.progress||0)*100);
+        progressCb&&progressCb(`Extracting text… ${p}%`,65+Math.round(p*0.35));
+      }
+    }
+  });
+  await _tesseractWorker.loadLanguage('eng');
+  await _tesseractWorker.initialize('eng');
+  return _tesseractWorker;
+}
+
+// Try native browser text detection first — instant, no download
+async function tryNativeOCR(imageDataUrl){
+  try{
+    if(!window.TextDetector)return null;
+    const detector=new window.TextDetector();
+    const img=new Image();
+    img.src=imageDataUrl;
+    await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;});
+    const results=await detector.detect(img);
+    if(!results||!results.length)return null;
+    const text=results.map(r=>r.rawValue).join('\n').trim();
+    return text.length>20?text:null;
+  }catch{return null;}
+}
+
 async function runOCRFromFile(src,statusEl){
+  // Try native browser text detection first
+  const nativeText=await tryNativeOCR(src);
+  if(nativeText&&nativeText.length>30){
+    document.getElementById('tc-text').value=secureText(nativeText);updateCounter();
+    statusEl.textContent=`✅ OCR complete — ${nativeText.length.toLocaleString()} chars`;
+    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    return;
+  }
   if(typeof Tesseract==='undefined'){
     try{await loadTesseract(statusEl);}
     catch(e){statusEl.textContent='❌ '+e.message;return;}
   }
   let timedOut=false;
-  const timeout=setTimeout(()=>{timedOut=true;statusEl.textContent='❌ OCR timed out — try a clearer image.';},60000);
+  const timeout=setTimeout(()=>{
+    timedOut=true;_workerBusy=false;_tesseractWorker=null;
+    statusEl.textContent='❌ OCR timed out. Check your internet connection.';
+  },120000);
   try{
-    statusEl.textContent='Starting OCR…';
-    const worker=await Tesseract.createWorker('eng',Tesseract.OEM?.LSTM_ONLY??1,{
-      logger:m=>{
-        if(timedOut)return;
-        if(m.status==='recognizing text')statusEl.textContent=`OCR: ${Math.round(m.progress*100)}%`;
-        else if(m.status==='loading language traineddata')statusEl.textContent='Loading language data…';
-        else if(m.status==='initializing api')statusEl.textContent='Initializing…';
-      }
-    });
-    if(timedOut){await worker.terminate();return;}
-    const result=await worker.recognize(src);
-    await worker.terminate();
-    clearTimeout(timeout);
+    _workerBusy=true;
+    statusEl.textContent='Loading OCR engine…';
+    const worker=await getTesseractWorker((msg)=>{if(!timedOut)statusEl.textContent=msg;});
     if(timedOut)return;
-    const text=result.data.text.trim();
-    if(text.length<30){statusEl.textContent='⚠ Not enough text detected — try a clearer image.';return;}
+    const{data}=await worker.recognize(src);
+    clearTimeout(timeout);_workerBusy=false;
+    if(timedOut)return;
+    const text=(data.text||'').trim();
+    if(text.length<30){statusEl.textContent='⚠ Not enough text — try a clearer image.';return;}
     document.getElementById('tc-text').value=secureText(text);updateCounter();
     statusEl.textContent=`✅ OCR complete — ${text.length.toLocaleString()} chars`;
     const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
   }catch(e){
-    clearTimeout(timeout);
-    if(!timedOut)statusEl.textContent='❌ OCR failed — '+e.message;
+    clearTimeout(timeout);_workerBusy=false;_tesseractWorker=null;
+    if(!timedOut)statusEl.textContent='❌ OCR failed: '+e.message;
   }
 }
 
@@ -3029,7 +3073,7 @@ function renderResults({findings,overallRisk,wordCount,readMins,aiData,dangerCou
           ${f.severity==='high'||f.severity==='medium'?`
           <div id="neg-wrap-${i}" style="margin-top:4px;">
             <button class="btn-negotiate" onclick="suggestFix(${i})" id="neg-btn-${i}" aria-label="Suggest a fairer replacement for this clause">
-              Suggest fairer clause
+              ✏️ Suggest fairer clause
             </button>
             <div id="neg-result-${i}"></div>
           </div>`:''}
@@ -3579,7 +3623,7 @@ Return ONLY valid JSON — no markdown, no explanation outside the JSON:
     resultEl.innerHTML=`<div style="color:var(--danger);font-size:12.5px;margin-top:8px;">❌ ${escHtml(e.message)}</div>`;
   }finally{
     btn.classList.remove('loading');
-    btn.textContent='Suggest fairer clause';
+    btn.textContent='✏️ Suggest fairer clause';
   }
 }
 
@@ -3756,7 +3800,7 @@ Be direct. No jargon. Write as a trusted friend who just read both versions.`}]
 // ── LIGHT / DARK THEME ────────────────────────
 function toggleTheme(){
   const isLight=document.documentElement.classList.toggle('light');
-  document.getElementById('theme-btn').textContent=isLight?'◑':'🌙';
+  document.getElementById('theme-btn').textContent=isLight?'🌑':'🌙';
   document.getElementById('theme-btn').setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');
   try{localStorage.setItem('fr_theme',isLight?'light':'dark');}catch{}
 }
@@ -3768,7 +3812,7 @@ function loadTheme(){
     if(!useDark){
       document.documentElement.classList.add('light');
       const btn=document.getElementById('theme-btn');
-      if(btn){btn.textContent='◑';btn.setAttribute('aria-label','Switch to dark mode');}
+      if(btn){btn.textContent='🌑';btn.setAttribute('aria-label','Switch to dark mode');}
     }
   }catch{}
 }
@@ -4147,7 +4191,7 @@ loadSharedResults();
 // Update theme-color meta for light mode
 window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
   if(!localStorage.getItem('fr_theme')){
-    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='◑';}}
+    if(e.matches){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌑';}}
     else{document.documentElement.classList.remove('light');const b=document.getElementById('theme-btn');if(b){b.textContent='🌙';}}
   }
 });
