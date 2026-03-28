@@ -2893,6 +2893,75 @@ async function runOCR(src){
   }
 }
 
+// ── FILE UPLOAD ───────────────────────────────
+function handleDragOver(e){e.preventDefault();e.dataTransfer.dropEffect='copy';document.getElementById('upload-zone').classList.add('drag-over');}
+function handleDragLeave(e){
+  const zone=document.getElementById('upload-zone');
+  if(!zone.contains(e.relatedTarget))zone.classList.remove('drag-over');
+}
+function handleDrop(e){e.preventDefault();handleDragLeave();const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function handleFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
+
+async function processFile(file){
+  const info=document.getElementById('upload-file-info');
+  const nameEl=document.getElementById('file-name');
+  const statusEl=document.getElementById('file-status');
+  const iconEl=document.getElementById('file-icon');
+  if(file.size>SEC.MAX_FILE){
+    info.classList.add('show');iconEl.textContent='!';nameEl.textContent=file.name;
+    statusEl.textContent='Error: Too large ('+((file.size/1e6).toFixed(1))+' MB). Max 10 MB.';return;
+  }
+  nameEl.textContent=file.name;info.classList.add('show');
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='txt'){
+    iconEl.textContent='TXT';statusEl.textContent='Reading...';
+    const text=await file.text();
+    document.getElementById('tc-text').value=secureText(text);updateCounter();
+    statusEl.textContent='Loaded '+text.length.toLocaleString()+' chars';
+    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+  }else if(['jpg','jpeg','png','webp','heic','heif'].includes(ext)){
+    iconEl.textContent='IMG';statusEl.textContent='Running OCR...';
+    const reader=new FileReader();
+    reader.onload=ev=>runOCRFromFile(ev.target.result,statusEl);
+    reader.readAsDataURL(file);
+  }else if(ext==='pdf'){
+    iconEl.textContent='PDF';statusEl.textContent='Extracting PDF text...';
+    try{
+      const buf=await file.arrayBuffer();
+      const text=await extractPDF(buf);
+      if(text.length<30){statusEl.textContent='Warning: No text layer found. Try the Camera tab to photograph each page.';return;}
+      document.getElementById('tc-text').value=secureText(text);updateCounter();
+      statusEl.textContent='Extracted '+text.length.toLocaleString()+' chars';
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    }catch(e){
+      if(e.message&&e.message.includes('password'))statusEl.textContent='Error: PDF is password protected.';
+      else statusEl.textContent='Error: Could not read this PDF. Try copy-pasting the text instead.';
+    }
+  }else{statusEl.textContent='Error: Unsupported. Use TXT, PDF, JPG, or PNG.';}
+}
+
+async function extractPDF(buf){
+  if(!window._pdfReady){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    await new Promise(r=>setTimeout(r,120));
+    if(typeof pdfjsLib==='undefined')throw new Error('pdf.js failed to load');
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    window._pdfReady=true;
+  }
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise.catch(e=>{
+    if(e&&e.name==='PasswordException')throw new Error('password protected');
+    throw e;
+  });
+  const pageNums=Array.from({length:pdf.numPages},(_,i)=>i+1);
+  const pages=await Promise.all(pageNums.map(async n=>{
+    const page=await pdf.getPage(n);
+    const c=await page.getTextContent();
+    return c.items.map(x=>x.str).join(' ');
+  }));
+  return pages.join('\n').trim();
+}
+
+
 async function runOCRFromFile(src,statusEl){
   // 1. Native OCR (Android Chrome only)
   const nativeText=await tryNativeOCR(src);
