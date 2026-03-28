@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="FineRead">
 <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;FineRead&quot;,&quot;short_name&quot;:&quot;FineRead&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23080808&quot;,&quot;theme_color&quot;:&quot;%23080808&quot;,&quot;description&quot;:&quot;Legal document scanner&quot;}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23181818'/><text y='.9em' font-size='62' x='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' fill='%23f2f2f2'>FR</text></svg>">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com https://api.ocr.space; worker-src blob:; frame-src 'none'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com https://api.ocr.space; worker-src blob:; frame-src 'none'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <title>FineRead — Know Before You Sign</title>
@@ -1324,7 +1324,7 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
          ondragleave="handleDragLeave(event)"
          ondrop="handleDrop(event)"
          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('file-input').click();}">
-      <input type="file" id="file-input" accept=".txt,.pdf,image/*" onchange="handleFileSelect(event)" aria-hidden="true" tabindex="-1">
+      <input type="file" id="file-input" accept=".txt,.pdf,.docx,.doc,.rtf,.md,.csv,image/*" onchange="handleFileSelect(event)" aria-hidden="true" tabindex="-1">
       <div class="drop-icon" aria-hidden="true">↑</div>
       <div class="drop-label">Drop a file or tap to browse</div>
       <div class="drop-sub">TXT · PDF (text-based) · JPG · PNG · max 10 MB</div>
@@ -2381,38 +2381,288 @@ const RULES=[
    desc:'Consent to data collection or marketing is pre-ticked, buried, or the opt-out requires multiple steps while opt-in is one click. This is a recognised dark pattern that may violate GDPR and CCPA.',
    patterns:[/\bpre.selected.*opt.out\b/i,/\bunchecking.*box.*opt.*out\b/i,/\bcontinued.*use.*deemed.*consent\b/i,/\bopt.*out.*by.*contacting\b/i,/\bwithdraw.*consent.*writing\b/i]},
 
+  // ══ SCHOOL & EDUCATION ════════════════════════════════════════════════
+  {id:'school_photo_consent',level:'info',category:'Education',docCat:'rights',icon:'·',
+   title:'School may photograph or film your child',
+   desc:'The school reserves the right to photograph, video, or record your child for use in school publications, websites, social media, or promotional materials.',
+   patterns:[/\bphotograph.*student\b/i,/\bimage.*child.*school.*publication\b/i,/\brecord.*student.*promot\b/i,/\bphoto.*video.*student.*consent\b/i,/\bstudent.*image.*website\b/i]},
+
+  {id:'school_medical_treatment',level:'info',category:'Education',docCat:'obligation',icon:'·',
+   title:'School authorised to seek emergency medical treatment',
+   desc:'You authorise the school to arrange emergency medical care for your child if they cannot reach you. This is standard but means the school can make medical decisions without your consent in urgent situations.',
+   patterns:[/\bemergency.*medical.*treatment.*school\b/i,/\bauthorize.*school.*medical\b/i,/\bschool.*seek.*medical.*attention\b/i,/\bcannot.*reach.*parent.*treatment\b/i]},
+
+  {id:'school_disciplinary',level:'warning',category:'Education',docCat:'risk',icon:'·',
+   title:'School can suspend or expel without prior notice',
+   desc:'The school retains the right to suspend or expel students without advance warning for violations of the code of conduct. Definitions of violations are often broad and vague.',
+   patterns:[/\bsuspend.*without.*notice\b/i,/\bexpel.*without.*prior\b/i,/\bdiscretion.*suspend.*expel\b/i,/\bconduct.*violation.*suspend\b/i,/\bremoval.*school.*without.*hearing\b/i]},
+
+  {id:'school_data_sharing',level:'warning',category:'Education',docCat:'risk',icon:'·',
+   title:'Student data shared with third parties',
+   desc:'Your child\'s academic records, behavioural data, or personal information may be shared with third-party vendors, researchers, or government agencies beyond what FERPA requires.',
+   patterns:[/\bstudent.*data.*third.party\b/i,/\bstudent.*record.*share.*vendor\b/i,/\bstudent.*information.*partner\b/i,/\beducational.*record.*disclose\b/i,/\bferpa.*exception\b/i]},
+
+  {id:'school_field_trip_waiver',level:'warning',category:'Education',docCat:'rights',icon:'·',
+   title:'Field trip waiver — school not liable for injuries',
+   desc:'By signing this field trip permission form you acknowledge the school and chaperones are not responsible for injuries, accidents, or incidents that occur during the trip.',
+   patterns:[/\bfield.*trip.*waiver\b/i,/\bnot.*liable.*injury.*trip\b/i,/\brelease.*school.*claim.*excursion\b/i,/\bassume.*risk.*field.*trip\b/i,/\bno.*liability.*school.*outing\b/i]},
+
+  {id:'iep_consent',level:'info',category:'Education',docCat:'obligation',icon:'·',
+   title:'IEP or special education plan — consent required',
+   desc:'This document relates to an Individualised Education Programme (IEP) or special education services. You have the right to consent, refuse, or request changes before services begin.',
+   patterns:[/\bindividualized.*education.*program\b/i,/\biep\b/i,/\bspecial.*education.*consent\b/i,/\b504.*plan\b/i,/\bdisability.*education.*act\b/i,/\bidea.*consent\b/i]},
+
+  // ══ MEDICAL & HOSPITAL ════════════════════════════════════════════════
+  {id:'surgical_consent',level:'danger',category:'Medical',docCat:'rights',icon:'·',
+   title:'Blanket consent to additional surgical procedures',
+   desc:'You are consenting not just to the named procedure but to any additional procedures the surgeon deems necessary during the operation. This broad consent removes your ability to decide about unexpected interventions.',
+   patterns:[/\badditional.*procedure.*surgeon.*deem\b/i,/\bsurgeon.*discretion.*additional\b/i,/\bunforeseen.*procedure.*consent\b/i,/\bpermission.*additional.*surgical\b/i,/\boperative.*finding.*additional.*procedure\b/i]},
+
+  {id:'hipaa_authorisation',level:'info',category:'Medical',docCat:'obligation',icon:'·',
+   title:'HIPAA authorisation — sharing your medical records',
+   desc:'This authorises a healthcare provider to share your medical information with named parties. You have the right to revoke this authorisation at any time except where the information has already been disclosed.',
+   patterns:[/\bhipaa.*authorization\b/i,/\bauthorization.*release.*medical\b/i,/\brelease.*health.*information.*hipaa\b/i,/\bprotected.*health.*information.*disclose\b/i,/\bphi.*release.*authorization\b/i]},
+
+  {id:'dnr_order',level:'danger',category:'Medical',docCat:'rights',icon:'·',
+   title:'Do Not Resuscitate (DNR) order',
+   desc:'This document instructs medical staff not to perform CPR or other life-saving measures if your heart stops or you stop breathing. This is an irreversible instruction that must be fully understood before signing.',
+   patterns:[/\bdo not resuscitat\b/i,/\bdnr\b/i,/\bno.*cpr\b/i,/\bwithhold.*resuscitat\b/i,/\ballow.*natural.*death\b/i,/\band.*order\b/i]},
+
+  {id:'medical_billing_arbitration',level:'danger',category:'Medical',docCat:'rights',icon:'·',
+   title:'Medical billing disputes go to arbitration',
+   desc:'By signing this admission form you agree that any disputes about your medical bill must go through arbitration rather than court. This is often buried in hospital admission paperwork.',
+   patterns:[/\bbilling.*dispute.*arbitrat\b/i,/\bhospital.*admission.*arbitrat\b/i,/\bmedical.*bill.*arbitrat\b/i,/\bpatient.*admission.*waive.*jury\b/i,/\bhealthcare.*arbitrat.*agreement\b/i]},
+
+  {id:'experimental_treatment',level:'danger',category:'Medical',docCat:'rights',icon:'·',
+   title:'Consent to experimental or investigational treatment',
+   desc:'You are consenting to a treatment, drug, or procedure that is experimental, investigational, or not yet FDA-approved. The risks may not be fully known.',
+   patterns:[/\bexperimental.*treatment\b/i,/\binvestigational.*drug\b/i,/\bclinical.*trial.*consent\b/i,/\boff.label.*use.*consent\b/i,/\bnot.*fda.*approved.*consent\b/i,/\bresearch.*participant.*consent\b/i]},
+
+  {id:'release_of_medical_records',level:'info',category:'Medical',docCat:'obligation',icon:'·',
+   title:'Release of medical records to third party',
+   desc:'Your medical records are being released to an insurance company, employer, attorney, or other third party. You have the right to know exactly what is being shared and why.',
+   patterns:[/\brelease.*medical.*record.*insur\b/i,/\brelease.*health.*record.*employer\b/i,/\bmedical.*information.*attorney\b/i,/\bauthorize.*release.*medical.*record\b/i,/\bdisclose.*medical.*history\b/i]},
+
+  {id:'financial_hardship_waiver',level:'info',category:'Medical',docCat:'rights',icon:'·',
+   title:'Financial hardship or charity care available',
+   desc:'The provider offers financial assistance, sliding-scale fees, or charity care programmes for patients who cannot afford treatment. This is a right worth knowing about before paying full price.',
+   patterns:[/\bfinancial.*hardship.*program\b/i,/\bcharity.*care\b/i,/\bsliding.*scale.*fee\b/i,/\bfinancial.*assistance.*patient\b/i,/\binability.*to.*pay.*assistance\b/i]},
+
+  // ══ GOVERNMENT & LEGAL ════════════════════════════════════════════════
+  {id:'benefit_overpayment',level:'danger',category:'Government',docCat:'obligation',icon:'·',
+   title:'Government benefit overpayments must be repaid',
+   desc:'If you receive more benefits than you are entitled to — even if it was the government\'s error — you are required to repay the full overpayment. This can result in significant unexpected debt.',
+   patterns:[/\boverpayment.*repay\b/i,/\bbenefit.*overpayment.*recover\b/i,/\brecoup.*overpayment\b/i,/\brepayment.*benefits.*overpaid\b/i,/\bgovernment.*recover.*excess.*payment\b/i]},
+
+  {id:'means_test_disclosure',level:'info',category:'Government',docCat:'obligation',icon:'·',
+   title:'Means test — assets and income must be disclosed',
+   desc:'You are required to fully disclose your income, assets, savings, and financial situation. Failure to disclose or providing inaccurate information can result in penalties, benefit termination, or fraud charges.',
+   patterns:[/\bmeans.*test\b/i,/\bdisclose.*assets.*income.*benefit\b/i,/\bfinancial.*circumstances.*disclose.*benefit\b/i,/\bprovide.*accurate.*financial.*information\b/i,/\bfraud.*false.*declaration.*benefit\b/i]},
+
+  {id:'court_default_judgment',level:'danger',category:'Legal',docCat:'risk',icon:'·',
+   title:'Default judgment if you do not respond',
+   desc:'If you do not respond to this legal document by the stated deadline, a default judgment may be entered against you automatically. This means the other party wins without a hearing.',
+   patterns:[/\bdefault.*judgment.*fail.*respond\b/i,/\bjudgment.*entered.*against.*you\b/i,/\bfailure.*answer.*default\b/i,/\bdefault.*against.*defendant\b/i,/\bresponse.*required.*default.*judgment\b/i]},
+
+  {id:'wage_garnishment',level:'danger',category:'Legal',docCat:'obligation',icon:'·',
+   title:'Wage garnishment — employer will deduct from your pay',
+   desc:'A court has ordered or this document authorises your employer to deduct money from your wages automatically to repay a debt. This happens without your control each pay period.',
+   patterns:[/\bwage.*garnishment\b/i,/\bgarnish.*wage\b/i,/\bwithhold.*wage.*debt\b/i,/\bemployer.*deduct.*judgment\b/i,/\bgarnishment.*order\b/i]},
+
+  {id:'immigration_consequences',level:'danger',category:'Legal',docCat:'risk',icon:'·',
+   title:'Signing this may affect your immigration status',
+   desc:'This document or a conviction/settlement associated with it may have consequences for your visa, green card, citizenship application, or right to remain in the country.',
+   patterns:[/\bimmigration.*consequence\b/i,/\bdeportation.*risk\b/i,/\bremoval.*proceeding\b/i,/\bvisa.*status.*affect\b/i,/\bimmigration.*status.*implic\b/i,/\bnon.citizen.*consequence\b/i]},
+
+  // ══ REAL ESTATE ═══════════════════════════════════════════════════════
+  {id:'as_is_property',level:'danger',category:'Real Estate',docCat:'risk',icon:'·',
+   title:'Property sold as-is — no warranty on condition',
+   desc:'The seller makes no representations about the condition of the property. Any defects, structural issues, or problems discovered after purchase are your responsibility. This significantly increases your risk.',
+   patterns:[/\bas.is.*condition\b/i,/\bproperty.*as.is\b/i,/\bno.*warranty.*condition.*property\b/i,/\bsold.*without.*warranty\b/i,/\bbuyer.*accepts.*property.*condition\b/i]},
+
+  {id:'earnest_money_forfeiture',level:'danger',category:'Real Estate',docCat:'obligation',icon:'·',
+   title:'Deposit forfeited if you back out of purchase',
+   desc:'Your earnest money deposit will be kept by the seller if you withdraw from the transaction without a valid contingency. This can be thousands of dollars lost.',
+   patterns:[/\bearnest.*money.*forfeit\b/i,/\bdeposit.*non.refundable.*purchas\b/i,/\bbreach.*buyer.*deposit.*retain\b/i,/\bescape.*contingency.*deposit\b/i,/\bdeposit.*liquidated.*damages.*purchas\b/i]},
+
+  {id:'hoa_fees',level:'warning',category:'Real Estate',docCat:'obligation',icon:'·',
+   title:'HOA fees and rules apply — non-payment can result in lien',
+   desc:'By purchasing this property you are subject to homeowners association fees and rules. Failure to pay HOA fees can result in a lien on your property and eventually foreclosure.',
+   patterns:[/\bhomeowners.*association.*fee\b/i,/\bhoa.*fee.*lien\b/i,/\bassociation.*dues.*mandatory\b/i,/\bhoa.*rules.*binding\b/i,/\bcovenants.*conditions.*restrictions.*hoa\b/i]},
+
+  {id:'title_defect_risk',level:'warning',category:'Real Estate',docCat:'risk',icon:'·',
+   title:'Title may have defects — title insurance recommended',
+   desc:'There may be liens, easements, encumbrances, or ownership disputes on the title that are not immediately apparent. Without title insurance you bear the financial risk of any title defects.',
+   patterns:[/\btitle.*defect\b/i,/\btitle.*insurance.*recommend\b/i,/\bencumbrance.*title\b/i,/\blien.*title.*search\b/i,/\bquitclaim.*deed\b/i,/\btitle.*warrant\b/i]},
+
+  {id:'lead_paint_disclosure',level:'info',category:'Real Estate',docCat:'obligation',icon:'·',
+   title:'Lead paint disclosure — property built before 1978',
+   desc:'Federal law requires sellers to disclose known lead paint hazards in homes built before 1978. You have the right to conduct a lead paint inspection before purchase.',
+   patterns:[/\blead.*paint.*disclosure\b/i,/\blead.based.*paint\b/i,/\bpre.1978.*lead\b/i,/\blead.*hazard.*disclosure\b/i]},
+
+  // ══ DEBT COLLECTION ════════════════════════════════════════════════════
+  {id:'debt_validation_rights',level:'info',category:'Debt',docCat:'rights',icon:'·',
+   title:'You have the right to request debt validation',
+   desc:'Under the Fair Debt Collection Practices Act (FDCPA) you have 30 days to request written verification of the debt. Once you request validation the collector must stop collection activity until they provide it.',
+   patterns:[/\bdebt.*validation\b/i,/\bfdcpa\b/i,/\bfair.*debt.*collection\b/i,/\bverification.*debt.*written\b/i,/\bdebt.*collector.*verification\b/i]},
+
+  {id:'debt_settlement_tax',level:'warning',category:'Debt',docCat:'risk',icon:'·',
+   title:'Forgiven debt may be treated as taxable income',
+   desc:'If your debt is settled for less than the full amount the forgiven portion may be reported to the IRS as income and you could owe taxes on it. The creditor is required to send a 1099-C form.',
+   patterns:[/\bforgiven.*debt.*income\b/i,/\b1099.c\b/i,/\bcancellation.*debt.*income\b/i,/\btaxable.*debt.*forgiven\b/i,/\bcod.*income\b/i,/\birs.*1099.*debt\b/i]},
+
+  {id:'credit_card_chargeback',level:'info',category:'Debt',docCat:'rights',icon:'·',
+   title:'You may have chargeback rights on disputed charges',
+   desc:'If you dispute a charge on your credit card, you have rights under the Fair Credit Billing Act to initiate a chargeback. The card issuer must investigate and temporarily remove the charge during review.',
+   patterns:[/\bchargeback\b/i,/\bdispute.*charge.*credit.*card\b/i,/\bfcba\b/i,/\bfair.*credit.*billing\b/i,/\bbilling.*dispute.*investigate\b/i]},
+
+  // ══ GYM & FITNESS ═════════════════════════════════════════════════════
+  {id:'gym_liability_waiver',level:'danger',category:'Fitness',docCat:'rights',icon:'·',
+   title:'Gym waiver — you cannot sue for injuries',
+   desc:'By signing this membership agreement you waive your right to sue the gym for injuries sustained on the premises, including those caused by equipment failure or staff negligence.',
+   patterns:[/\bgym.*liabilit.*waiver\b/i,/\bfitness.*center.*not.*liable.*injury\b/i,/\brelease.*gym.*claim\b/i,/\bhealth.*club.*waiver\b/i,/\bexercise.*risk.*release\b/i,/\bassume.*risk.*workout\b/i]},
+
+  {id:'gym_membership_freeze',level:'warning',category:'Fitness',docCat:'obligation',icon:'·',
+   title:'Membership freeze requires fees or notice period',
+   desc:'Pausing your gym membership may require a written freeze request, advance notice, or payment of a reduced freeze fee. Many members are unaware they continue to be billed when they stop attending.',
+   patterns:[/\bmembership.*freeze.*fee\b/i,/\bsuspend.*membership.*fee\b/i,/\bfreeze.*notice.*required\b/i,/\bhold.*membership.*charge\b/i,/\bpause.*gym.*fee\b/i]},
+
+  {id:'gym_annual_fee',level:'warning',category:'Fitness',docCat:'obligation',icon:'·',
+   title:'Annual enhancement or maintenance fee charged',
+   desc:'In addition to your monthly dues the gym charges an annual enhancement or maintenance fee — often not prominently disclosed at signup. This is charged once per year automatically.',
+   patterns:[/\bannual.*enhancement.*fee\b/i,/\bannual.*maintenance.*fee.*gym\b/i,/\byearly.*fee.*membership\b/i,/\bannual.*processing.*fee.*fitness\b/i,/\bclub.*annual.*fee.*member\b/i]},
+
+  // ══ AUTO & VEHICLE ════════════════════════════════════════════════════
+  {id:'gap_insurance_upsell',level:'warning',category:'Auto',docCat:'obligation',icon:'·',
+   title:'GAP insurance added — you may not need it',
+   desc:'GAP insurance covers the difference between what you owe on your car and its market value if it is totalled. It is often added to financing agreements without clear disclosure — and may already be included in your car insurance.',
+   patterns:[/\bgap.*insurance\b/i,/\bguaranteed.*auto.*protection\b/i,/\bgap.*coverage.*added\b/i,/\bguaranteed.*asset.*protection\b/i]},
+
+  {id:'dealer_addon_fees',level:'danger',category:'Auto',docCat:'obligation',icon:'·',
+   title:'Dealer add-on fees bundled into loan',
+   desc:'Fees for extras like paint protection, rustproofing, wheel insurance, or extended warranties have been added to your loan balance. You may not have explicitly agreed to these and they significantly increase the total cost.',
+   patterns:[/\bpaint.*protection.*fee\b/i,/\brust.*proofing.*added\b/i,/\bdealer.*added.*products\b/i,/\bvehicle.*protection.*package.*fee\b/i,/\bdealer.*optional.*equipment.*fee\b/i,/\bprep.*fee.*delivery.*fee.*dealer\b/i]},
+
+  {id:'auto_repossession',level:'danger',category:'Auto',docCat:'risk',icon:'·',
+   title:'Vehicle can be repossessed without notice',
+   desc:'If you miss a payment the lender can repossess your vehicle — in many states without advance notice or a court order. You may also still owe the remaining balance after repossession if the sale price does not cover the debt.',
+   patterns:[/\brepossess.*without.*notice\b/i,/\bvehicle.*repossess.*default\b/i,/\bself.help.*repossession\b/i,/\brepossess.*car.*right\b/i,/\bdeficiency.*balance.*repossession\b/i]},
+
+  {id:'extended_warranty_exclusions',level:'warning',category:'Auto',docCat:'risk',icon:'·',
+   title:'Extended warranty has significant exclusions',
+   desc:'The extended warranty or vehicle service contract excludes many common repairs including wear-and-tear items, pre-existing conditions, and failures caused by lack of maintenance.',
+   patterns:[/\bextended.*warranty.*exclud\b/i,/\bservice.*contract.*exclusion\b/i,/\bvehicle.*warranty.*not.*cover\b/i,/\bextended.*service.*pre.existing\b/i,/\bwear.*tear.*not.*covered.*warranty\b/i]},
+
+  // ══ TRAVEL & HOSPITALITY ══════════════════════════════════════════════
+  {id:'airline_denied_boarding',level:'warning',category:'Travel',docCat:'rights',icon:'·',
+   title:'Airline may deny boarding on overbooked flight',
+   desc:'By purchasing a ticket you acknowledge the airline may involuntarily deny you boarding if the flight is overbooked. US law requires compensation but airlines often downplay this.',
+   patterns:[/\bdenied.*boarding\b/i,/\boverbook.*deny.*board\b/i,/\binvoluntary.*denied.*board\b/i,/\bairline.*right.*deny.*board\b/i,/\bbumped.*flight\b/i]},
+
+  {id:'hotel_resort_fees',level:'warning',category:'Travel',docCat:'obligation',icon:'·',
+   title:'Resort or destination fees added at checkout',
+   desc:'A mandatory resort fee, destination fee, or amenity fee is charged separately from the advertised room rate. This is added at checkout and is not optional regardless of whether you use the amenities.',
+   patterns:[/\bresort.*fee\b/i,/\bdestination.*fee\b/i,/\bamenity.*fee.*mandatory\b/i,/\bfacility.*fee.*hotel\b/i,/\bdaily.*resort.*fee\b/i]},
+
+  {id:'cruise_itinerary_change',level:'warning',category:'Travel',docCat:'risk',icon:'·',
+   title:'Cruise line can change itinerary without compensation',
+   desc:'The cruise line reserves the right to alter or cancel port calls, destinations, and activities at any time without compensation. You booked for specific destinations but have no guarantee of visiting them.',
+   patterns:[/\bcruise.*itinerary.*change.*discretion\b/i,/\bport.*call.*cancel.*no.*compens\b/i,/\bcruis.*substitute.*port\b/i,/\bchanges.*itinerary.*refund\b/i,/\bcruise.*right.*modify.*itinerary\b/i]},
+
+  {id:'travel_insurance_exclusions',level:'warning',category:'Travel',docCat:'risk',icon:'·',
+   title:'Travel insurance has broad exclusions',
+   desc:'Your travel insurance excludes pre-existing conditions, acts of war, pandemics, government travel advisories, and many other common scenarios. Review exclusions carefully before assuming you are covered.',
+   patterns:[/\btravel.*insurance.*exclud\b/i,/\bpre.existing.*condition.*travel.*insur\b/i,/\bact.*of.*war.*travel\b/i,/\bpandemic.*travel.*coverage.*exclud\b/i,/\btravel.*advisory.*not.*covered\b/i]},
+
+  // ══ CONTRACTOR & HOME SERVICES ════════════════════════════════════════
+  {id:'mechanic_lien',level:'danger',category:'Contractor',docCat:'risk',icon:'·',
+   title:'Contractor can place a lien on your property',
+   desc:'If you do not pay the contractor, subcontractors, or suppliers they have the legal right to place a lien on your property — preventing you from selling or refinancing until the lien is paid.',
+   patterns:[/\bmechanic.*lien\b/i,/\bconstruction.*lien\b/i,/\blien.*right.*contractor\b/i,/\blien.*property.*unpaid\b/i,/\bsubcontractor.*lien.*right\b/i,/\bmaterialman.*lien\b/i]},
+
+  {id:'change_order_costs',level:'warning',category:'Contractor',docCat:'obligation',icon:'·',
+   title:'Change orders can significantly increase the final price',
+   desc:'Any changes to the agreed scope of work require a written change order and will increase the contract price. Verbal agreements for additional work are not binding and disputes are common.',
+   patterns:[/\bchange.*order.*additional.*cost\b/i,/\bscope.*change.*additional.*charge\b/i,/\bchange.*order.*written.*required\b/i,/\bmodification.*work.*additional.*fee\b/i,/\bchange.*scope.*written.*approval\b/i]},
+
+  {id:'contractor_warranty',level:'info',category:'Contractor',docCat:'rights',icon:'·',
+   title:'Workmanship warranty — contractor responsible for defects',
+   desc:'The contractor warrants their work against defects in materials and workmanship for a specified period. Know what is covered, for how long, and what you must do to make a warranty claim.',
+   patterns:[/\bworkmanship.*warrant\b/i,/\bcontractor.*warrant.*defect\b/i,/\bone.year.*warrant.*workmanship\b/i,/\blabor.*warrant.*period\b/i,/\brepair.*defect.*warrant.*contractor\b/i]},
+
+  {id:'home_inspection_waiver',level:'danger',category:'Real Estate',docCat:'rights',icon:'·',
+   title:'Waiving right to home inspection',
+   desc:'You are waiving your right to a professional home inspection before purchase. This removes one of the most important consumer protections in a property transaction — discovering hidden defects before closing.',
+   patterns:[/\bwaive.*home.*inspection\b/i,/\bwaiv.*inspection.*contingency\b/i,/\bno.*inspection.*condition\b/i,/\bpurchase.*without.*inspection\b/i,/\binspection.*contingency.*waiv\b/i]},
+
+  // ══ GENERAL LIABILITY & WAIVERS ═══════════════════════════════════════
+  {id:'general_liability_waiver',level:'danger',category:'Liability',docCat:'rights',icon:'·',
+   title:'General liability waiver — you give up right to sue',
+   desc:'By signing this form you release the organisation from liability for any injuries, accidents, or damages that occur — even those caused by their negligence. Courts sometimes enforce these waivers.',
+   patterns:[/\brelease.*from.*liability.*participat\b/i,/\bwaiver.*liability.*event\b/i,/\bhold.*harmless.*participant\b/i,/\bassume.*all.*risk.*activ\b/i,/\brelease.*claims.*organisation\b/i,/\bliability.*waiver.*sign\b/i]},
+
+  {id:'photo_release_waiver',level:'info',category:'Media',docCat:'rights',icon:'·',
+   title:'Photo or video release — image used commercially',
+   desc:'You or your child\'s image, voice, or likeness may be used in commercial materials, advertising, or promotional content without additional payment. This grant is often perpetual and irrevocable.',
+   patterns:[/\bphoto.*release.*commercial\b/i,/\bimage.*likeness.*promot\b/i,/\bmodel.*release\b/i,/\bimage.*advertis.*without.*compensation\b/i,/\blikeness.*commercial.*perpetual\b/i]},
+
+  {id:'volunteer_waiver',level:'warning',category:'Liability',docCat:'rights',icon:'·',
+   title:'Volunteer waiver — limited recourse if injured',
+   desc:'As a volunteer you waive certain rights to compensation if you are injured while volunteering. The organisation\'s liability for your injuries may be limited by this agreement.',
+   patterns:[/\bvolunteer.*waiver\b/i,/\bvolunteer.*liability.*release\b/i,/\bvolunteer.*assume.*risk\b/i,/\bnot.*liable.*volunteer.*injury\b/i,/\bvolunteer.*agreement.*release\b/i]},
+
+  // ══ SUBSCRIPTIONS & DIGITAL SERVICES ══════════════════════════════════
+  {id:'price_change_notice_short',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
+   title:'Price can change with very short notice',
+   desc:'The service can increase your subscription price with only a few days\' notice — sometimes as little as 3-7 days. You may not have enough time to cancel before the new price applies.',
+   patterns:[/\bprice.*change.*\d+.*days.*notice\b/i,/\brate.*increas.*notice.*days\b/i,/\bfee.*change.*notification.*days\b/i,/\bpricing.*change.*short.*notice\b/i,/\bcharge.*new.*rate.*notice\b/i]},
+
+  {id:'free_to_paid_upgrade',level:'warning',category:'Billing',docCat:'risk',icon:'·',
+   title:'Free plan automatically upgraded to paid',
+   desc:'Your free account may be automatically converted to a paid subscription after a trial period or upon exceeding usage limits, without a separate confirmation step.',
+   patterns:[/\bfree.*plan.*upgrade.*paid\b/i,/\bautomatically.*convert.*paid\b/i,/\bfree.*tier.*exceed.*charge\b/i,/\bfree.*account.*upgrade.*subscription\b/i,/\bcredit.*card.*charge.*free.*period\b/i]},
+
+  {id:'data_deletion_on_cancel',level:'info',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Your data may be deleted when you cancel',
+   desc:'When you cancel your subscription, your data — including files, messages, history, and settings — may be permanently deleted after a short grace period. Export your data before cancelling.',
+   patterns:[/\bdata.*deleted.*cancel\b/i,/\baccount.*data.*remov.*terminat\b/i,/\bcontent.*deleted.*subscription.*end\b/i,/\bfiles.*deleted.*account.*clos\b/i,/\bdata.*purge.*cancel.*subscription\b/i]},
+
 ];
 
 
 
+
+
 function keywordScan(text){
-  // Negation: if these words appear immediately before the matched keyword, skip the rule
-  const negWords=['not ','never ','no ','do not ','will not ','does not ','won\'t ','don\'t ','cannot ','can\'t ','prohibited from ','we will not ','we do not ','we never ','shall not '];
+  const negWords=['not ','never ','no ','do not ','will not ','does not ',"won't ","don't ",'cannot ',"can't ",'prohibited from ','we will not ','we do not ','we never ','shall not ','does not ','is not ','are not ','was not '];
 
   const found=[];
+  const seenIds=new Set();
   for(const r of RULES){
+    if(seenIds.has(r.id))continue;
     for(const p of r.patterns){
       const idx=text.search(p);
       if(idx!==-1){
-        // Check for negation in the 80 chars before the match
-        const before=text.slice(Math.max(0,idx-80),idx).toLowerCase();
+        // Check for negation in the 100 chars before the match
+        const before=text.slice(Math.max(0,idx-100),idx).toLowerCase();
         const negated=negWords.some(neg=>{
           const pos=before.lastIndexOf(neg);
-          // Only counts as negation if the neg word is within 30 chars of the match start
-          return pos!==-1&&(before.length-pos-neg.length)<15;
+          // Negation counts if within 30 chars of match start
+          return pos!==-1&&(before.length-pos-neg.length)<30;
         });
-        if(negated) break; // negated — skip this rule
+        if(negated)break;
 
-        // Walk back to sentence start — max 120 chars
+        // Extract a clean snippet: walk to sentence boundaries
         let s=idx,steps=0;
-        while(s>0&&steps<120&&!/[.!?\n]/.test(text[s-1])){s--;steps++;}
-        s=Math.max(s,idx-120);
-        // Walk forward to sentence end — max 300 chars
+        while(s>0&&steps<150&&!/[.!?\n]/.test(text[s-1])){s--;steps++;}
+        s=Math.max(s,idx-150);
         let e=idx,fsteps=0;
-        while(e<text.length&&fsteps<300&&!/[.!?\n]/.test(text[e])){e++;fsteps++;}
+        while(e<text.length&&fsteps<350&&!/[.!?\n]/.test(text[e])){e++;fsteps++;}
         e=Math.min(e+1,text.length);
-        const snippet='…'+text.slice(s,e).replace(/\s+/g,' ').trim()+'…';
+        const raw=text.slice(s,e).replace(/\s+/g,' ').trim();
+        const snippet=raw.length>20?'…'+raw+'…':'';
         found.push({...r,snippet});
+        seenIds.add(r.id);
         break;
       }
     }
@@ -2462,18 +2712,46 @@ function buildDocumentSummary(text, findings, wordCount){
 
   // Detect document type from content
   const docSigs=[
-    {type:'Privacy Policy',   keys:['privacy','personal data','cookies','we collect','information we','your data']},
-    {type:'Terms of Service', keys:['terms of service','terms and conditions','by using','you agree','acceptance']},
-    {type:'Employment Contract', keys:['employment','salary','compensation','employee','employer','job title','position']},
-    {type:'Non-Disclosure Agreement', keys:['confidential','nda','non-disclosure','proprietary','trade secret']},
-    {type:'Rental or Lease Agreement', keys:['tenant','landlord','lease','rent','premises','deposit']},
-    {type:'Loan Agreement',   keys:['loan','apr','interest rate','repayment','borrower','lender','principal']},
-    {type:'Software License', keys:['license','software','intellectual property','source code','end user']},
-    {type:'Service Agreement',keys:['services','deliverables','scope of work','payment terms','client']},
-    {type:'Sales Contract',   keys:['purchase','seller','buyer','sale price','delivery','goods']},
-    {type:'Medical or Health Form', keys:['patient','diagnosis','treatment','medical','hipaa','healthcare']},
-    {type:'Insurance Policy', keys:['policy','premium','coverage','insured','claim','deductible']},
-    {type:'Partnership Agreement', keys:['partnership','partners','profit sharing','dissolution','equity']},
+    {type:'Privacy Policy',            keys:['privacy policy','personal data','cookies','we collect','information we collect','your data','data protection']},
+    {type:'Terms of Service',          keys:['terms of service','terms and conditions','terms of use','by using this','you agree to these','acceptance of terms']},
+    {type:'Employment Contract',       keys:['employment agreement','salary','compensation','employee','employer','job title','position','at-will','at will']},
+    {type:'Non-Disclosure Agreement',  keys:['non-disclosure','nda','confidential information','proprietary','trade secret','confidentiality agreement']},
+    {type:'Residential Lease Agreement', keys:['tenant','landlord','lease','monthly rent','premises','security deposit','rental agreement']},
+    {type:'Loan Agreement',            keys:['loan','apr','annual percentage rate','repayment','borrower','lender','principal','interest rate']},
+    {type:'Software License',          keys:['software license','end user license','eula','source code','intellectual property','open source']},
+    {type:'Service Agreement',         keys:['scope of work','deliverables','service agreement','payment terms','contractor','client','professional services']},
+    {type:'Sales Contract',            keys:['purchase agreement','sale price','buyer','seller','delivery','goods','title to goods']},
+    {type:'Medical Consent Form',      keys:['patient','consent to treatment','medical procedure','healthcare provider','hipaa','informed consent','diagnosis']},
+    {type:'Insurance Policy',          keys:['insurance policy','premium','coverage','deductible','insured','claim','policyholder','exclusion']},
+    {type:'Partnership Agreement',     keys:['partnership','partners','profit sharing','dissolution','equity stake','general partner']},
+    {type:'School Consent Form',       keys:['student','parent','guardian','school','permission','field trip','educational','pupil']},
+    {type:'IEP / Special Education Plan', keys:['individualized education','iep','special education','504 plan','disability','idea act','learning disability']},
+    {type:'Surgical Consent Form',     keys:['surgical','surgery','procedure','anaesthesia','anesthesia','surgeon','operative','hospital admission']},
+    {type:'HIPAA Authorisation',       keys:['hipaa','protected health information','phi','release of records','health information','authorized representative']},
+    {type:'DNR / Advance Directive',   keys:['do not resuscitate','dnr','advance directive','living will','durable power of attorney','end of life','hospice']},
+    {type:'Government Benefit Form',   keys:['benefit','means test','eligibility','income','assets','overpayment','claimant','social security','medicaid','welfare']},
+    {type:'Court Document',            keys:['plaintiff','defendant','court','judge','jurisdiction','hearing','judgment','subpoena','summons','complaint']},
+    {type:'Debt Collection Notice',    keys:['debt','creditor','debtor','collection','fdcpa','validation','balance due','past due','account in collections']},
+    {type:'Real Estate Purchase Agreement', keys:['purchase price','earnest money','closing date','escrow','title','property address','real estate','deed']},
+    {type:'HOA Agreement',             keys:['homeowners association','hoa','dues','covenants','restrictions','community rules','board of directors']},
+    {type:'Gym Membership Agreement',  keys:['membership','gym','fitness','facility','monthly dues','annual fee','personal training','health club']},
+    {type:'Auto Purchase / Finance Agreement', keys:['vehicle','automobile','car','dealer','financing','monthly payment','trade-in','msrp','gap insurance']},
+    {type:'Travel Booking / Airline Agreement', keys:['passenger','flight','airline','boarding','itinerary','ticket','cruise','hotel','resort fee']},
+    {type:'Contractor / Home Services Agreement', keys:['contractor','scope of work','materials','labor','permit','change order','completion date','lien']},
+    {type:'Liability Waiver',          keys:['waiver','release','liability','assume the risk','hold harmless','indemnify','participant','voluntary']},
+    {type:'Volunteer Agreement',       keys:['volunteer','voluntary service','no compensation','release of liability','community service']},
+    {type:'Photo / Media Release',     keys:['likeness','image','photograph','video','commercial use','media release','model release']},
+    {type:'Immigration Form',          keys:['visa','immigration','citizenship','naturalization','green card','resident','alien','immigration status']},
+    {type:'Extended Warranty / Service Contract', keys:['extended warranty','service contract','vehicle service','mechanical breakdown','repair coverage']},
+    {type:'Credit Card Agreement',     keys:['credit card','annual percentage rate','credit limit','minimum payment','grace period','cash advance','billing cycle']},
+    {type:'Bank Account Agreement',    keys:['account','bank','deposit','withdrawal','overdraft','routing number','account holder','financial institution']},
+    {type:'Franchise Agreement',       keys:['franchise','franchisor','franchisee','royalty fee','territory','brand standards','franchise fee']},
+    {type:'Clinical Trial Consent',    keys:['clinical trial','research','experimental','investigational','irb','protocol','study participant']},
+    {type:'Arbitration Agreement',     keys:['arbitration agreement','binding arbitration','aaa rules','jams','waive jury trial','class action waiver']},
+    {type:'Severance Agreement',       keys:['severance','separation agreement','in exchange for','release of claims','final paycheck','cobra','references']},
+    {type:'Non-Compete Agreement',     keys:['non-compete','covenant not to compete','restricted activities','geographic restriction','post-employment']},
+    {type:'Power of Attorney',         keys:['power of attorney','attorney-in-fact','principal','agent','durable power','healthcare proxy']},
+    {type:'Subscription Agreement',    keys:['subscription','monthly fee','annual plan','auto-renew','cancel anytime','billing cycle','upgrade']},
   ];
 
   let detectedType='Document';
@@ -2488,7 +2766,9 @@ function buildDocumentSummary(text, findings, wordCount){
     'agree','must','shall','require','responsible','obligat','entitled','right','pay',
     'terminat','cancel','refund','liable','warrant','guarantee','prohibit','permit',
     'confidential','disclose','own','grant','license','collect','share','transfer',
-    'effective','commence','expire','notice','govern','law','jurisdiction'
+    'effective','commence','expire','notice','govern','law','jurisdiction',
+    'consent','sign','authoris','authoriz','waive','release','arbitrat','judgment',
+    'deposit','fee','penalty','default','expir','renew','suspend','terminat','dismiss'
   ];
   const keySentences=meaningful
     .filter(s=>importantWords.some(w=>s.toLowerCase().includes(w)))
@@ -2499,12 +2779,11 @@ function buildDocumentSummary(text, findings, wordCount){
   let summary='';
 
   if(bestScore<1){
-    // Can't detect a known doc type — just describe what we see
     const firstReal=meaningful.slice(0,3).map(s=>s.trim().replace(/\s+/g,' ')).join(' ');
-    summary=`This ${wStr} document doesn't match a standard legal template that FineRead recognises. `;
+    summary=`This ${wStr} document doesn't match a standard template that FineRead recognises. `;
     if(firstReal.length>60) summary+=`It appears to begin: "${firstReal.slice(0,200)}…" `;
     summary+=`The keyword scanner found no common legal risk patterns. `;
-    summary+=`For a full understanding of what this document says and means, add a Claude API key above — the AI can read and explain any document in plain English regardless of type.`;
+    summary+=`For a full understanding of what this document says, add a Claude API key above — the AI can read and explain any document in plain English regardless of type.`;
     return summary;
   }
 
@@ -2515,17 +2794,44 @@ function buildDocumentSummary(text, findings, wordCount){
     'Privacy Policy':'It describes how the organisation collects, uses, stores, and shares your personal information.',
     'Terms of Service':'It sets out the rules you agree to follow when using a product or service.',
     'Employment Contract':'It defines the terms of your employment — role, pay, obligations, and how either party can end the relationship.',
-    'Non-Disclosure Agreement':'It creates a legal obligation to keep certain information secret.',
-    'Rental or Lease Agreement':'It governs the rental of a property — your rights, obligations, and the landlord\'s rights.',
-    'Loan Agreement':'It sets out the terms under which money is being lent — amounts, interest, and repayment.',
-    'Software License':'It defines how you are permitted to use a piece of software and what rights you have over it.',
+    'Non-Disclosure Agreement':'It creates a legal obligation to keep certain information secret and not share it with others.',
+    'Residential Lease Agreement':'It governs the rental of a property — your rights, your obligations, and the landlord\'s rights over the property.',
+    'Loan Agreement':'It sets out the terms under which money is being lent — amounts, interest rate, repayment schedule, and consequences of default.',
+    'Software License':'It defines how you are permitted to use a piece of software and what rights you have (or don\'t have) over it.',
     'Service Agreement':'It defines the scope of work, payment terms, and responsibilities between a service provider and a client.',
-    'Sales Contract':'It documents the terms of a purchase or sale between two parties.',
-    'Medical or Health Form':'It covers consent, treatment, and how your medical information will be handled.',
-    'Insurance Policy':'It defines what is covered, what is excluded, and how claims are handled.',
-    'Partnership Agreement':'It sets out how a business partnership is structured, including profit sharing and responsibilities.',
+    'Sales Contract':'It documents the terms of a purchase or sale between two parties — price, delivery, and what happens if something goes wrong.',
+    'Medical Consent Form':'It records your informed consent to a medical procedure or treatment. You have the right to ask questions and refuse.',
+    'Insurance Policy':'It defines what is covered by your insurance, what is excluded, how to make a claim, and the cost.',
+    'Partnership Agreement':'It sets out how a business partnership is structured, including profit sharing, responsibilities, and how it ends.',
+    'School Consent Form':'It authorises the school to take certain actions involving your child — review carefully what you are permitting.',
+    'IEP / Special Education Plan':'It documents the special education services and accommodations your child is legally entitled to receive.',
+    'Surgical Consent Form':'It records your consent to a surgical procedure. Read carefully — it may include broad consent to additional procedures.',
+    'HIPAA Authorisation':'It authorises the release of your protected health information to a named party. You can revoke this at any time.',
+    'DNR / Advance Directive':'It instructs medical staff on your end-of-life care preferences. This is one of the most important documents you will ever sign.',
+    'Government Benefit Form':'It determines your eligibility for government benefits. Accuracy is critical — errors can result in fraud charges.',
+    'Court Document':'This is a legal court document. If you have received this, you may have legal obligations and deadlines to respond.',
+    'Debt Collection Notice':'A debt collector is attempting to collect a debt. You have legal rights including the right to request validation.',
+    'Real Estate Purchase Agreement':'It sets out the terms of buying or selling a property — price, contingencies, closing date, and what is included.',
+    'HOA Agreement':'It binds you to the rules and fees of a homeowners association — including potential liens if you don\'t pay dues.',
+    'Gym Membership Agreement':'It governs your gym membership — including fees, cancellation terms, and liability waivers for injuries.',
+    'Auto Purchase / Finance Agreement':'It documents the purchase or financing of a vehicle — including the total cost, interest, and your rights.',
+    'Travel Booking / Airline Agreement':'It governs your travel booking — including the airline or cruise line\'s rights to change or cancel without full compensation.',
+    'Contractor / Home Services Agreement':'It defines the scope and cost of home improvement or repair work — including what happens if work is incomplete or defective.',
+    'Liability Waiver':'You are waiving your right to sue if you are injured. Courts sometimes enforce these — read carefully.',
+    'Volunteer Agreement':'It governs your volunteer work — including any liability waivers and restrictions on what you can say publicly.',
+    'Photo / Media Release':'You are giving permission for your image or likeness to be used — potentially commercially and forever.',
+    'Immigration Form':'This is an immigration document. Errors or omissions can have serious consequences for your visa or residency status.',
+    'Extended Warranty / Service Contract':'It covers repair costs for a vehicle or appliance — but exclusions are common and significant.',
+    'Credit Card Agreement':'It governs your credit card — including the interest rate, fees, and what happens if you miss payments.',
+    'Bank Account Agreement':'It sets out the terms of your bank account — including fees, overdraft rules, and your rights as an account holder.',
+    'Franchise Agreement':'It governs your franchise relationship — including fees, rules you must follow, and how the franchisor can terminate.',
+    'Clinical Trial Consent':'You are consenting to participate in medical research involving experimental treatments or drugs.',
+    'Arbitration Agreement':'This requires all disputes to go to private arbitration — waiving your right to a jury trial or class action.',
+    'Severance Agreement':'Your employer is offering severance pay in exchange for you releasing all legal claims against them.',
+    'Non-Compete Agreement':'This restricts where you can work after leaving — review the geographic scope, duration, and enforceability in your state.',
+    'Power of Attorney':'You are granting someone legal authority to make decisions on your behalf. Choose this person with extreme care.',
+    'Subscription Agreement':'It governs your subscription — including auto-renewal terms, price change rights, and cancellation policy.',
   };
-  if(typeContext[detectedType]) summary+=typeContext[detectedType]+' ';
 
   // Add what the document requires/says based on key sentences
   if(keySentences.length>0){
@@ -2692,12 +2998,7 @@ function capturePhoto(){
   const ctx=canvas.getContext('2d');
   // Draw original frame
   ctx.drawImage(video,0,0);
-  // Image enhancement for OCR accuracy:
-  // 1. Convert to greyscale
-  // 2. Boost contrast significantly
-  // 3. Sharpen slightly
-  // This dramatically improves Tesseract accuracy on photos of documents
-  ctx.globalCompositeOperation='source-over';
+  // Pixel-level enhancement: greyscale + contrast stretch for better OCR
   const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
   const data=imageData.data;
   for(let i=0;i<data.length;i+=4){
@@ -2744,27 +3045,39 @@ async function ocrSpaceFromDataUrl(dataUrl,onProgress){
   fd.append('scale','true');
   fd.append('OCREngine','2');
   onProgress&&onProgress('Reading text…',65);
-  const resp=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:fd});
-  if(!resp.ok)throw new Error('OCR.space error '+resp.status);
-  const result=await resp.json();
-  if(result.IsErroredOnProcessing)throw new Error(result.ErrorMessage?.[0]||'OCR processing failed');
-  return(result.ParsedResults?.[0]?.ParsedText||'').trim();
+  // 15-second timeout — OCR.space is usually 1-3s; fail fast so Tesseract fallback kicks in
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
+  try{
+    const resp=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:fd,signal:controller.signal});
+    clearTimeout(timer);
+    if(!resp.ok)throw new Error('OCR.space error '+resp.status);
+    const result=await resp.json();
+    if(result.IsErroredOnProcessing)throw new Error(result.ErrorMessage?.[0]||'OCR processing failed');
+    return(result.ParsedResults?.[0]?.ParsedText||'').trim();
+  }catch(e){
+    clearTimeout(timer);
+    throw e;
+  }
 }
 
 async function compressImage(dataUrl,targetKB){
-  return new Promise(res=>{
+  return new Promise((res,rej)=>{
     const img=new Image();
     img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      let w=img.width,h=img.height;
-      const maxPx=2000;
-      if(w>maxPx||h>maxPx){const r=Math.min(maxPx/w,maxPx/h);w=Math.round(w*r);h=Math.round(h*r);}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      let q=0.85,result=canvas.toDataURL('image/jpeg',q);
-      while(result.length*0.75/1024>targetKB&&q>0.3){q-=0.1;result=canvas.toDataURL('image/jpeg',q);}
-      res(result);
+      try{
+        const canvas=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        const maxPx=2000;
+        if(w>maxPx||h>maxPx){const r=Math.min(maxPx/w,maxPx/h);w=Math.round(w*r);h=Math.round(h*r);}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        let q=0.85,result=canvas.toDataURL('image/jpeg',q);
+        while(result.length*0.75/1024>targetKB&&q>0.3){q-=0.1;result=canvas.toDataURL('image/jpeg',q);}
+        res(result);
+      }catch(e){rej(e);}
     };
+    img.onerror=()=>rej(new Error('Could not load image for compression'));
     img.src=dataUrl;
   });
 }
@@ -2907,58 +3220,120 @@ async function processFile(file){
   const nameEl=document.getElementById('file-name');
   const statusEl=document.getElementById('file-status');
   const iconEl=document.getElementById('file-icon');
+  // Zero-byte check
+  if(file.size===0){
+    info.classList.add('show');iconEl.textContent='!';nameEl.textContent=file.name;
+    statusEl.textContent='Error: File is empty (0 bytes).';return;
+  }
   if(file.size>SEC.MAX_FILE){
     info.classList.add('show');iconEl.textContent='!';nameEl.textContent=file.name;
     statusEl.textContent='Error: Too large ('+((file.size/1e6).toFixed(1))+' MB). Max 10 MB.';return;
   }
   nameEl.textContent=file.name;info.classList.add('show');
   const ext=file.name.split('.').pop().toLowerCase();
-  if(ext==='txt'){
-    iconEl.textContent='TXT';statusEl.textContent='Reading...';
-    const text=await file.text();
-    document.getElementById('tc-text').value=secureText(text);updateCounter();
-    statusEl.textContent='Loaded '+text.length.toLocaleString()+' chars';
-    const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
-  }else if(['jpg','jpeg','png','webp','heic','heif'].includes(ext)){
-    iconEl.textContent='IMG';statusEl.textContent='Running OCR...';
+  if(ext==='txt'||ext==='text'||ext==='md'||ext==='rtf'||ext==='csv'){
+    iconEl.textContent='TXT';statusEl.textContent='Reading…';
+    try{
+      const text=await file.text();
+      document.getElementById('tc-text').value=secureText(text);updateCounter();
+      statusEl.textContent='Loaded '+text.length.toLocaleString()+' chars';
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    }catch(e){statusEl.textContent='Error reading file: '+e.message;}
+  }else if(['jpg','jpeg','png','webp','heic','heif','bmp','tiff','tif','gif'].includes(ext)){
+    iconEl.textContent='IMG';statusEl.textContent='Running OCR…';
     const reader=new FileReader();
+    reader.onerror=()=>{statusEl.textContent='Error: Could not read image file. It may be corrupted.';};
     reader.onload=ev=>runOCRFromFile(ev.target.result,statusEl);
     reader.readAsDataURL(file);
   }else if(ext==='pdf'){
-    iconEl.textContent='PDF';statusEl.textContent='Extracting PDF text...';
+    iconEl.textContent='PDF';statusEl.textContent='Extracting PDF text…';
     try{
       const buf=await file.arrayBuffer();
-      const text=await extractPDF(buf);
-      if(text.length<30){statusEl.textContent='Warning: No text layer found. Try the Camera tab to photograph each page.';return;}
+      const text=await extractPDF(buf,statusEl);
+      if(!text||text.length<30){
+        // Scanned PDF — try OCR on the first page via OCR.space
+        statusEl.textContent='No text layer — trying OCR on PDF…';
+        iconEl.textContent='IMG';
+        const reader=new FileReader();
+        reader.onerror=()=>{statusEl.textContent='Error: Could not read PDF file.';};
+        reader.onload=ev=>runOCRFromFile(ev.target.result,statusEl);
+        reader.readAsDataURL(file);
+        return;
+      }
       document.getElementById('tc-text').value=secureText(text);updateCounter();
       statusEl.textContent='Extracted '+text.length.toLocaleString()+' chars';
       const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
     }catch(e){
-      if(e.message&&e.message.includes('password'))statusEl.textContent='Error: PDF is password protected.';
+      if(e.message&&e.message.includes('password'))statusEl.textContent='Error: PDF is password protected — remove the password first.';
+      else if(e.message&&e.message.includes('timed out'))statusEl.textContent='Error: PDF took too long to process. Try a smaller file.';
       else statusEl.textContent='Error: Could not read this PDF. Try copy-pasting the text instead.';
     }
-  }else{statusEl.textContent='Error: Unsupported. Use TXT, PDF, JPG, or PNG.';}
+  }else if(ext==='docx'||ext==='doc'){
+    // DOCX: extract raw text from the XML inside the zip
+    iconEl.textContent='DOC';statusEl.textContent='Extracting Word document text…';
+    try{
+      const text=await extractDocx(file);
+      if(!text||text.length<10){statusEl.textContent='Error: Could not extract text from this Word document.';return;}
+      document.getElementById('tc-text').value=secureText(text);updateCounter();
+      statusEl.textContent='Extracted '+text.length.toLocaleString()+' chars from Word doc';
+      const pb=document.querySelector('.tab[data-tab="paste"]');if(pb)setTab('paste',pb);
+    }catch(e){statusEl.textContent='Error: Could not read Word document. Try saving as PDF or TXT first.';}
+  }else{
+    statusEl.textContent='Error: Unsupported file type ('+ext+'). Supported: PDF, TXT, JPG, PNG, DOCX, HEIC.';}
 }
 
-async function extractPDF(buf){
+async function extractPDF(buf,statusEl){
   if(!window._pdfReady){
+    if(statusEl)statusEl.textContent='Loading PDF engine…';
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
     await new Promise(r=>setTimeout(r,120));
     if(typeof pdfjsLib==='undefined')throw new Error('pdf.js failed to load');
     pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     window._pdfReady=true;
   }
-  const pdf=await pdfjsLib.getDocument({data:buf}).promise.catch(e=>{
-    if(e&&e.name==='PasswordException')throw new Error('password protected');
-    throw e;
-  });
-  const pageNums=Array.from({length:pdf.numPages},(_,i)=>i+1);
-  const pages=await Promise.all(pageNums.map(async n=>{
-    const page=await pdf.getPage(n);
-    const c=await page.getTextContent();
-    return c.items.map(x=>x.str).join(' ');
-  }));
-  return pages.join('\n').trim();
+  // 30-second timeout for large PDFs
+  const timeoutPromise=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timed out')),30000));
+  const extractPromise=(async()=>{
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise.catch(e=>{
+      if(e&&e.name==='PasswordException')throw new Error('password protected');
+      throw e;
+    });
+    const totalPages=pdf.numPages;
+    const pagesToRead=Math.min(totalPages,50); // cap at 50 pages
+    if(statusEl&&totalPages>50)statusEl.textContent=`Large PDF — reading first 50 of ${totalPages} pages…`;
+    const pageNums=Array.from({length:pagesToRead},(_,i)=>i+1);
+    const pages=await Promise.all(pageNums.map(async n=>{
+      const page=await pdf.getPage(n);
+      const c=await page.getTextContent();
+      return c.items.map(x=>x.str).join(' ');
+    }));
+    return pages.join('\n').trim();
+  })();
+  return Promise.race([extractPromise,timeoutPromise]);
+}
+
+async function extractDocx(file){
+  // DOCX is a zip — load JSZip to unpack, then strip XML tags from word/document.xml
+  if(typeof JSZip==='undefined'){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+    if(typeof JSZip==='undefined')throw new Error('JSZip failed to load');
+  }
+  const buf=await file.arrayBuffer();
+  const zip=await JSZip.loadAsync(buf);
+  const docXml=zip.file('word/document.xml');
+  if(!docXml)throw new Error('Not a valid DOCX file');
+  const xmlText=await docXml.async('string');
+  // Strip all XML tags, decode common entities, clean whitespace
+  const text=xmlText
+    .replace(/<w:p[ >][^>]*>/gi,'\n')  // paragraph breaks
+    .replace(/<w:br[^>]*>/gi,' ')       // line breaks
+    .replace(/<w:tab[^>]*>/gi,' ')      // tabs
+    .replace(/<[^>]+>/g,'')            // all remaining tags
+    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'")
+    .replace(/[ \t]+/g,' ')
+    .replace(/\n{3,}/g,'\n\n')
+    .trim();
+  return text;
 }
 
 
