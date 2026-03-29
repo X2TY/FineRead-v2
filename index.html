@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="FineRead">
 <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;FineRead&quot;,&quot;short_name&quot;:&quot;FineRead&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23080808&quot;,&quot;theme_color&quot;:&quot;%23080808&quot;,&quot;description&quot;:&quot;Legal document scanner&quot;}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23181818'/><text y='.9em' font-size='62' x='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' fill='%23f2f2f2'>FR</text></svg>">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com https://api.ocr.space; worker-src blob:; frame-src 'none'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://tessdata.projectnaptha.com https://api.ocr.space; worker-src blob:; frame-src 'none'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <title>FineRead — Know Before You Sign</title>
@@ -1246,6 +1246,42 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
   .results-title{color:#000!important;}
   .disclaimer{color:#444!important;border-top:1px solid #ccc!important;}
 }
+
+/* ── PLATFORM FIXES ───────────────────────────────────── */
+/* iOS safe area + rubber band scroll fix */
+html{-webkit-overflow-scrolling:touch;}
+body{overflow-y:scroll;-webkit-overflow-scrolling:touch;}
+
+/* iOS input zoom prevention */
+input,textarea,select{font-size:max(16px,1em)!important;}
+
+/* Android tap highlight removal */
+*{-webkit-tap-highlight-color:transparent;}
+
+/* iOS button rendering */
+button{-webkit-appearance:none;appearance:none;}
+
+/* Touch target minimum size */
+button,a,[role=button]{min-height:44px;min-width:44px;}
+
+/* Prevent double-tap zoom on buttons */
+button,.tab,.btn-primary,.btn-export{touch-action:manipulation;}
+
+/* Samsung Internet scrollbar fix */
+::-webkit-scrollbar{width:0;background:transparent;}
+
+/* iOS notch support already handled with safe-area-inset */
+
+/* Prevent layout shift on keyboard open (iOS) */
+.card,#results{transform:translateZ(0);will-change:auto;}
+
+/* Better text rendering on all platforms */
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
+
+/* AI panel toggle animation */
+#ai-key-row{transition:opacity .2s;opacity:1;}
+#ai-knob{will-change:transform;}
+
 </style>
 </head>
 <body>
@@ -1483,6 +1519,39 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
         <div class="ai-sub" id="ai-sub-label">Add your Claude API key to unlock deep AI analysis of any document</div>
       </div>
       
+
+
+  <div class="card" id="ai-panel" style="margin-bottom:12px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:600;color:var(--text1);display:flex;align-items:center;gap:8px;">
+          <span>AI Analysis</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);font-weight:500;">CLAUDE</span>
+          <span id="ai-status-badge" style="font-size:11px;padding:2px 7px;border-radius:20px;background:#e8f5e9;color:#2e7d32;font-weight:600;display:none;">Active</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Paste your Claude API key for deep AI analysis of any document</div>
+      </div>
+      <label class="toggle-wrap" style="flex-shrink:0;">
+        <input type="checkbox" id="ai-toggle" onchange="toggleAI()" style="display:none;">
+        <div class="toggle-track" id="ai-track" onclick="toggleAI()" style="width:44px;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;position:relative;transition:background .2s;">
+          <div id="ai-knob" style="width:18px;height:18px;border-radius:9px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
+        </div>
+      </label>
+    </div>
+    <div id="ai-key-row" style="display:none;margin-top:12px;">
+      <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false"
+        style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text1);font-size:13px;font-family:monospace;"
+        oninput="onKeyInput()">
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="remember-key" style="width:14px;height:14px;accent-color:var(--accent);">
+        <label for="remember-key" style="font-size:12px;color:var(--muted);cursor:pointer;">Remember key in this browser</label>
+      </div>
+      <div style="margin-top:8px;font-size:11.5px;color:var(--muted);line-height:1.5;">
+        Your key is sent directly to Anthropic — never stored on any server.
+        Get a free key at <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent);">console.anthropic.com</a>
+      </div>
+    </div>
+  </div>
 
   <div class="btn-row">
     <button class="btn-primary" id="analyzeBtn" onclick="analyze()" aria-describedby="status-msg" aria-busy="false">Analyze document →</button>
@@ -4811,6 +4880,130 @@ function cleanOCRText(t){
 }
 
 
+// ── AI KEY MANAGEMENT ─────────────────────────────────
+const KEY_RE=/^sk-ant-[a-zA-Z0-9\-_]{10,}$/;
+function validKey(k){if(!k)return'No API key.';if(!KEY_RE.test(k))return'Invalid key format — expected sk-ant-…';return null;}
+
+function loadSavedKey(){
+  try{
+    const k=localStorage.getItem('fr_key');
+    if(k){
+      const el=document.getElementById('api-key');
+      if(el){el.value=k;document.getElementById('remember-key').checked=true;onKeyInput();}
+    }
+  }catch{}
+}
+
+function onKeyInput(){
+  const k=(document.getElementById('api-key')||{}).value||'';
+  const valid=k&&!validKey(k);
+  const badge=document.getElementById('ai-status-badge');
+  if(badge){badge.style.display=valid?'inline':'none';}
+}
+
+let _aiOn=false;
+function toggleAI(){
+  _aiOn=!_aiOn;
+  const track=document.getElementById('ai-track');
+  const knob=document.getElementById('ai-knob');
+  const row=document.getElementById('ai-key-row');
+  if(track)track.style.background=_aiOn?'var(--accent)':'var(--surface2)';
+  if(knob)knob.style.transform=_aiOn?'translateX(20px)':'translateX(0)';
+  if(row)row.style.display=_aiOn?'block':'none';
+  if(_aiOn){setTimeout(()=>document.getElementById('api-key').focus(),50);}
+}
+
+// ── AI SCAN ───────────────────────────────────────────
+async function aiScan(text,key){
+  const body=text.slice(0,14000);
+  const juris=getJurisContext();
+  const jurisNote=juris?` The user is in ${juris}. Where relevant, note if local law (GDPR, CCPA, employment law etc.) gives extra protections or makes a clause unenforceable.`:'';
+  const prompt=`You are a consumer-rights attorney.${jurisNote} Analyze this document and return ONLY valid JSON — no markdown, no text outside the JSON.
+
+{"docType":"exact document type","parties":"who the parties are","overallRisk":"high|medium|low","overallScore":1-10,"verdict":"4-5 sentences: what is this document, what does it require, biggest risk, is it fair overall. Plain English, no jargon.","bottomLine":"single most important thing to know before signing.","keyDates":"deadlines/renewals/notice periods or empty string","keyNumbers":"key amounts/rates/fees or empty string","findings":[{"title":"6-8 word descriptive title","severity":"high|medium|low|info","category":"category name","clause":"exact quote from document max 80 words","what":"2-3 sentences plain English explanation","whyItMatters":"1-2 sentences with a concrete real-world scenario","action":"1 specific actionable step to take"}]}
+
+Rules: 6-10 findings. severity info = things that PROTECT the signer. Quote clauses exactly. Be direct and honest.
+
+Document:
+---
+${body}
+---`;
+
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),55000);
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'content-type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:3500,messages:[{role:'user',content:prompt}]}),
+      signal:controller.signal
+    });
+    clearTimeout(timer);
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      throw new Error(err?.error?.message||`API ${resp.status}`);
+    }
+    const data=await resp.json();
+    const raw=data.content?.[0]?.text||'';
+    const clean=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();
+    try{return JSON.parse(clean);}
+    catch{
+      const m=clean.match(/\{[\s\S]*/);
+      if(m){try{return JSON.parse(m[0]);}catch{}}
+      return{docType:'',overallRisk:'medium',overallScore:5,verdict:raw.slice(0,400),bottomLine:'',findings:[],parties:'',keyDates:'',keyNumbers:''};
+    }
+  }catch(e){
+    clearTimeout(timer);
+    if(e.name==='AbortError')throw new Error('AI timed out — document may be too long. Keyword results still shown below.');
+    throw e;
+  }
+}
+
+// ── RENDER AI FINDINGS ────────────────────────────────
+function renderAIFindings(aiData){
+  if(!aiData)return'';
+  if(aiData.error)return`<div class="ai-result"><div style="padding:14px 16px;background:var(--danger-dim,#fff0f0);border:1px solid var(--danger,#c00);border-radius:8px;font-size:13px;color:var(--danger,#c00);">⚠ AI error: ${escHtml(aiData.error)}</div></div>`;
+  const sev={high:'t-danger',medium:'t-warning',low:'t-info',info:'t-info'};
+  const sevLabel={high:'High Risk',medium:'Caution',low:'Low Risk',info:'Info'};
+  const findings=(aiData.findings||[]);
+  const totalAI=findings.length;
+  const highAI=findings.filter(f=>f.severity==='high').length;
+  const findingsHtml=findings.map((f,idx)=>`
+    <div class="finding" tabindex="0" role="button" style="margin-bottom:10px;">
+      <div class="f-header">
+        <span class="f-sev ${sev[f.severity]||'t-info'}">${sevLabel[f.severity]||'Info'}</span>
+        <span class="f-cat">${escHtml(f.category||'')}</span>
+      </div>
+      <div class="f-title">${escHtml(f.title||'')}</div>
+      ${f.clause?`<div class="f-clause">"${escHtml(f.clause)}"</div>`:''}
+      <div class="f-desc">${escHtml(f.what||'')}</div>
+      ${f.whyItMatters?`<div class="f-desc" style="margin-top:6px;color:var(--muted);">💡 ${escHtml(f.whyItMatters)}</div>`:''}
+      ${f.action?`<div class="f-desc" style="margin-top:6px;color:var(--accent);font-weight:500;">→ ${escHtml(f.action)}</div>`:''}
+    </div>`).join('');
+  return`<div class="ai-result" style="margin-top:20px;">
+    <div class="sec-header-static">
+      <div class="sec-left">
+        <span class="sec-name">AI Analysis</span>
+        <span class="sec-badge">${totalAI}</span>
+        ${highAI>0?`<span class="sec-badge" style="background:var(--danger,#c00);color:#fff;">${highAI} high risk</span>`:''}
+      </div>
+      <span style="font-size:11px;color:var(--muted);">claude-sonnet</span>
+    </div>
+    ${aiData.docType?`<div style="font-size:12px;color:var(--muted);margin:8px 0 4px;font-weight:600;">${escHtml(aiData.docType)}</div>`:''}
+    ${aiData.verdict?`<div style="font-size:13.5px;line-height:1.65;color:var(--text1);margin-bottom:12px;">${escHtml(aiData.verdict)}</div>`:''}
+    ${aiData.bottomLine?`<div style="padding:10px 14px;background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:13px;font-weight:600;margin-bottom:14px;">📌 ${escHtml(aiData.bottomLine)}</div>`:''}
+    ${aiData.keyNumbers?`<div style="font-size:12px;color:var(--muted);margin-bottom:6px;">💰 ${escHtml(aiData.keyNumbers)}</div>`:''}
+    ${aiData.keyDates?`<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">📅 ${escHtml(aiData.keyDates)}</div>`:''}
+    <div>${findingsHtml}</div>
+  </div>`;
+}
+
+
 function keywordScan(text){
   const negWords=['not ','never ','no ','do not ','will not ','does not ',"will not ","do not ",'cannot ',"cannot ",'prohibited from ','we will not ','we do not ','we never ','shall not ','does not ','is not ','are not ','was not '];
 
@@ -5715,15 +5908,52 @@ async function analyze(){
     ||'Scanned document';
   addToHistory({title:titleGuess,risk:overallRisk,findings:findings.length,date:new Date().toLocaleDateString(),text:text.slice(0,12000)});
 
-  renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warningCount,infoCount,text,detectedLang});
+  // Render keyword results immediately — don't wait for AI
+  renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warningCount,infoCount,text,detectedLang,aiData:null});
   btn.disabled=false;
   btn.classList.remove('loading');
   btn.setAttribute('aria-busy','false');
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),150);
+
+  // AI runs in background — updates results when done
+  const key=(document.getElementById('api-key')||{}).value?.trim()||'';
+  if(key&&_aiOn){
+    const keyErr=validKey(key);
+    if(keyErr){setStatus('AI key: '+keyErr);return;}
+    if((document.getElementById('remember-key')||{}).checked){
+      try{localStorage.setItem('fr_key',key);}catch{}
+    }
+    const aiContainer=document.getElementById('ai-result-container');
+    if(aiContainer){
+      aiContainer.innerHTML='<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px;">🤖 AI analysis running<span id="ai-ticker"></span></div>';
+      aiContainer.style.display='block';
+    }
+    const aiStart=Date.now();
+    const aiTick=setInterval(()=>{
+      const el=document.getElementById('ai-ticker');
+      if(el){const s=Math.round((Date.now()-aiStart)/1000);el.textContent=` · ${s}s`;}
+    },1000);
+    aiScan(text,key).then(aiData=>{
+      clearInterval(aiTick);
+      if(aiData?.overallRisk){
+        const riskOrder={low:0,medium:1,high:2};
+        const newRisk=aiData.overallRisk.toLowerCase();
+        if((riskOrder[newRisk]||0)>(riskOrder[overallRisk]||0)){
+          const badge=document.getElementById('risk-badge');
+          if(badge)badge.className='risk-badge risk-'+newRisk;
+        }
+      }
+      if(aiContainer)aiContainer.innerHTML=renderAIFindings(aiData);
+      window._lastAI=aiData;
+    }).catch(e=>{
+      clearInterval(aiTick);
+      if(aiContainer)aiContainer.innerHTML=renderAIFindings({error:e.message});
+    });
+  }
 }
 
 // ── RENDER RESULTS ────────────────────────────
-function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warningCount,infoCount,text,detectedLang}){
+function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warningCount,infoCount,text,detectedLang,aiData}){
   const rc={
     high:{emoji:'',label:'High Risk',color:'var(--danger)',bg:'high',desc:'Serious clauses found that could significantly affect your rights, finances, or obligations.'},
     medium:{emoji:'',label:'Medium Risk',color:'var(--warning)',bg:'medium',desc:'Some concerning clauses found. Review the highlighted sections before agreeing.'},
@@ -5853,12 +6083,14 @@ function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warn
         No keyword pattern matches found. 
       </div>`}
 
+    <div id="ai-result-container" style="display:none;"></div>
+
     <div class="disclaimer">
       <strong>Disclaimer:</strong> FineRead is an automated tool for informational purposes only — not legal advice. AI analysis may miss nuances or make errors. Consult a qualified attorney before signing anything with significant legal or financial consequences.
     </div>`;
 
   window._lastFindings=findings;
-  window._lastSummary=summary;
+  window._lastSummary=summary;window._lastAI=null;
   window._lastRisk=overallRisk;
 }
 
@@ -6654,6 +6886,8 @@ window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>
   }catch{}
 })();
 console.log('%cFineRead ready — '+RULES.length+' rules loaded','color:#e2e2e2;font-weight:600;font-size:13px;');
+loadSavedKey();
+
 </script>
 </body>
 </html>
