@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="FineRead scans any legal document — Terms & Conditions, contracts, leases, NDAs, privacy policies — and flags clauses that could harm your rights, finances, or privacy. Powered by Claude AI.">
 <meta name="theme-color" content="#080808">
 <meta property="og:title" content="FineRead — Know Before You Sign">
@@ -1250,8 +1250,6 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
 html{-webkit-overflow-scrolling:touch;}
 body{overflow-y:scroll;-webkit-overflow-scrolling:touch;}
 
-/* iOS input zoom prevention */
-input,textarea,select{font-size:max(16px,1em)!important;}
 
 /* Android tap highlight removal */
 *{-webkit-tap-highlight-color:transparent;}
@@ -1259,8 +1257,6 @@ input,textarea,select{font-size:max(16px,1em)!important;}
 /* iOS button rendering */
 button{-webkit-appearance:none;appearance:none;}
 
-/* Touch target minimum size */
-button,a,[role=button]{min-height:44px;min-width:44px;}
 
 /* Prevent double-tap zoom on buttons */
 button,.tab,.btn-primary,.btn-export{touch-action:manipulation;}
@@ -1280,6 +1276,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 #ai-key-row{transition:opacity .2s;opacity:1;}
 #ai-knob{will-change:transform;}
 
+
+/* ── MOBILE ADDITIONS (camera touch targets + small screen fixes) ── */
+@media(max-width:640px){
+  #capture-btn{min-height:56px!important;}
+  #flip-btn{min-width:48px;min-height:48px;}
+  #history-panel{width:min(320px,92vw)!important;}
+  button,a,[role=button]{min-height:44px;}
+  input,textarea,select{font-size:max(16px,1em)!important;}
+}
+@media(max-width:380px){
+  .demo-grid{grid-template-columns:1fr!important;}
+}
+───────── */
 </style>
 </head>
 <body>
@@ -1348,7 +1357,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   <div id="tab-paste" role="tabpanel" aria-label="Paste text">
     <div class="paste-wrap">
       <label for="tc-text" class="sr-only">Paste your legal document here</label>
-      <textarea id="tc-text" placeholder="Paste the full Terms & Conditions, Privacy Policy, or any legal document here…" oninput="updateCounter()" aria-label="Document text"></textarea>
+      <textarea id="tc-text" placeholder="Paste the full Terms & Conditions, Privacy Policy, or any legal document here…" oninput="updateCounter()" aria-label="Document text" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>
       <span class="char-counter" id="char-counter" aria-live="polite" aria-atomic="true">0 chars</span>
     </div>
   </div>
@@ -1532,7 +1541,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
     <div id="ai-key-row" style="display:none;padding:12px;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r) var(--r);background:var(--surface2);">
       <div style="display:flex;gap:8px;align-items:center;">
-        <input type="password" id="api-key" placeholder="sk-ant-api03-…"
+        <input type="password" id="api-key" placeholder="sk-ant-api03-…" inputmode="text"
           autocomplete="off" spellcheck="false"
           style="flex:1;min-width:0;padding:9px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text1);font-size:13px;font-family:monospace;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .2s;box-sizing:border-box;"
           oninput="onKeyInput()"
@@ -1604,7 +1613,15 @@ const SEC={
   MAX_TEXT:500_000,MAX_FILE:10_000_000,MAX_SCAN:60_000,RATE_MS:5_000
 };
 let lastRun=0;
-function secureText(s){if(s.length>SEC.MAX_TEXT){setStatus('Warning: Text truncated to 500 KB.');return s.slice(0,SEC.MAX_TEXT);}return s;}
+function secureText(s){
+  if(!s)return'';
+  // Strip potential script injections from pasted content
+  s=s.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'');
+  s=s.replace(/javascript:/gi,'');
+  s=s.replace(/on\w+\s*=/gi,'');
+  if(s.length>SEC.MAX_TEXT){setStatus('Warning: Text truncated to 500 KB.');return s.slice(0,SEC.MAX_TEXT);}
+  return s;
+}
 function checkRate(){
   if(!lastRun)return null;
   const wait=Math.ceil((SEC.RATE_MS-(Date.now()-lastRun))/1000);
@@ -2019,7 +2036,7 @@ const RULES=[
   {id:'auto_renewal',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Subscription renews automatically',
    desc:'Your subscription renews without any action from you. You must actively cancel before the renewal date or face another full charge for the next period.',
-   patterns:[/\bautomatically renew\b/i,/\bauto.renew\b/i,/\bautomatic renewal\b/i,/\brenews at the end\b/i,/\bautomatically.*renewed.*unless.*cancel\b/i,/\bcontinuous.*until.*cancel\b/i,/\bwill renew.*unless\b/i,/\bwill automatically renew unless cancelled\b/i,/\bsubscription.*automatically renew.*unless.*cancel\b/i,/\bauto.renew.*unless.*cancel.*at least\b/i,/\brenew.*automatically.*end.*subscription.*period\b/i,/\bauto.renews\b/i,/\brenews.*annually\b/i,/\brenews.*each.*year\b/i,/\brenews.*every.*year\b/i,/\bplan.*auto.renew\b/i,/\brenew.*automatically\b/i]},
+   patterns:[/\bautomatically renew\b/i,/\bauto.renew\b/i,/\bautomatic renewal\b/i,/\brenews at the end\b/i,/\bautomatically.*renewed.*unless.*cancel\b/i,/\bcontinuous.*until.*cancel\b/i,/\bwill renew.*unless\b/i,/\bwill automatically renew unless cancelled\b/i,/\bsubscription.*automatically renew.*unless.*cancel\b/i,/\bauto.renew.*unless.*cancel.*at least\b/i,/\brenew.*automatically.*end.*subscription.*period\b/i,/\bauto.renews\b/i,/\brenews.*annually\b/i,/\brenews.*each.*year\b/i,/\brenews.*every.*year\b/i,/\bplan.*auto.renew\b/i,/\brenew.*automatically\b/i,/\bautomatically renews\b/i,/\brenews.*unless.*cancel\b/i,/\bautomatically renews.*price\b/i,/\brenews.*48 hours\b/i,/\brenews.*24 hours\b/i]},
 
   {id:'termination_no_reason',level:'warning',category:'Account',docCat:'risk',icon:'·',
    title:'Account can be terminated any time, no reason given',
