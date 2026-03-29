@@ -5711,8 +5711,7 @@ async function analyze(){
 
   lastRun=Date.now();endProgress();
 
-  const titleGuess=aiData?.docType
-    ||text.match(/(?:privacy policy|terms of service|terms & conditions|terms and conditions|employment agreement|rental agreement|non.disclosure|nda|license agreement)[^\n]*/i)?.[0]?.slice(0,50)
+  const titleGuess=text.match(/(?:privacy policy|terms of service|terms & conditions|terms and conditions|employment agreement|rental agreement|non.disclosure|nda|license agreement)[^\n]*/i)?.[0]?.slice(0,50)
     ||'Scanned document';
   addToHistory({title:titleGuess,risk:overallRisk,findings:findings.length,date:new Date().toLocaleDateString(),text:text.slice(0,12000)});
 
@@ -5783,72 +5782,9 @@ function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warn
   }
 
   // Build AI findings HTML
-  function renderAIFindings(aiData){
-    if(!aiData) return '';
-    if(aiData.error) return `<div class="ai-result"><div class="ai-result-header"><div class="ai-result-title">AI Analysis</div></div><div class="ai-verdict"><strong>Error</strong>Error: ${aiData.error}</div></div>`;
-
-    const sevClass={high:'sev-high',medium:'sev-medium',low:'sev-low',info:'sev-info'};
-    const sevLabel={high:'!',medium:'~',low:'ok',info:'i'};
-    const sevTag={high:'t-danger',medium:'t-warning',low:'t-cat',info:'t-info'};
-    const sevTagLabel={high:'High Risk',medium:'Caution',low:'Low Risk',info:'Info'};
-
-    const findingsHtml=(aiData.findings||[]).map(f=>`
-      <div class="ai-finding">
-        <div class="ai-finding-top">
-          <div class="ai-finding-sev ${sevClass[f.severity]||'sev-info'}">${sevLabel[f.severity]||'i'}</div>
-          <div style="flex:1;min-width:0;">
-            <div class="ai-finding-title">${escHtml(f.title||'')}</div>
-            <div class="ai-finding-tags">
-              <span class="tag ${sevTag[f.severity]||'t-info'}">${sevTagLabel[f.severity]||'ℹ Info'}</span>
-              ${f.category?`<span class="tag t-cat">${escHtml(f.category)}</span>`:''}
-            </div>
-          </div>
-        </div>
-        <div class="ai-finding-body">
-          ${f.clause?`<div class="ai-clause"><span class="ai-clause-label">From the document</span>${escHtml(f.clause)}</div>`:''}
-          ${f.what?`<div class="ai-section"><span class="ai-section-label">What this means</span><div class="ai-what">${escHtml(f.what)}</div></div>`:''}
-          ${f.whyItMatters?`<div class="ai-section"><span class="ai-section-label">Why it matters</span><div class="ai-why">${escHtml(f.whyItMatters)}</div></div>`:''}
-          ${f.impact?`<div class="ai-section"><span class="ai-section-label">Impact on you</span><div class="ai-impact">${escHtml(f.impact)}</div></div>`:''}
-          ${f.action?`<div class="ai-section"><span class="ai-section-label">What to do</span><div class="ai-action-list">${escHtml(f.action)}</div></div>`:''}
-          ${f.negotiate?`<div class="ai-negotiate">${escHtml(f.negotiate)}</div>`:''}
-          ${f.severity==='high'||f.severity==='medium'?`
-          <div id="neg-wrap-${i}" style="margin-top:4px;">
-            
-            <div id="neg-result-${i}"></div>
-          </div>`:''}
-        </div>
-      </div>`).join('');
-
-    const totalAI=(aiData.findings||[]).length;
-    const highAI=(aiData.findings||[]).filter(f=>f.severity==='high').length;
-    const medAI=(aiData.findings||[]).filter(f=>f.severity==='medium').length;
-
-    return`<div class="ai-result">
-      <div class="ai-result-header">
-        <div class="ai-result-title">
-          AI Analysis
-          ${aiData.docType?`<span class="ai-doc-type">${escHtml(aiData.docType)}</span>`:''}
-        </div>
-        ${aiData.overallScore?`<span style="font-size:12px;color:var(--muted2);">Score <strong style="color:var(--text)">${aiData.overallScore}<span style="font-size:10px;color:var(--muted)">/10</span></strong></span>`:''}
-      </div>
-      ${aiData.parties||aiData.keyDates||aiData.keyNumbers?`
-        <div class="ai-meta-row">
-          ${aiData.parties?`<div class="ai-meta-item"><span class="ai-meta-label">Parties</span><span class="ai-meta-val">${escHtml(aiData.parties)}</span></div>`:''}
-          ${aiData.keyNumbers?`<div class="ai-meta-item"><span class="ai-meta-label">Key numbers</span><span class="ai-meta-val">${escHtml(aiData.keyNumbers)}</span></div>`:''}
-          ${aiData.keyDates?`<div class="ai-meta-item"><span class="ai-meta-label">Key dates</span><span class="ai-meta-val">${escHtml(aiData.keyDates)}</span></div>`:''}
-        </div>`:''}
-      ${aiData.verdict?`<div class="ai-verdict"><strong>What you are agreeing to</strong>${escHtml(aiData.verdict)}</div>`:''}
-      ${totalAI>0?`
-        <div class="ai-findings-wrap">
-          <div class="ai-findings-label">${totalAI} finding${totalAI!==1?'s':''}&ensp;·&ensp;${highAI} high risk&ensp;·&ensp;${medAI} caution</div>
-          <div class="ai-findings-list">${findingsHtml}</div>
-        </div>`:''}
-      ${aiData.bottomLine?`<div class="ai-bottom-line"><strong>Bottom line</strong>${escHtml(aiData.bottomLine)}</div>`:''}
-    </div>`;
-  }
 
   const summary=buildDocumentSummary(text||'',findings,wordCount);
-  const totalFindings=findings.length+(aiData&&!aiData.error?(aiData.findings||[]).length:0);
+  const totalFindings=findings.length;
 
   document.getElementById('results').innerHTML=`
     <div class="results-header">
@@ -5897,7 +5833,7 @@ function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warn
     <div class="risk-banner ${rc.bg}">
       <div class="risk-icon">${rc.emoji}</div>
       <div>
-        <div class="risk-title">${rc.label}${aiData&&aiData.docType?' — '+escHtml(aiData.docType):''}</div>
+        <div class="risk-title">${rc.label}</div>
         <div class="risk-desc">${rc.desc}</div>
       </div>
     </div>
@@ -5914,7 +5850,7 @@ function renderResults({findings,overallRisk,wordCount,readMins,dangerCount,warn
       ${section('CAUTION',wI,dI.length)}
       ${section('INFORMATIONAL',iI,dI.length+wI.length)}`:
       `<div style="margin-top:20px;padding:14px 18px;background:var(--surface2);border-radius:var(--r-sm);font-size:13px;color:var(--muted);line-height:1.5;">
-        No keyword pattern matches found. ${aiData&&!aiData.error?'See the AI analysis above for a full breakdown.':'Add a Claude API key above for a complete AI analysis.'}
+        No keyword pattern matches found. 
       </div>`}
 
     <div class="disclaimer">
@@ -6627,7 +6563,7 @@ function loadBatchResult(idx){
   const d=findings.filter(f=>f.level==='danger').length;
   const w=findings.filter(f=>f.level==='warning').length;
   const info=findings.filter(f=>f.level==='info').length;
-  renderResults({findings,overallRisk:item.risk,wordCount,readMins,aiData:null,dangerCount:d,warningCount:w,infoCount:info,hasKey:!!document.getElementById('api-key').value.trim(),text:item.text,detectedLang:'en'});
+  renderResults({findings,overallRisk:item.risk,wordCount,readMins,dangerCount:d,warningCount:w,infoCount:info,text:item.text||'',detectedLang:'en'});
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
