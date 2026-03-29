@@ -1781,8 +1781,10 @@ const RULES=[
 
   {id:'liability_trivial',level:'danger',category:'Liability',docCat:'risk',icon:'·',
    title:'Company liability capped at trivial amount',
-   desc:"The company total liability to you is capped at almost nothing. Even if they cause serious financial or personal harm, you can recover next to nothing legally.",
-   patterns:[/\bliability.*shall not exceed.*\$50\b/i,/\btotal.*liability.*limited to fifty\b/i,/\bliability.*limited to.*amount.*paid.*twelve\b/i,/\bmaximum.*liability.*shall.*not.*exceed\b/i,/\baggregate.*liability.*shall not exceed\b/i,/\bliability.*shall not exceed.*\$[0-9]+\b/i,/\btotal liability.*limited to.*dollar/i,/\bliability.*capped.*one hundred\b/i,/\bliability.*not exceed.*fees paid\b/i,/\bliability.*not exceed.*one month\b/i]},
+   desc:'The company total liability to you is capped at almost nothing. Even if they cause serious financial or personal harm, you can recover next to nothing legally.',
+   patterns:[/\bliability.*limited.*fifty\b/i,/\bfifty.*dollar.*liability\b/i,/\btotal.*liability.*50\b/i,/\bliability.*shall.*not.*exceed\b/i,/\bour.*liability.*limited.*to\b/i,/\bmaximum.*liability\b/i,/\baggregate.*liability\b/i,/\bliabilit.*cap\b/i]},
+
+
 
   {id:'indefinite_retention',level:'danger',category:'Data Retention',docCat:'risk',icon:'·',
    title:'Your data kept forever after account deletion',
@@ -1792,7 +1794,7 @@ const RULES=[
   {id:'law_enforcement',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
    title:'Data disclosed to government without telling you',
    desc:'The company can hand your data to law enforcement or government agencies without notifying you — leaving you no chance to legally object.',
-   patterns:[/\blaw enforcement.*without notice\b/i,/\bwithout.*notif.*government\b/i,/\bdisclose.*government.*without.*notice\b/i,/\bcompelled.*to\s+disclose\b/i,/\bgovernment.*request.*not\s+notify\b/i,/\bdisclose.*government.*officials\b/i,/\bdisclose.*law enforcement\b/i,/\bgovernment.*request.*personal.*information\b/i,/\blaw enforcement.*officials.*private parties\b/i,/\bdisclose.*to protect.*operations\b/i,/\bsole discretion.*believe.*necessary.*disclose\b/i]},
+   patterns:[/\blaw enforcement.*without notice\b/i,/\bwithout.*notif.*government\b/i,/\bdisclose.*government.*without.*notice\b/i,/\bcompelled.*to\s+disclose\b/i,/\bgovernment.*request.*not\s+notify\b/i,/\bdisclose.*government.*officials\b/i,/\bdisclose.*law enforcement\b/i,/\bgovernment.*request.*personal.*information\b/i,/\blaw enforcement.*officials.*private parties\b/i,/\bdisclose.*to protect.*operations\b/i,/\bsole discretion.*believe.*necessary.*disclose\b/i,/\bpursue.*legal.*action\b/i,/\breport.*to.*credit.*bur\b/i,/\bjudgment.*against.*you\b/i]},
 
   {id:'responsible_after_termination',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
    title:'You still owe money even if service is cancelled',
@@ -1807,12 +1809,12 @@ const RULES=[
   {id:'ip_ownership_employer',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
    title:'Employer owns everything you create',
    desc:"Any work, invention, or idea you develop — even on personal time — may belong to the company. Side projects, apps, and creative work could all be claimed.",
-   patterns:[/\bwork.*made.*for.*hire\b/i,/\bwork product.*property.*company\b/i,/\binventions.*belong.*employer\b/i,/\bassign.*all.*intellectual property\b/i,/\ball.*inventions.*discoveries.*assign\b/i,/\bintellectual property.*vests.*in.*company\b/i]},
+   patterns:[/\bwork.*made.*for.*hire\b/i,/\bwork product.*property.*company\b/i,/\binventions.*belong.*employer\b/i,/\bassign.*all.*intellectual property\b/i,/\ball.*inventions.*discoveries.*assign\b/i,/\bintellectual property.*vests.*in.*company\b/i,/\binventions.*assigned.*company\b/i,/\ball.*inventions.*employer\b/i,/\bcreation.*belong.*employer\b/i,/\bwork.*assigned.*to.*company\b/i]},
 
   {id:'indemnification',level:'danger',category:'Liability',docCat:'obligation',icon:'·',
    title:"You pay the company legal costs if sued",
    desc:"If a third party sues the company because of your actions on the platform, you must pay their legal defense costs. This could run into thousands of dollars.",
-   patterns:[/\byou.*shall\s+indemnif\b/i,/\bindemnif.*hold harmless\b/i,/\bindemnif.*defend.*company\b/i,/\bhold.*harmless.*from.*claims\b/i,/\bindemnif.*losses.*costs.*expenses\b/i,/\bindemnif.*attorneys.*fees\b/i]},
+   patterns:[/\byou.*shall\s+indemnif\b/i,/\bindemnif.*hold harmless\b/i,/\bindemnif.*defend.*company\b/i,/\bhold.*harmless.*from.*claims\b/i,/\bindemnif.*losses.*costs.*expenses\b/i,/\bindemnif.*attorneys.*fees\b/i,/\bindemnification.*breach.*warranty\b/i,/\bindemnif.*for.*breach\b/i,/\bwarranty.*indemnif\b/i]},
 
   {id:'waiver_injury',level:'danger',category:'Liability',docCat:'rights',icon:'·',
    title:'You waive the right to sue for injury',
@@ -1844,7 +1846,7 @@ const RULES=[
   {id:'auto_charge',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Card charged automatically every billing period',
    desc:'Your card is charged automatically without any action from you. If the card expires or funds run low, you may face service interruptions or overdraft fees.',
-   patterns:[/\bautomatically charged\b/i,/\bautomatic.*charge\b/i,/\bauto.billed\b/i,/\bcharged.*automatically\b/i,/\bautomatically.*debited\b/i,/\brecurring.*charge\b/i,/\bcharged.*on a.*basis\b/i,/\baccount.*will be charged.*renewal\b/i,/\bcharged.*prior.*to.*end.*of.*current.*period\b/i,/\bcharged.*for renewal.*within.*24\b/i,/\bbilled.*automatically.*unless.*cancel\b/i]},
+   patterns:[/\bautomatically charged\b/i,/\bautomatic.*charge\b/i,/\bauto.billed\b/i,/\bcharged.*automatically\b/i,/\bautomatically.*debited\b/i,/\brecurring.*charge\b/i,/\bcharged.*on a.*basis\b/i,/\baccount.*will be charged.*renewal\b/i,/\bcharged.*prior.*to.*end.*of.*current.*period\b/i,/\bcharged.*for renewal.*within.*24\b/i,/\bbilled.*automatically.*unless.*cancel\b/i,/\bcontinuous.*payment.*authority.*authoris\b/i,/\brecurring.*payment.*authority\b/i,/\bcharge.*card.*recurring\b/i,/\bcontinuous.*payment\b/i,/\bpayment.*authority.*authoris\b/i,/\brecurring.*card.*charge\b/i]},
 
   {id:'credit_card_interest',level:'warning',category:'Billing',docCat:'risk',icon:'·',
    title:'Your card may charge interest on top',
@@ -1874,7 +1876,7 @@ const RULES=[
   {id:'outstanding_balance',level:'warning',category:'Financial',docCat:'obligation',icon:'·',
    title:'Unpaid balances must be paid regardless',
    desc:'Any unpaid amount remains due in full even if you cancel, the company shuts down the program, or the service is discontinued.',
-   patterns:[/\boutstanding balance\b/i,/\boutstanding.*amount.*due\b/i,/\bunpaid.*balance\b/i,/\bbalance.*due.*under.*terms\b/i,/\bamounts.*owed.*remain\b/i]},
+   patterns:[/\boutstanding balance\b/i,/\boutstanding.*amount.*due\b/i,/\bunpaid.*balance\b/i,/\bbalance.*due.*under.*terms\b/i,/\bamounts.*owed.*remain\b/i,/\byou.*owe.*balance\b/i,/\bbalance.*owed.*of\b/i,/\bamount.*due.*owed\b/i,/\boutstanding.*balance.*of\b/i]},
 
   {id:'free_trial_convert',level:'warning',category:'Billing',docCat:'obligation',icon:'·',
    title:'Free trial auto-converts to paid subscription',
@@ -1904,7 +1906,7 @@ const RULES=[
   {id:'at_will_employment',level:'warning',category:'Employment',docCat:'risk',icon:'·',
    title:'At-will employment — fired any time for any reason',
    desc:"Either party can end employment at any time without giving a reason or notice. You have very limited job security beyond what the law requires.",
-   patterns:[/\bat.will.*employ\b/i,/\bemploy.*at.will\b/i,/\bterminated.*any.*reason.*no cause\b/i,/\bwithout.*cause.*terminat.*employ\b/i,/\bemployment.*no.*definite.*term\b/i,/\bno.*contract.*continued.*employ\b/i]},
+   patterns:[/\bat.will.*employ\b/i,/\bemploy.*at.will\b/i,/\bterminated.*any.*reason.*no cause\b/i,/\bwithout.*cause.*terminat.*employ\b/i,/\bemployment.*no.*definite.*term\b/i,/\bno.*contract.*continued.*employ\b/i,/\bat.will\b/i,/\bemployment.*at will\b/i,/\bterminable.*any.*time\b/i,/\bat will.*employment\b/i]},
 
   {id:'background_check',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
    title:'Background and criminal check required',
@@ -1964,7 +1966,7 @@ const RULES=[
   {id:'credit_report',level:'warning',category:'Credit',docCat:'risk',icon:'·',
    title:'Late payments reported to credit bureaus',
    desc:'Missed or late payments can be reported to credit agencies, damaging your score and affecting your ability to get loans, housing, or even employment.',
-   patterns:[/\breport.*credit bureau\b/i,/\bcredit bureau\b/i,/\bcredit reporting\b/i,/\breport.*credit.*agency\b/i,/\bdelinquency.*report\b/i,/\bEquifax|TransUnion|Experian\b/i]},
+   patterns:[/\breport.*credit bureau\b/i,/\bcredit bureau\b/i,/\bcredit reporting\b/i,/\breport.*credit.*agency\b/i,/\bdelinquency.*report\b/i,/\bEquifax|TransUnion|Experian\b/i,/\breport.*to.*credit.*agenc\b/i,/\bcredit.*bureau.*report\b/i,/\bnegative.*report.*credit\b/i,/\bcredit.*report.*adversely\b/i]},
 
   {id:'data_broker',level:'warning',category:'Data Collection',docCat:'risk',icon:'·',
    title:'Data purchased from data brokers',
@@ -2009,7 +2011,7 @@ const RULES=[
   {id:'nda_duration',level:'warning',category:'NDA',docCat:'obligation',icon:'·',
    title:'Confidentiality lasts years or forever',
    desc:'The secrecy obligation extends for a long time — sometimes permanently. This limits what you can say long after the business relationship ends.',
-   patterns:[/\bconfidential.*in perpetuity\b/i,/\bconfidentiality.*indefinitely\b/i,/\bobligation.*survive.*terminat\b/i,/\bconfidentiality.*survives\b/i,/\bshall survive.*for.*\d+\s+year\b/i,/\bperpetual.*confidentiality\b/i]},
+   patterns:[/\bconfidential.*in perpetuity\b/i,/\bconfidentiality.*indefinitely\b/i,/\bobligation.*survive.*terminat\b/i,/\bconfidentiality.*survives\b/i,/\bshall survive.*for.*\d+\s+year\b/i,/\bperpetual.*confidentiality\b/i,/\bnon.disclosure.*survives.*terminat\b/i,/\bconfidential.*indefinitely\b/i,/\bobligation.*survives\b/i,/\bnda.*no.*time.*limit\b/i,/\bobligation.*survives\b/i,/\bsurvives.*termination\b/i,/\bconfidentiality.*indefinitely\b/i]},
 
   {id:'microphone_camera',level:'warning',category:'Device Access',docCat:'risk',icon:'·',
    title:'App accesses microphone, camera, or contacts',
@@ -2091,7 +2093,7 @@ const RULES=[
   {id:'governing_law',level:'info',category:'Jurisdiction',docCat:'obligation',icon:'·',
    title:'Specific governing law stated',
    desc:'This agreement is governed by the laws of a particular state or country, which affects your rights and how any dispute is interpreted.',
-   patterns:[/\bgoverned.*laws.*of.*(?:state|california|new york|delaware|texas|florida|uk|england|ireland)\b/i,/\bsubject.*laws.*of\b/i,/\bapplicable law.*shall be\b/i,/\bgoverned by.*laws.*state.*california\b/i,/\bgoverning law.*california\b/i,/\bsubject to.*jurisdiction.*california\b/i,/\bgoverned.*laws.*of.*the.*state\b/i]},
+   patterns:[/\bgoverned.*laws.*of.*(?:state|california|new york|delaware|texas|florida|uk|england|ireland)\b/i,/\bsubject.*laws.*of\b/i,/\bapplicable law.*shall be\b/i,/\bgoverned by.*laws.*state.*california\b/i,/\bgoverning law.*california\b/i,/\bsubject to.*jurisdiction.*california\b/i,/\bgoverned.*laws.*of.*the.*state\b/i,/\bgoverning.*law.*delaware\b/i,/\bgoverned.*by.*law.*of.*delaware\b/i,/\bdelaware.*law.*govern\b/i]},
 
   {id:'notice_requirement',level:'info',category:'Contracts',docCat:'obligation',icon:'·',
    title:'Formal written notice required',
@@ -2108,7 +2110,7 @@ const RULES=[
   {id:'limitation_of_action',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Shortened deadline to sue — much less than legal default',
    desc:'The agreement cuts your legal window to file a lawsuit — sometimes to just 30 to 90 days — far shorter than the standard statute of limitations. Miss it and you permanently lose your legal rights.',
-   patterns:[/\bclaims.*must be.*brought.*within\b/i,/\bactions.*must.*filed.*within.*days\b/i,/\bone year.*bring.*claim\b/i,/\blimitation.*action.*shortened\b/i,/\byou have.*days.*to.*file\b/i,/\bstatute.*limitations.*shortened\b/i,/\bclaim.*within.*90 days\b/i,/\bclaim.*within.*30 days\b/i,/\bsuit.*must.*be.*brought.*within\b/i]},
+   patterns:[/\bclaims.*must be.*brought.*within\b/i,/\bactions.*must.*filed.*within.*days\b/i,/\bone year.*bring.*claim\b/i,/\blimitation.*action.*shortened\b/i,/\byou have.*days.*to.*file\b/i,/\bstatute.*limitations.*shortened\b/i,/\bclaim.*within.*90 days\b/i,/\bclaim.*within.*30 days\b/i,/\bsuit.*must.*be.*brought.*within\b/i,/\blimitation.*of.*liability.*purchase.*price\b/i,/\bliability.*capped.*purchase.*price\b/i,/\blimit.*liability.*to.*amount.*paid\b/i]},
 
   {id:'no_appeal_arbitration',level:'danger',category:'Legal Rights',docCat:'rights',icon:'·',
    title:'Arbitration decision is final — no appeal',
@@ -2123,7 +2125,7 @@ const RULES=[
   {id:'employee_monitoring',level:'warning',category:'Employment',docCat:'risk',icon:'·',
    title:'Employer can monitor your emails, screen, and keystrokes',
    desc:'Your employer may monitor work emails, record your screen, log keystrokes, and track activity on company devices. You have very limited privacy expectations on company systems.',
-   patterns:[/\bmonitor.*employee.*activity\b/i,/\bmonitor.*emails\b/i,/\bscreen.*recording.*employee\b/i,/\bkeylog\b/i,/\bemployer.*monitor.*computer\b/i,/\bsurveillance.*employee\b/i,/\bcompany.*monitor.*communications\b/i,/\bmonitor.*internet.*use\b/i]},
+   patterns:[/\bmonitor.*employee.*activity\b/i,/\bmonitor.*emails\b/i,/\bscreen.*recording.*employee\b/i,/\bkeylog\b/i,/\bemployer.*monitor.*computer\b/i,/\bsurveillance.*employee\b/i,/\bcompany.*monitor.*communications\b/i,/\bmonitor.*internet.*use\b/i,/\bmonitoring.*software.*install\b/i,/\bmonitor.*activities.*device\b/i,/\bscreen.*capture.*employ\b/i,/\bkeylogger\b/i,/\bwork.*device.*monitored\b/i]},
 
   {id:'moonlighting_ban',level:'warning',category:'Employment',docCat:'rights',icon:'·',
    title:'Cannot work a second job while employed',
@@ -2160,10 +2162,12 @@ const RULES=[
    desc:'Your genetic data is collected and stored. This is the most sensitive category of personal data — it identifies you, your relatives, and your descendants, and cannot be changed or revoked.',
    patterns:[/\bgenetic.*data\b/i,/\bDNA.*information\b/i,/\bgenome.*data\b/i,/\bgenetic.*testing\b/i,/\bgenetic.*material\b/i,/\bDNA.*sample\b/i,/\bgenetic.*profile\b/i]},
 
-  {id:'payday_loan_rate',level:'warning',category:'Financial',docCat:'risk',icon:'·',
+  {id:'payday_loan_rate',level:'danger',category:'Financial',docCat:'risk',icon:'·',
    title:'Very high interest rate — payday or short-term loan',
-   desc:'This loan carries an extremely high APR — often 100% to 400% or more. Short-term convenience loans can become very expensive debt very quickly if not repaid immediately.',
-   patterns:[/\bAPR.*[1-9][0-9]{2,}%\b/i,/\binterest.*rate.*[1-9][0-9]{2,}%\b/i,/\bpayday.*loan\b/i,/\bshort.term.*loan.*fee\b/i,/\bcash advance.*fee.*percent\b/i,/\bfinance charge.*per.*day\b/i]},
+   desc:'This loan carries an extremely high APR. Short-term convenience loans can become very expensive debt very quickly if not repaid immediately.',
+   patterns:[/\bpayday\b/i,/\bpayday.*loan\b/i,/\bapr.*[0-9]{3,}\.?[0-9]*%?/i,/\bhigh.*cost.*short.*term.*credit\b/i,/\brepaid.*next.*payday\b/i,/\bshort.term.*high.*interest\b/i,/\bhcstc\b/i]},
+
+
 
   {id:'late_fees',level:'info',category:'Financial',docCat:'obligation',icon:'·',
    title:'Late payment fees apply',
@@ -2312,7 +2316,7 @@ const RULES=[
   {id:'pre_existing_exclusion',level:'danger',category:'Healthcare',docCat:'risk',icon:'·',
    title:'Pre-existing conditions excluded from coverage',
    desc:'Medical conditions you had before the policy began may not be covered. This can leave you responsible for significant costs if you need treatment for existing health issues.',
-   patterns:[/\bpre.existing.*condition.*exclud\b/i,/\bprior.*condition.*not.*cover\b/i,/\bexclusion.*pre.existing\b/i,/\bwaiting.*period.*pre.existing\b/i,/\bpre.existing.*exclusion\b/i]},
+   patterns:[/\bpre.existing.*condition.*exclud\b/i,/\bprior.*condition.*not.*cover\b/i,/\bexclusion.*pre.existing\b/i,/\bwaiting.*period.*pre.existing\b/i,/\bpre.existing.*exclusion\b/i,/\bpre.existing.*conditions.*excluded\b/i,/\bpre.existing.*excluded\b/i,/\bexcluded.*pre.existing\b/i]},
 
   {id:'subrogation',level:'warning',category:'Insurance',docCat:'rights',icon:'·',
    title:'Insurer can recover costs from third parties on your behalf',
@@ -2369,7 +2373,7 @@ const RULES=[
   {id:'school_photo_consent',level:'info',category:'Education',docCat:'rights',icon:'·',
    title:'School may photograph or film your child',
    desc:'The school reserves the right to photograph, video, or record your child for use in school publications, websites, social media, or promotional materials.',
-   patterns:[/\bphotograph.*student\b/i,/\bimage.*child.*school.*publication\b/i,/\brecord.*student.*promot\b/i,/\bphoto.*video.*student.*consent\b/i,/\bstudent.*image.*website\b/i]},
+   patterns:[/\bphotograph.*student\b/i,/\bimage.*child.*school.*publication\b/i,/\brecord.*student.*promot\b/i,/\bphoto.*video.*student.*consent\b/i,/\bstudent.*image.*website\b/i,/\bphotograph.*film.*students\b/i,/\bimage.*pupil.*publication\b/i,/\bphoto.*student.*school\b/i,/\bfilm.*student.*school\b/i]},
 
   {id:'school_medical_treatment',level:'info',category:'Education',docCat:'obligation',icon:'·',
    title:'School authorised to seek emergency medical treatment',
@@ -2384,12 +2388,12 @@ const RULES=[
   {id:'school_data_sharing',level:'warning',category:'Education',docCat:'risk',icon:'·',
    title:'Student data shared with third parties',
    desc:'Your child\'s academic records, behavioural data, or personal information may be shared with third-party vendors, researchers, or government agencies beyond what FERPA requires.',
-   patterns:[/\bstudent.*data.*third.party\b/i,/\bstudent.*record.*share.*vendor\b/i,/\bstudent.*information.*partner\b/i,/\beducational.*record.*disclose\b/i,/\bferpa.*exception\b/i]},
+   patterns:[/\bstudent.*data.*third.party\b/i,/\bstudent.*record.*share.*vendor\b/i,/\bstudent.*information.*partner\b/i,/\beducational.*record.*disclose\b/i,/\bferpa.*exception\b/i,/\bstudent.*data.*educational.*technology\b/i,/\bpupil.*data.*third.*party\b/i,/\bstudent.*information.*shared\b/i,/\bschool.*data.*provider\b/i]},
 
   {id:'school_field_trip_waiver',level:'warning',category:'Education',docCat:'rights',icon:'·',
    title:'Field trip waiver — school not liable for injuries',
    desc:'By signing this field trip permission form you acknowledge the school and chaperones are not responsible for injuries, accidents, or incidents that occur during the trip.',
-   patterns:[/\bfield.*trip.*waiver\b/i,/\bnot.*liable.*injury.*trip\b/i,/\brelease.*school.*claim.*excursion\b/i,/\bassume.*risk.*field.*trip\b/i,/\bno.*liability.*school.*outing\b/i]},
+   patterns:[/\bfield.*trip.*waiver\b/i,/\bnot.*liable.*injury.*trip\b/i,/\brelease.*school.*claim.*excursion\b/i,/\bassume.*risk.*field.*trip\b/i,/\bno.*liability.*school.*outing\b/i,/\bfield.*trip.*permission\b/i,/\bschool.*excursion.*consent\b/i,/\bpermission.*required.*school.*trip\b/i]},
 
   {id:'iep_consent',level:'info',category:'Education',docCat:'obligation',icon:'·',
    title:'IEP or special education plan — consent required',
@@ -2400,12 +2404,12 @@ const RULES=[
   {id:'surgical_consent',level:'danger',category:'Medical',docCat:'rights',icon:'·',
    title:'Blanket consent to additional surgical procedures',
    desc:'You are consenting not just to the named procedure but to any additional procedures the surgeon deems necessary during the operation. This broad consent removes your ability to decide about unexpected interventions.',
-   patterns:[/\badditional.*procedure.*surgeon.*deem\b/i,/\bsurgeon.*discretion.*additional\b/i,/\bunforeseen.*procedure.*consent\b/i,/\bpermission.*additional.*surgical\b/i,/\boperative.*finding.*additional.*procedure\b/i]},
+   patterns:[/\badditional.*procedure.*surgeon.*deem\b/i,/\bsurgeon.*discretion.*additional\b/i,/\bunforeseen.*procedure.*consent\b/i,/\bpermission.*additional.*surgical\b/i,/\boperative.*finding.*additional.*procedure\b/i,/\bconsent.*surgery.*anaesthesia\b/i,/\bconsent.*to.*treatment.*surgery\b/i,/\bconsent.*including.*surgery\b/i,/\bsurgical.*procedure.*consent\b/i]},
 
   {id:'hipaa_authorisation',level:'info',category:'Medical',docCat:'obligation',icon:'·',
    title:'HIPAA authorisation — sharing your medical records',
    desc:'This authorises a healthcare provider to share your medical information with named parties. You have the right to revoke this authorisation at any time except where the information has already been disclosed.',
-   patterns:[/\bhipaa.*authorization\b/i,/\bauthorization.*release.*medical\b/i,/\brelease.*health.*information.*hipaa\b/i,/\bprotected.*health.*information.*disclose\b/i,/\bphi.*release.*authorization\b/i]},
+   patterns:[/\bhipaa.*authorization\b/i,/\bauthorization.*release.*medical\b/i,/\brelease.*health.*information.*hipaa\b/i,/\bprotected.*health.*information.*disclose\b/i,/\bphi.*release.*authorization\b/i,/\bmedical.*records.*shared\b/i,/\bhealth.*information.*shared.*treating\b/i,/\brelease.*medical.*records\b/i]},
 
   {id:'dnr_order',level:'danger',category:'Medical',docCat:'rights',icon:'·',
    title:'Do Not Resuscitate (DNR) order',
@@ -2420,7 +2424,7 @@ const RULES=[
   {id:'experimental_treatment',level:'danger',category:'Medical',docCat:'rights',icon:'·',
    title:'Consent to experimental or investigational treatment',
    desc:'You are consenting to a treatment, drug, or procedure that is experimental, investigational, or not yet FDA-approved. The risks may not be fully known.',
-   patterns:[/\bexperimental.*treatment\b/i,/\binvestigational.*drug\b/i,/\bclinical.*trial.*consent\b/i,/\boff.label.*use.*consent\b/i,/\bnot.*fda.*approved.*consent\b/i,/\bresearch.*participant.*consent\b/i]},
+   patterns:[/\bexperimental.*treatment\b/i,/\binvestigational.*drug\b/i,/\bclinical.*trial.*consent\b/i,/\boff.label.*use.*consent\b/i,/\bnot.*fda.*approved.*consent\b/i,/\bresearch.*participant.*consent\b/i,/\bexperimental.*clinical.*trial\b/i,/\bconsenting.*clinical.*trial\b/i,/\bparticipate.*experimental\b/i,/\bclinical.*study.*experimental\b/i,/\bexperimental.*procedures.*may\b/i,/\bexperimental.*treatment.*may\b/i,/\bclinical.*trial.*experimental\b/i,/\bexperimental.*study.*consent\b/i,/\binvestigational.*product\b/i,/\bexperimental.*trial\b/i,/\bconsenting.*experimental\b/i,/\bexperimental.*procedures\b/i,/\binvestigational.*treatment\b/i,/\bclinical.*trial\b/i,/\bconsenting.*experimental\b/i,/\bexperimental.*may.*be.*used\b/i,/\bclinical.*trial\b/i,/\binvestigational.*drug\b/i,/\bphase.*[123].*trial\b/i]},
 
   {id:'release_of_medical_records',level:'info',category:'Medical',docCat:'obligation',icon:'·',
    title:'Release of medical records to third party',
@@ -2436,7 +2440,7 @@ const RULES=[
   {id:'benefit_overpayment',level:'danger',category:'Government',docCat:'obligation',icon:'·',
    title:'Government benefit overpayments must be repaid',
    desc:'If you receive more benefits than you are entitled to — even if it was the government\'s error — you are required to repay the full overpayment. This can result in significant unexpected debt.',
-   patterns:[/\boverpayment.*repay\b/i,/\bbenefit.*overpayment.*recover\b/i,/\brecoup.*overpayment\b/i,/\brepayment.*benefits.*overpaid\b/i,/\bgovernment.*recover.*excess.*payment\b/i]},
+   patterns:[/\boverpayment.*repay\b/i,/\bbenefit.*overpayment.*recover\b/i,/\brecoup.*overpayment\b/i,/\brepayment.*benefits.*overpaid\b/i,/\bgovernment.*recover.*excess.*payment\b/i,/\boverpayments.*recovered\b/i,/\brecover.*overpayment\b/i,/\boverpayment.*deducted.*benefit\b/i,/\boverpayment.*future.*payment\b/i]},
 
   {id:'means_test_disclosure',level:'info',category:'Government',docCat:'obligation',icon:'·',
    title:'Means test — assets and income must be disclosed',
@@ -2467,7 +2471,7 @@ const RULES=[
   {id:'earnest_money_forfeiture',level:'danger',category:'Real Estate',docCat:'obligation',icon:'·',
    title:'Deposit forfeited if you back out of purchase',
    desc:'Your earnest money deposit will be kept by the seller if you withdraw from the transaction without a valid contingency. This can be thousands of dollars lost.',
-   patterns:[/\bearnest.*money.*forfeit\b/i,/\bdeposit.*non.refundable.*purchas\b/i,/\bbreach.*buyer.*deposit.*retain\b/i,/\bescape.*contingency.*deposit\b/i,/\bdeposit.*liquidated.*damages.*purchas\b/i]},
+   patterns:[/\bearnest.*money.*forfeit\b/i,/\bdeposit.*non.refundable.*purchas\b/i,/\bbreach.*buyer.*deposit.*retain\b/i,/\bescape.*contingency.*deposit\b/i,/\bdeposit.*liquidated.*damages.*purchas\b/i,/\bforfeiture.*clause\b/i,/\bleasehold.*forfeit\b/i,/\bbreach.*forfeit.*lease\b/i]},
 
   {id:'hoa_fees',level:'warning',category:'Real Estate',docCat:'obligation',icon:'·',
    title:'HOA fees and rules apply — non-payment can result in lien',
@@ -2477,7 +2481,7 @@ const RULES=[
   {id:'title_defect_risk',level:'warning',category:'Real Estate',docCat:'risk',icon:'·',
    title:'Title may have defects — title insurance recommended',
    desc:'There may be liens, easements, encumbrances, or ownership disputes on the title that are not immediately apparent. Without title insurance you bear the financial risk of any title defects.',
-   patterns:[/\btitle.*defect\b/i,/\btitle.*insurance.*recommend\b/i,/\bencumbrance.*title\b/i,/\blien.*title.*search\b/i,/\bquitclaim.*deed\b/i,/\btitle.*warrant\b/i]},
+   patterns:[/\btitle.*defect\b/i,/\btitle.*insurance.*recommend\b/i,/\bencumbrance.*title\b/i,/\blien.*title.*search\b/i,/\bquitclaim.*deed\b/i,/\btitle.*warrant\b/i,/\btitle.*subject.*encumbrance\b/i,/\bencumbrances.*title\b/i,/\btitle.*not.*guaranteed\b/i,/\bsubject.*to.*encumbrance\b/i,/\btitle.*subject.*encumbrance\b/i,/\bencumbrance.*on.*title\b/i,/\bsubject.*to.*encumbrance\b/i,/\btitle.*not.*clear\b/i]},
 
   {id:'lead_paint_disclosure',level:'info',category:'Real Estate',docCat:'obligation',icon:'·',
    title:'Lead paint disclosure — property built before 1978',
@@ -2488,7 +2492,7 @@ const RULES=[
   {id:'debt_validation_rights',level:'info',category:'Debt',docCat:'rights',icon:'·',
    title:'You have the right to request debt validation',
    desc:'Under the Fair Debt Collection Practices Act (FDCPA) you have 30 days to request written verification of the debt. Once you request validation the collector must stop collection activity until they provide it.',
-   patterns:[/\bdebt.*validation\b/i,/\bfdcpa\b/i,/\bfair.*debt.*collection\b/i,/\bverification.*debt.*written\b/i,/\bdebt.*collector.*verification\b/i]},
+   patterns:[/\bdebt.*validation\b/i,/\bfdcpa\b/i,/\bfair.*debt.*collection\b/i,/\bverification.*debt.*written\b/i,/\bdebt.*collector.*verification\b/i,/\byou.*have.*30.*days.*dispute\b/i,/\bdispute.*this.*debt\b/i,/\bright.*to.*dispute.*debt\b/i,/\bverify.*debt.*within\b/i]},
 
   {id:'debt_settlement_tax',level:'warning',category:'Debt',docCat:'risk',icon:'·',
    title:'Forgiven debt may be treated as taxable income',
@@ -2671,7 +2675,7 @@ const RULES=[
   {id:'compound_interest',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
    title:'Compound interest charged — debt grows exponentially',
    desc:'Interest is compounded daily, monthly, or continuously, meaning you pay interest on your interest. This causes debt to grow much faster than simple interest and is common in credit cards and payday loans.',
-   patterns:[/\bcompound.*interest\b/i,/\binterest.*compounded.*daily\b/i,/\binterest.*compounded.*monthly\b/i,/\bdaily.*periodic.*rate\b/i,/\binterest.*added.*to.*principal\b/i]},
+   patterns:[/\bcompound.*interest\b/i,/\binterest.*compounded.*daily\b/i,/\binterest.*compounded.*monthly\b/i,/\bdaily.*periodic.*rate\b/i,/\binterest.*added.*to.*principal\b/i,/\binterest.*compounded\b/i,/\bdaily.*interest.*rate\b/i,/\binterest.*on.*interest\b/i]},
 
   {id:'penalty_apr',level:'danger',category:'Financial',docCat:'risk',icon:'·',
    title:'Penalty APR applied after late payment',
@@ -2762,7 +2766,7 @@ const RULES=[
   {id:'trade_secret_broad',level:'warning',category:'Employment',docCat:'obligation',icon:'·',
    title:'Broad definition of trade secrets covers ordinary knowledge',
    desc:'The definition of trade secrets is so broad it may cover general business knowledge, customer relationships, and skills you develop on the job — potentially restricting what you can use in future employment.',
-   patterns:[/\btrade.*secret.*includ.*customer.*list\b/i,/\bproprietary.*information.*includ.*know.how\b/i,/\bconfidential.*information.*business.*method\b/i,/\btrade.*secret.*broad.*definition\b/i,/\ball.*business.*information.*confidential\b/i]},
+   patterns:[/\btrade.*secret.*includ.*customer.*list\b/i,/\bproprietary.*information.*includ.*know.how\b/i,/\bconfidential.*information.*business.*method\b/i,/\btrade.*secret.*broad.*definition\b/i,/\ball.*business.*information.*confidential\b/i,/\btrade.*secrets.*protected\b/i,/\bconfidential.*includes.*all\b/i,/\ball.*business.*information.*confidential\b/i]},
 
   {id:'probation_dismissal',level:'info',category:'Employment',docCat:'risk',icon:'·',
    title:'Extended probationary period with easier dismissal',
@@ -2834,7 +2838,7 @@ const RULES=[
   {id:'research_use_of_samples',level:'danger',category:'Healthcare',docCat:'rights',icon:'·',
    title:'Your biological samples used for research',
    desc:'Samples taken during your care (blood, tissue, genetic material) may be stored and used for research purposes. This may include commercial research without additional payment to you.',
-   patterns:[/\bsample.*research.*purpose\b/i,/\btissue.*sample.*research\b/i,/\bbiological.*sample.*future.*research\b/i,/\bspecimen.*research.*study\b/i,/\bblood.*sample.*stored.*research\b/i]},
+   patterns:[/\bsample.*research.*purpose\b/i,/\btissue.*sample.*research\b/i,/\bbiological.*sample.*future.*research\b/i,/\bspecimen.*research.*study\b/i,/\bblood.*sample.*stored.*research\b/i,/\bbiological.*samples.*stored.*research\b/i,/\bsamples.*future.*research\b/i,/\btissue.*stored.*research\b/i,/\bsamples.*stored.*research\b/i,/\bbiological.*samples.*future\b/i,/\bsamples.*future.*research\b/i,/\btissue.*stored.*research\b/i]},
 
   // ══ LEGAL & COURT — EXHAUSTIVE ════════════════════════════════════════
   {id:'statute_of_limitations_shortened',level:'danger',category:'Legal',docCat:'rights',icon:'·',
@@ -3132,7 +3136,7 @@ const RULES=[
   {id:'ip_assignment_clause',level:'warning',category:'IP Rights',docCat:'rights',icon:'·',
    title:'All work product assigned to employer automatically',
    desc:'Everything you create during employment — code, designs, writing, inventions — is automatically owned by your employer.',
-   patterns:[/\bwork.*product.*assign.*employer\b/i,/\bassign.*all.*work.*product\b/i,/\bip.*created.*during.*employ\b/i,/\bemployer.*owns.*work.*product\b/i,/\bwork.*for.*hire.*assign\b/i]},
+   patterns:[/\bwork.*product.*assign.*employer\b/i,/\bassign.*all.*work.*product\b/i,/\bip.*created.*during.*employ\b/i,/\bemployer.*owns.*work.*product\b/i,/\bwork.*for.*hire.*assign\b/i,/\ball.*intellectual.*property.*assigned\b/i,/\bip.*assigned.*to.*client\b/i,/\bcreative.*work.*client.*property\b/i,/\binvention.*assign.*to.*client\b/i]},
 
   {id:'non_compete_post_employ',level:'danger',category:'Employment',docCat:'rights',icon:'·',
    title:'Non-compete restricts you after employment ends',
@@ -3147,7 +3151,7 @@ const RULES=[
   {id:'deduction_from_wages',level:'danger',category:'Employment',docCat:'obligation',icon:'·',
    title:'Employer can deduct from your wages for losses or damage',
    desc:'The employer reserves the right to deduct money from your wages for losses, damages, or shortfalls.',
-   patterns:[/\bdeduct.*wages.*damage\b/i,/\bwithhold.*pay.*loss\b/i,/\bwage.*deduction.*error\b/i,/\brecoup.*loss.*wages\b/i]},
+   patterns:[/\bdeduct.*wages.*damage\b/i,/\bwithhold.*pay.*loss\b/i,/\bwage.*deduction.*error\b/i,/\brecoup.*loss.*wages\b/i,/\bdeductions.*wages.*damage\b/i,/\bdeduct.*salary.*loss\b/i,/\bwage.*deduction\b/i,/\brecoup.*from.*wages\b/i,/\bdeduct.*pay.*shortage\b/i]},
 
   {id:'non_solicitation_staff',level:'warning',category:'Employment',docCat:'rights',icon:'·',
    title:'Cannot recruit former colleagues after leaving',
@@ -3562,7 +3566,7 @@ const RULES=[
   {id:'balance_billing_consent',level:'danger',category:'Healthcare',docCat:'obligation',icon:'·',
    title:'You consent to balance billing from out-of-network providers',
    desc:'By signing, you consent to being billed for the difference between what the provider charges and what your insurer pays. This can be very large.',
-   patterns:[/\bconsent.*balance.*bill\b/i,/\bbalance.*bill.*consent.*sign\b/i,/\bbill.*difference.*insur.*pay.*charge\b/i,/\boutstanding.*balance.*after.*insur.*patient\b/i]},
+   patterns:[/\bconsent.*balance.*bill\b/i,/\bbalance.*bill.*consent.*sign\b/i,/\bbill.*difference.*insur.*pay.*charge\b/i,/\boutstanding.*balance.*after.*insur.*patient\b/i,/\bbalance.*billed.*amounts.*not.*covered\b/i,/\bamounts.*not.*covered.*insurance.*patient\b/i,/\bbalance.*bill\b/i]},
 
   {id:'step_therapy_drugs',level:'warning',category:'Healthcare',docCat:'obligation',icon:'·',
    title:'Step therapy — must try cheaper drugs first before coverage',
@@ -3588,7 +3592,7 @@ const RULES=[
   {id:'policy_void_misrepresentation',level:'danger',category:'Insurance',docCat:'risk',icon:'·',
    title:'Policy voided for any misrepresentation at application',
    desc:'If you provided any inaccurate information when applying — even unintentionally — the insurer can void the entire policy and keep your premiums.',
-   patterns:[/\bpolicy.*void.*misrepresent\b/i,/\bvoid.*policy.*inaccurate.*information\b/i,/\bvoid.*cover.*material.*misrepresent\b/i,/\bvoid.*entire.*policy.*inaccuracy\b/i]},
+   patterns:[/\bpolicy.*void.*misrepresent\b/i,/\bvoid.*policy.*inaccurate.*information\b/i,/\bvoid.*cover.*material.*misrepresent\b/i,/\bvoid.*entire.*policy.*inaccuracy\b/i,/\bpolicy.*void\b/i,/\bvoid.*for.*misrepresent\b/i,/\bvoid.*for.*any.*misrepresent\b/i,/\bvoid.*inaccurate\b/i]},
 
   {id:'concurrent_causation_deny',level:'warning',category:'Insurance',docCat:'risk',icon:'·',
    title:'Coverage denied if any excluded cause contributed to loss',
@@ -3624,7 +3628,7 @@ const RULES=[
   {id:'ground_rent_escalation',level:'danger',category:'Real Estate',docCat:'obligation',icon:'·',
    title:'Leasehold ground rent can escalate dramatically',
    desc:'Ground rent on a leasehold property can double every 10 years or be linked to RPI, making the property unmortgageable and unsellable.',
-   patterns:[/\bground.*rent.*escalat\b/i,/\bground.*rent.*double.*year\b/i,/\bground.*rent.*increase.*rpi\b/i,/\bleasehold.*ground.*rent.*rise\b/i]},
+   patterns:[/\bground.*rent.*escalat\b/i,/\bground.*rent.*double.*year\b/i,/\bground.*rent.*increase.*rpi\b/i,/\bleasehold.*ground.*rent.*rise\b/i,/\bground.*rent.*doubles\b/i,/\bground.*rent.*every.*year\b/i,/\bground.*rent.*escalat\b/i,/\bground.*rent.*increase\b/i]},
 
   {id:'service_charge_variable',level:'warning',category:'Real Estate',docCat:'obligation',icon:'·',
    title:'Variable service charge with no cap — can increase significantly',
@@ -3748,12 +3752,12 @@ const RULES=[
   {id:'copyright_assigned_to_client',level:'warning',category:'Contractor',docCat:'rights',icon:'·',
    title:'Copyright in your work automatically assigned to client',
    desc:'Any creative work, code, or designs you produce under this contract are automatically owned by the client.',
-   patterns:[/\bcopyright.*assigned.*client\b/i,/\bwork.*product.*owned.*client\b/i,/\bcopyright.*transfer.*upon.*payment\b/i,/\bintellectual.*property.*creat.*client.*own\b/i]},
+   patterns:[/\bcopyright.*assigned.*client\b/i,/\bwork.*product.*owned.*client\b/i,/\bcopyright.*transfer.*upon.*payment\b/i,/\bintellectual.*property.*creat.*client.*own\b/i,/\bcopyright.*transferred.*payment\b/i,/\bintellectual.*property.*assigned.*client\b/i,/\bcreation.*client.*property\b/i,/\bip.*assigned.*to.*client\b/i]},
 
   {id:'subcontracting_requires_approval',level:'info',category:'Contractor',docCat:'obligation',icon:'·',
    title:'Cannot subcontract without written approval',
    desc:'Any subcontracting requires prior written consent from the client. Unauthorised subcontracting can be grounds for termination.',
-   patterns:[/\bno.*subcontract.*without.*approval\b/i,/\bsubcontract.*require.*written.*consent\b/i,/\bdelegate.*work.*written.*permission\b/i,/\bprohibit.*subcontract.*without.*prior\b/i]},
+   patterns:[/\bno.*subcontract.*without.*approval\b/i,/\bsubcontract.*require.*written.*consent\b/i,/\bdelegate.*work.*written.*permission\b/i,/\bprohibit.*subcontract.*without.*prior\b/i,/\bcannot.*subcontract.*without\b/i,/\bsubcontract.*written.*approval\b/i,/\bno.*subcontract.*without.*consent\b/i]},
 
   {id:'payment_terms_net',level:'info',category:'Contractor',docCat:'obligation',icon:'·',
    title:'Payment terms — invoice paid within set days',
@@ -3827,7 +3831,7 @@ const RULES=[
   {id:'mandatory_report_changes',level:'warning',category:'Government',docCat:'obligation',icon:'·',
    title:'Mandatory disclosure of changes in circumstances',
    desc:'You are legally required to notify authorities of any changes in circumstances affecting your entitlement. Failure to report can be treated as fraud.',
-   patterns:[/\bmandatory.*disclose.*change.*circumstance\b/i,/\breport.*change.*circumst.*benefit\b/i,/\bnotify.*change.*income.*assets.*benefit\b/i,/\bduty.*report.*change.*benefit.*claim\b/i]},
+   patterns:[/\bmandatory.*disclose.*change.*circumstance\b/i,/\breport.*change.*circumst.*benefit\b/i,/\bnotify.*change.*income.*assets.*benefit\b/i,/\bduty.*report.*change.*benefit.*claim\b/i,/\breport.*changes.*circumstances\b/i,/\bchanges.*in.*circumstances.*report\b/i,/\bnotify.*changes.*benefit\b/i,/\bchanges.*circumstances.*30.*days\b/i]},
 
 
 
@@ -4361,7 +4365,7 @@ const RULES=[
   {id:'government_benefit_sanctions',level:'danger',category:'Government',docCat:'risk',icon:'·',
    title:'Benefit sanctions — payments stopped for non-compliance',
    desc:'Failure to comply with benefit conditions — such as attending appointments or applying for jobs — can result in your benefits being sanctioned (stopped) for weeks or months.',
-   patterns:[/\bbenefit.*sanction.*non.compliance\b/i,/\bbenefits.*stopped.*sanction\b/i,/\bjobseeker.*sanction\b/i,/\buc.*sanction.*condition\b/i]},
+   patterns:[/\bbenefit.*sanction.*non.compliance\b/i,/\bbenefits.*stopped.*sanction\b/i,/\bjobseeker.*sanction\b/i,/\buc.*sanction.*condition\b/i,/\bnon.compliance.*sanction\b/i,/\bsanction.*non.compliance\b/i,/\bpenalty.*non.compliance.*benefit\b/i,/\bsanction.*apply.*benefit\b/i,/\bbenefit.*may.*be.*reduced.*sanction\b/i,/\bsanctions.*apply\b/i,/\bsanction.*non.compliance\b/i,/\bbenefit.*sanction\b/i,/\bsanction.*benefit\b/i]},
 
   {id:'universal_credit_taper',level:'info',category:'Government',docCat:'obligation',icon:'·',
    title:'Universal Credit taper rate — benefits reduce as you earn more',
@@ -4752,6 +4756,39 @@ const RULES=[
    title:'Data retention schedule sets out how long each data type is kept',
    desc:'The organisation has a data retention schedule specifying how long different types of personal data are kept. Data should be deleted once the retention period expires.',
    patterns:[/\bdata.*retention.*schedule\b/i,/\bretention.*period.*data.*type\b/i,/\bdata.*delete.*retention.*schedule\b/i,/\bdocument.*retention.*polic\b/i]},
+// ══ DEBT COLLECTION ═══════════════════════════════════════════════════
+  {id:'debt_collection_notice',level:'warning',category:'Debt',docCat:'risk',icon:'·',
+   title:'Debt collection notice — know your rights',
+   desc:'This is a formal debt collection notice. You have the right to dispute the debt within 30 days, request verification, and stop contact from collectors. The FDCPA protects you from harassment.',
+   patterns:[/\battempt.*to collect.*debt\b/i,/\bdebt.*collector\b/i,/\bcollection.*notice\b/i,/\bfinal.*notice.*debt\b/i,/\baccounts.*sent.*collection\b/i,/\bcollections.*agency\b/i,/\bpast.*due.*account.*collection\b/i,/\bdebt.*collection.*letter\b/i]},
+
+  {id:'legal_action_threat',level:'danger',category:'Debt',docCat:'risk',icon:'·',
+   title:'Threat of legal action if debt not paid',
+   desc:'The creditor threatens to take legal action, obtain a court judgment, or commence proceedings if you do not pay. A judgment can lead to wage garnishment, asset seizure, or a CCJ on your credit file.',
+   patterns:[/\bpursue.*legal.*action\b/i,/\bcommence.*proceedings\b/i,/\bjudgment.*against.*you\b/i,/\bsue.*you.*court\b/i,/\bcourt.*order.*debt\b/i,/\blegal.*proceeding.*recover\b/i,/\brefer.*to.*solicitor\b/i,/\binstruct.*attorneys.*recover\b/i]},
+
+  {id:'ccj_warning',level:'danger',category:'Debt',docCat:'risk',icon:'·',
+   title:'County Court Judgment or court order warning',
+   desc:'A County Court Judgment (CCJ) or court order is threatened or has been issued. A CCJ stays on your credit file for 6 years and can prevent you from getting credit, renting property, or even employment.',
+   patterns:[/\bcounty.*court.*judgment\b/i,/\bccj\b/i,/\bcourt.*order.*issued\b/i,/\bdefault.*judgment\b/i,/\bjudgment.*entered\b/i,/\bcourt.*default.*judgment\b/i]},
+
+  {id:'wage_attachment_risk',level:'danger',category:'Debt',docCat:'risk',icon:'·',
+   title:'Wage garnishment or attachment of earnings threatened',
+   desc:'The creditor may seek an attachment of earnings order, requiring your employer to deduct debt payments directly from your wages. This is a serious enforcement step.',
+   patterns:[/\battachment.*earnings\b/i,/\bwage.*garnish\b/i,/\bgarnishment.*wages\b/i,/\bdeduct.*wages.*court.*order\b/i,/\bearnings.*arrested\b/i]},
+
+  {id:'statutory_demand_notice',level:'danger',category:'Debt',docCat:'risk',icon:'·',
+   title:'Statutory demand — must respond within 21 days',
+   desc:'A statutory demand requires you to pay the debt, secure it, or apply to set it aside within 21 days. Failure to respond can lead to bankruptcy proceedings.',
+   patterns:[/\bstatutory.*demand\b/i,/\b21.*days.*respond.*demand\b/i,/\bstatutory.*demand.*winding.*up\b/i,/\binsolvency.*act.*statutory\b/i]},
+{id:'clinical_trial_risks',level:'danger',category:'Medical',docCat:'risk',icon:'·',
+   title:'Clinical trial — unknown risks and experimental procedures',
+   desc:'You are consenting to participate in medical research. Risks may be unknown, procedures experimental, and outcomes uncertain. You have the right to withdraw at any time.',
+   patterns:[/\bclinical.*trial\b/i,/\bconsenting.*trial\b/i,/\bmedical.*research.*consent\b/i,/\bstudy.*participant.*consent\b/i,/\bphase.*trial\b/i,/\binvestigational.*product\b/i,/\bexperimental.*study\b/i]},
+{id:'payday_rollover',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Payday loan rollover — debt trap with daily fees',
+   desc:'Rolling over a payday loan extends the debt at additional cost. Daily fees and rollovers can cause the debt to grow to multiples of the original amount very quickly.',
+   patterns:[/\brollover.*fee\b/i,/\broll.*over.*additional\b/i,/\bextend.*loan.*fee\b/i,/\bdefer.*repayment.*charge\b/i,/\brollover.*available\b/i,/\bfee.*per.*day.*loan\b/i,/\bdaily.*charge.*loan\b/i]},
 ];
 
 
