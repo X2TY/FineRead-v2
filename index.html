@@ -549,7 +549,6 @@ html.light .capture-btn{background:#111111;color:#ffffff;}
 .demo-card-desc{font-size:12px;color:var(--muted);line-height:1.4;position:relative;}
 
 /* ── AI PANEL ── */
-.ai-panel{margin-top:20px;}
 .ai-top{
   display:flex;align-items:center;justify-content:space-between;
   padding:16px 18px;
@@ -562,7 +561,6 @@ html.light .capture-btn{background:#111111;color:#ffffff;}
 .ai-top:hover{border-color:var(--border3);background:var(--surface3);}
 .ai-top.on{border-color:var(--border3);background:var(--surface3);}
 .ai-label{font-weight:600;font-size:14.5px;margin-bottom:2px;display:flex;align-items:center;gap:8px;}
-.ai-sub{font-size:12.5px;color:var(--muted);}
 .toggle{
   width:46px;height:25px;
   background:var(--surface3);
@@ -664,7 +662,7 @@ html.light .btn-primary:hover{background:#222222;opacity:1;}
 #prog-label{margin-top:8px;color:var(--muted);font-size:12.5px;}
 
 /* Hide key input — key is baked in */
-#ai-key-row{display:none!important;}
+/* ai-key-row controlled by JS */
 #remember-row{display:none!important;}
 
 /* ── RESULTS ── */
@@ -1514,41 +1512,42 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <span class="juris-badge" id="juris-badge" style="display:none;"></span>
   </div>
 
-  <!-- AI PANEL -->
-  <div class="ai-panel">
-        <div class="ai-sub" id="ai-sub-label">Add your Claude API key to unlock deep AI analysis of any document</div>
+
+
+
+
+
+
+  <div id="ai-strip" style="margin-bottom:10px;">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;" onclick="toggleAI()" role="switch" aria-checked="false" aria-label="Enable AI analysis">
+      <div id="ai-knob-wrap" style="flex-shrink:0;width:36px;height:20px;border-radius:10px;background:var(--surface2);border:1.5px solid var(--border);position:relative;transition:background .2s,border-color .2s;">
+        <div id="ai-knob" style="width:14px;height:14px;border-radius:7px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
       </div>
-      
-
-
-  <div class="card" id="ai-panel" style="margin-bottom:12px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
       <div style="flex:1;min-width:0;">
-        <div style="font-size:13px;font-weight:600;color:var(--text1);display:flex;align-items:center;gap:8px;">
-          <span>AI Analysis</span>
-          <span style="font-size:11px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);font-weight:500;">CLAUDE</span>
-          <span id="ai-status-badge" style="font-size:11px;padding:2px 7px;border-radius:20px;background:#e8f5e9;color:#2e7d32;font-weight:600;display:none;">Active</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Paste your Claude API key for deep AI analysis of any document</div>
+        <span style="font-size:13px;font-weight:600;color:var(--text1);">AI Analysis</span>
+        <span style="font-size:10.5px;padding:1px 6px;border-radius:10px;background:var(--surface2);color:var(--muted);font-weight:600;margin-left:6px;letter-spacing:.3px;">CLAUDE</span>
+        <span id="ai-status-badge" style="font-size:10.5px;padding:1px 6px;border-radius:10px;background:#d4edda;color:#155724;font-weight:600;margin-left:4px;display:none;">Active</span>
       </div>
-      <label class="toggle-wrap" style="flex-shrink:0;">
-        <input type="checkbox" id="ai-toggle" onchange="toggleAI()" style="display:none;">
-        <div class="toggle-track" id="ai-track" onclick="toggleAI()" style="width:44px;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;position:relative;transition:background .2s;">
-          <div id="ai-knob" style="width:18px;height:18px;border-radius:9px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
-        </div>
-      </label>
+      <span style="font-size:11px;color:var(--muted);" id="ai-strip-hint">Add key →</span>
     </div>
-    <div id="ai-key-row" style="display:none;margin-top:12px;">
-      <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false"
-        style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text1);font-size:13px;font-family:monospace;"
-        oninput="onKeyInput()">
-      <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
-        <input type="checkbox" id="remember-key" style="width:14px;height:14px;accent-color:var(--accent);">
-        <label for="remember-key" style="font-size:12px;color:var(--muted);cursor:pointer;">Remember key in this browser</label>
+    <div id="ai-key-row" style="display:none;padding:12px;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r) var(--r);background:var(--surface2);">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="password" id="api-key" placeholder="sk-ant-api03-…"
+          autocomplete="off" spellcheck="false"
+          style="flex:1;min-width:0;padding:9px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text1);font-size:13px;font-family:monospace;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .2s;box-sizing:border-box;"
+          oninput="onKeyInput()"
+          onfocus="this.style.borderColor='var(--accent)'"
+          onblur="this.style.borderColor='var(--border)'"
+          onkeydown="if(event.key==='Enter')document.getElementById('analyzeBtn').click()">
+        <button onclick="toggleKeyVis()" tabindex="-1" title="Show/hide key"
+          style="padding:9px 10px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-size:14px;flex-shrink:0;min-height:0;min-width:0;">👁</button>
       </div>
-      <div style="margin-top:8px;font-size:11.5px;color:var(--muted);line-height:1.5;">
-        Your key is sent directly to Anthropic — never stored on any server.
-        Get a free key at <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent);">console.anthropic.com</a>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--muted);">
+          <input type="checkbox" id="remember-key" checked style="accent-color:var(--accent);cursor:pointer;">
+          Remember key
+        </label>
+        <span style="font-size:11.5px;color:var(--muted);">🔒 Sent directly to Anthropic — never stored by us. Get key at <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent);">console.anthropic.com</a></span>
       </div>
     </div>
   </div>
@@ -1602,7 +1601,7 @@ Paste document 3 here..."></textarea>
 <script>
 // ── SECURITY ──────────────────────────────────
 const SEC={
-  MAX_TEXT:500_000,MAX_FILE:10_000_000,MAX_SCAN:60_000,RATE_MS:8_000
+  MAX_TEXT:500_000,MAX_FILE:10_000_000,MAX_SCAN:60_000,RATE_MS:5_000
 };
 let lastRun=0;
 function secureText(s){if(s.length>SEC.MAX_TEXT){setStatus('Warning: Text truncated to 500 KB.');return s.slice(0,SEC.MAX_TEXT);}return s;}
@@ -4858,6 +4857,46 @@ const RULES=[
    title:'Payday loan rollover — debt trap with daily fees',
    desc:'Rolling over a payday loan extends the debt at additional cost. Daily fees and rollovers can cause the debt to grow to multiples of the original amount very quickly.',
    patterns:[/\brollover.*fee\b/i,/\broll.*over.*additional\b/i,/\bextend.*loan.*fee\b/i,/\bdefer.*repayment.*charge\b/i,/\brollover.*available\b/i,/\bfee.*per.*day.*loan\b/i,/\bdaily.*charge.*loan\b/i]},
+// ══ ACCURACY BOOST — missing patterns ══════════════════════════
+  {id:'ip_all_inventions',level:'danger',category:'IP Rights',docCat:'rights',icon:'·',
+   title:'All inventions and creative work owned by employer',
+   desc:'Everything you create during employment — inventions, discoveries, developments, and works of authorship — automatically belongs to your employer, not you.',
+   patterns:[/\ball inventions.*discoveries.*developments\b/i,/\bworks.*authorship.*property.*company\b/i,/\binventions.*discoveries.*developments.*exclusive\b/i,/\bcreated.*during.*employment.*exclusive.*property\b/i,/\bworks.*authorship.*created.*during.*employ\b/i,/\bexclusive.*property.*company.*inventions\b/i]},
+
+  {id:'deduct_final_paycheck',level:'danger',category:'Employment',docCat:'obligation',icon:'·',
+   title:'Employer can deduct money from your final paycheck',
+   desc:'The employer reserves the right to deduct amounts you owe — for equipment, property, or other debts — directly from your final paycheck. This may be illegal without your written consent in many jurisdictions.',
+   patterns:[/\bdeduct.*from.*final.*paycheck\b/i,/\bdeduct.*final.*pay.*amounts.*owe\b/i,/\bwithhold.*paycheck.*owe\b/i,/\bfinal.*paycheck.*deduct.*property\b/i,/\bdeduct.*final.*pay.*unreturned\b/i,/\bfinal.*salary.*deduct.*owe\b/i]},
+
+  {id:'data_retained_necessary',level:'danger',category:'Privacy',docCat:'risk',icon:'·',
+   title:'Data kept indefinitely — "as long as necessary" with no time limit',
+   desc:'Your data is retained for as long as the company considers "reasonably necessary" — which has no defined end date. This allows indefinite storage without a clear deletion timeline.',
+   patterns:[/\bretain.*as long as.*reasonably necessary\b/i,/\bas long as.*necessary.*business\b/i,/\bpersonal data.*as long.*reasonably\b/i,/\bkeep.*data.*as long.*reasonably\b/i,/\bretain.*reasonably necessary.*business\b/i,/\bdata.*retained.*as long.*deemed.*necessary\b/i]},
+
+  {id:'acceleration_on_default',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Full loan balance immediately due if you default',
+   desc:'On any default — including a single missed payment — the entire outstanding loan balance plus all accrued interest becomes immediately due. This is called an acceleration clause.',
+   patterns:[/\bentire.*outstanding.*principal.*immediately.*due\b/i,/\bupon.*default.*entire.*balance.*due.*payable\b/i,/\ball.*accrued.*interest.*immediately.*due.*payable\b/i,/\bimmediately.*due.*payable.*upon.*default\b/i,/\bdefault.*entire.*outstanding.*immediately\b/i,/\bprincipal.*interest.*due.*payable.*default\b/i]},
+
+  {id:'variable_rate_no_cap',level:'danger',category:'Financial',docCat:'risk',icon:'·',
+   title:'Variable interest rate that can increase without limit',
+   desc:'The interest rate can rise without any cap. If the benchmark rate spikes, your payments could increase dramatically with no upper limit.',
+   patterns:[/\binterest rate.*variable.*may increase\b/i,/\bvariable.*may increase without limit\b/i,/\brate.*variable.*increase.*without.*limit\b/i,/\bvariable.*interest.*no.*cap\b/i,/\brate.*may increase.*based.*prime\b/i,/\bvariable.*rate.*increase.*without.*limit\b/i]},
+
+  {id:'daily_late_charge',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
+   title:'Daily late payment fee — compounds rapidly',
+   desc:'A fee is charged every day a payment is late. A $15/day fee equals $5,475 per year. These daily charges compound into very large sums very quickly.',
+   patterns:[/\blate.*payment.*charge.*per day\b/i,/\bcharge.*per day.*outstanding\b/i,/\blate.*charge.*assessed.*each day\b/i,/\bfee.*per day.*payment.*remains\b/i,/\bassessed.*per day.*payment\b/i,/\bper.*day.*late.*payment.*charge\b/i,/\bdaily.*late.*charge\b/i]},
+
+  {id:'personal_guarantor',level:'danger',category:'Financial',docCat:'obligation',icon:'·',
+   title:'You personally guarantee all business obligations',
+   desc:'The individual signing personally guarantees all obligations of the business — including future debts. If the business cannot pay, creditors can come after your personal assets.',
+   patterns:[/\bindividual.*personally guarantees\b/i,/\bpersonally guarantees.*obligations.*business\b/i,/\bpersonally guarantee.*all.*obligations\b/i,/\bsigning.*personally.*liable.*obligations\b/i,/\bguarantees.*obligations.*including.*future\b/i,/\bpersonal.*guarantee.*all.*obligations.*business\b/i]},
+
+  {id:'monitor_all_devices',level:'danger',category:'Employment',docCat:'rights',icon:'·',
+   title:'Employer can monitor all activity on your devices',
+   desc:'The employer reserves the right to monitor all activity on any device used for work — including personal devices — such as emails, messages, browsing history, and app usage.',
+   patterns:[/\bmonitor.*all.*activity.*devices\b/i,/\bmonitor.*activity.*company.owned.*personal.*device\b/i,/\breserve.*right.*monitor.*device\b/i,/\bactivity.*company.*personal.*devices.*monitor\b/i,/\bemails.*messages.*browsing.*monitor\b/i,/\bmonitor.*device.*work.*including.*personal\b/i]},
 ];
 
 
@@ -4867,16 +4906,28 @@ const RULES=[
 
 // ── OCR NOISE PREPROCESSING ───────────────────
 function cleanOCRText(t){
-  return t
-    .replace(/-\n([a-z])/g,'$1')          // re-join hyphen line-breaks
-    .replace(/([a-zA-Z,;])\n([a-zA-Z])/g,'$1 $2') // join mid-sentence breaks
-    .replace(/\|([A-Z])/g,'I$1')          // pipe -> I
-    .replace(/\b\|/g,'I')
-    .replace(/\b0f\b/g,'of')              // 0 -> o
-    .replace(/\b0r\b/g,'or')
-    .replace(/[ \t]{2,}/g,' ')            // collapse spaces
-    .replace(/\n{3,}/g,'\n\n')
-    .trim();
+  if(!t)return'';
+  let s=t;
+  // Fix hyphenated line breaks: "arbi-\ntration" -> "arbitration"
+  s=s.replace(/-\r?\n([a-z])/g,'$1');
+  // Join mid-sentence line breaks
+  s=s.replace(/([a-zA-Z,;:])\r?\n([a-zA-Z])/g,'$1 $2');
+  // Common OCR character substitutions
+  s=s.replace(/\|([A-Z])/g,'I$1');
+  s=s.replace(/\b\|/g,'I');
+  s=s.replace(/\b0f\b/g,'of');
+  s=s.replace(/\b0r\b/g,'or');
+  s=s.replace(/\b0n\b/g,'on');
+  // Fix common legal word OCR errors
+  s=s.replace(/arbi[tf]ration/gi,'arbitration');
+  s=s.replace(/liabi[il]ity/gi,'liability');
+  s=s.replace(/terrninate/gi,'terminate');
+  // Remove noise between words
+  s=s.replace(/([a-z])[•·°]([a-z])/gi,'$1$2');
+  // Normalise whitespace
+  s=s.replace(/[ \t]{2,}/g,' ');
+  s=s.replace(/\n{3,}/g,'\n\n');
+  return s.trim();
 }
 
 
@@ -4887,9 +4938,16 @@ function validKey(k){if(!k)return'No API key.';if(!KEY_RE.test(k))return'Invalid
 function loadSavedKey(){
   try{
     const k=localStorage.getItem('fr_key');
-    if(k){
+    if(k&&k.startsWith('sk-ant-')){
       const el=document.getElementById('api-key');
-      if(el){el.value=k;document.getElementById('remember-key').checked=true;onKeyInput();}
+      if(el){
+        el.value=k;
+        const rememberEl=document.getElementById('remember-key');
+        if(rememberEl)rememberEl.checked=true;
+        // Auto-enable AI if key found
+        if(!_aiOn)toggleAI();
+        onKeyInput();
+      }
     }
   }catch{}
 }
@@ -4898,37 +4956,58 @@ function onKeyInput(){
   const k=(document.getElementById('api-key')||{}).value||'';
   const valid=k&&!validKey(k);
   const badge=document.getElementById('ai-status-badge');
-  if(badge){badge.style.display=valid?'inline':'none';}
+  if(badge)badge.style.display=(valid&&_aiOn)?'inline':'none';
+  // Auto-save if remember is checked
+  if(valid&&(document.getElementById('remember-key')||{}).checked){
+    try{localStorage.setItem('fr_key',k);}catch{}
+  }
 }
 
 let _aiOn=false;
 function toggleAI(){
   _aiOn=!_aiOn;
-  const track=document.getElementById('ai-track');
+  const strip=document.getElementById('ai-strip');
+  const knobWrap=document.getElementById('ai-knob-wrap');
   const knob=document.getElementById('ai-knob');
   const row=document.getElementById('ai-key-row');
-  if(track)track.style.background=_aiOn?'var(--accent)':'var(--surface2)';
-  if(knob)knob.style.transform=_aiOn?'translateX(20px)':'translateX(0)';
+  const badge=document.getElementById('ai-status-badge');
+  const hint=document.getElementById('ai-strip-hint');
+  const stripHeader=strip?strip.querySelector('[role="switch"]'):null;
+  if(knobWrap){knobWrap.style.background=_aiOn?'var(--accent)':'var(--surface2)';knobWrap.style.borderColor=_aiOn?'var(--accent)':'var(--border)';}
+  if(knob)knob.style.transform=_aiOn?'translateX(16px)':'translateX(0)';
   if(row)row.style.display=_aiOn?'block':'none';
-  if(_aiOn){setTimeout(()=>document.getElementById('api-key').focus(),50);}
+  if(hint)hint.style.display=_aiOn?'none':'inline';
+  if(stripHeader)stripHeader.setAttribute('aria-checked',_aiOn?'true':'false');
+  const k=(document.getElementById('api-key')||{}).value||'';
+  if(badge)badge.style.display=(_aiOn&&k&&!validKey(k))?'inline':'none';
+  if(_aiOn){setTimeout(()=>{const inp=document.getElementById('api-key');if(inp&&!inp.value)inp.focus();},60);}
+}
+
+function toggleKeyVis(){
+  const k=document.getElementById('api-key');
+  if(k)k.type=k.type==='password'?'text':'password';
+}
+
+function toggleKeyVis(){
+  const k=document.getElementById('api-key');
+  if(k)k.type=k.type==='password'?'text':'password';
 }
 
 // ── AI SCAN ───────────────────────────────────────────
 async function aiScan(text,key){
-  const body=text.slice(0,14000);
+  const body=text.slice(0,18000);
   const juris=getJurisContext();
   const jurisNote=juris?` The user is in ${juris}. Where relevant, note if local law (GDPR, CCPA, employment law etc.) gives extra protections or makes a clause unenforceable.`:'';
-  const prompt=`You are a consumer-rights attorney.${jurisNote} Analyze this document and return ONLY valid JSON — no markdown, no text outside the JSON.
+  const prompt=`You are a consumer-rights attorney.${jurisNote} Analyze this document and return ONLY valid JSON.
 
-{"docType":"exact document type","parties":"who the parties are","overallRisk":"high|medium|low","overallScore":1-10,"verdict":"4-5 sentences: what is this document, what does it require, biggest risk, is it fair overall. Plain English, no jargon.","bottomLine":"single most important thing to know before signing.","keyDates":"deadlines/renewals/notice periods or empty string","keyNumbers":"key amounts/rates/fees or empty string","findings":[{"title":"6-8 word descriptive title","severity":"high|medium|low|info","category":"category name","clause":"exact quote from document max 80 words","what":"2-3 sentences plain English explanation","whyItMatters":"1-2 sentences with a concrete real-world scenario","action":"1 specific actionable step to take"}]}
+{"docType":"exact type","parties":"who the parties are","overallRisk":"high|medium|low","overallScore":1-10,"verdict":"4-5 sentences: what is this, what does it require, biggest risk, is it fair. Plain English.","bottomLine":"single most important thing before signing.","keyDates":"deadlines/renewals or empty","keyNumbers":"fees/rates/amounts or empty","findings":[{"title":"6-8 word title","severity":"high|medium|low|info","category":"category","clause":"exact quote max 60 words","what":"2 sentences plain English","whyItMatters":"1-2 sentences with concrete scenario","action":"1 specific step to take"}]}
 
-Rules: 6-10 findings. severity info = things that PROTECT the signer. Quote clauses exactly. Be direct and honest.
+Rules: 6-10 findings. Quote clauses exactly. severity info=protects signer. Be direct.
 
 Document:
 ---
 ${body}
 ---`;
-
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),55000);
   try{
@@ -4940,7 +5019,7 @@ ${body}
         'content-type':'application/json',
         'anthropic-dangerous-direct-browser-access':'true'
       },
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:3500,messages:[{role:'user',content:prompt}]}),
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2500,messages:[{role:'user',content:prompt}]}),
       signal:controller.signal
     });
     clearTimeout(timer);
@@ -4973,18 +5052,24 @@ function renderAIFindings(aiData){
   const findings=(aiData.findings||[]);
   const totalAI=findings.length;
   const highAI=findings.filter(f=>f.severity==='high').length;
-  const findingsHtml=findings.map((f,idx)=>`
-    <div class="finding" tabindex="0" role="button" style="margin-bottom:10px;">
-      <div class="f-header">
-        <span class="f-sev ${sev[f.severity]||'t-info'}">${sevLabel[f.severity]||'Info'}</span>
-        <span class="f-cat">${escHtml(f.category||'')}</span>
+  const findingsHtml=findings.map((f,idx)=>{
+    const sevColor={high:'#c62828',medium:'#e65100',low:'#1565c0',info:'#2e7d32'};
+    const sevBg={high:'#ffebee',medium:'#fff3e0',low:'#e3f2fd',info:'#e8f5e9'};
+    const sevIcon={high:'🔴',medium:'🟡',low:'🔵',info:'🟢'};
+    const sc=f.severity||'low';
+    return`<div class="finding" tabindex="0" role="article" aria-label="${escHtml(f.title||'')}"
+      style="margin-bottom:14px;padding:14px;border-radius:10px;background:var(--surface);border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:${sevBg[sc]||sevBg.low};color:${sevColor[sc]||sevColor.low};">${sevIcon[sc]||'🔵'} ${(f.severity||'low').toUpperCase()}</span>
+        ${f.category?`<span style="font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:4px;">${escHtml(f.category)}</span>`:''}
       </div>
-      <div class="f-title">${escHtml(f.title||'')}</div>
-      ${f.clause?`<div class="f-clause">"${escHtml(f.clause)}"</div>`:''}
-      <div class="f-desc">${escHtml(f.what||'')}</div>
-      ${f.whyItMatters?`<div class="f-desc" style="margin-top:6px;color:var(--muted);">💡 ${escHtml(f.whyItMatters)}</div>`:''}
-      ${f.action?`<div class="f-desc" style="margin-top:6px;color:var(--accent);font-weight:500;">→ ${escHtml(f.action)}</div>`:''}
-    </div>`).join('');
+      <div style="font-size:14px;font-weight:600;color:var(--text1);margin-bottom:8px;line-height:1.4;">${escHtml(f.title||'')}</div>
+      ${f.clause?`<div style="font-size:12.5px;font-style:italic;color:var(--muted);background:var(--surface2);padding:8px 12px;border-radius:6px;border-left:3px solid var(--border);margin-bottom:8px;line-height:1.5;">"${escHtml(f.clause)}"</div>`:''}
+      ${f.what?`<div style="font-size:13px;color:var(--text1);line-height:1.6;margin-bottom:6px;">${escHtml(f.what)}</div>`:''}
+      ${f.whyItMatters?`<div style="font-size:12.5px;color:var(--text2);line-height:1.5;margin-bottom:6px;padding:8px 10px;background:var(--surface2);border-radius:6px;">💡 <strong>Why it matters:</strong> ${escHtml(f.whyItMatters)}</div>`:''}
+      ${f.action?`<div style="font-size:12.5px;color:var(--accent);font-weight:600;margin-top:6px;">→ What to do: ${escHtml(f.action)}</div>`:''}
+    </div>`;
+  }).join('');
   return`<div class="ai-result" style="margin-top:20px;">
     <div class="sec-header-static">
       <div class="sec-left">
@@ -4994,11 +5079,14 @@ function renderAIFindings(aiData){
       </div>
       <span style="font-size:11px;color:var(--muted);">claude-sonnet</span>
     </div>
-    ${aiData.docType?`<div style="font-size:12px;color:var(--muted);margin:8px 0 4px;font-weight:600;">${escHtml(aiData.docType)}</div>`:''}
-    ${aiData.verdict?`<div style="font-size:13.5px;line-height:1.65;color:var(--text1);margin-bottom:12px;">${escHtml(aiData.verdict)}</div>`:''}
-    ${aiData.bottomLine?`<div style="padding:10px 14px;background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:13px;font-weight:600;margin-bottom:14px;">📌 ${escHtml(aiData.bottomLine)}</div>`:''}
-    ${aiData.keyNumbers?`<div style="font-size:12px;color:var(--muted);margin-bottom:6px;">💰 ${escHtml(aiData.keyNumbers)}</div>`:''}
-    ${aiData.keyDates?`<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">📅 ${escHtml(aiData.keyDates)}</div>`:''}
+    ${aiData.parties?`<div style="font-size:12px;color:var(--muted);margin:6px 0 10px;"><strong>Parties:</strong> ${escHtml(aiData.parties)}</div>`:''}
+    ${aiData.verdict?`<div style="font-size:13.5px;line-height:1.7;color:var(--text1);margin-bottom:14px;">${escHtml(aiData.verdict)}</div>`:''}
+    ${aiData.bottomLine?`<div style="padding:12px 16px;background:var(--surface2);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.5px;font-weight:600;color:var(--text1);margin-bottom:16px;line-height:1.4;">📌 ${escHtml(aiData.bottomLine)}</div>`:''}
+    ${(aiData.keyNumbers||aiData.keyDates)?`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+      ${aiData.keyNumbers?`<div style="flex:1;min-width:160px;padding:10px 12px;background:var(--surface2);border-radius:8px;font-size:12px;line-height:1.5;"><strong style="display:block;margin-bottom:3px;">💰 Key numbers</strong><span style="color:var(--text2);">${escHtml(aiData.keyNumbers)}</span></div>`:''}
+      ${aiData.keyDates?`<div style="flex:1;min-width:160px;padding:10px 12px;background:var(--surface2);border-radius:8px;font-size:12px;line-height:1.5;"><strong style="display:block;margin-bottom:3px;">📅 Key dates</strong><span style="color:var(--text2);">${escHtml(aiData.keyDates)}</span></div>`:''}
+    </div>`:''
+    }
     <div>${findingsHtml}</div>
   </div>`;
 }
@@ -5213,6 +5301,7 @@ async function detectMultipleCams(){
 }
 
 async function startCamera(){
+  if(!navigator.mediaDevices||!window.isSecureContext){document.getElementById('camera-status').textContent='Camera requires a secure connection (HTTPS). Use Upload or Paste instead.';return;}
   const video=document.getElementById('video');
   const status=document.getElementById('camera-status');
   const flipBtn=document.getElementById('flip-btn');
@@ -5255,10 +5344,11 @@ async function startCamera(){
   status.textContent='Could not start camera. Try the Upload tab — you can upload a photo of the document there.';
 }
 
-function stopCamera(){if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}}
+function stopCamera(){if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}const vid=document.getElementById('video');if(vid){vid.srcObject=null;}}
 async function flipCamera(){stopCamera();currentFacingMode=currentFacingMode==='environment'?'user':'environment';await startCamera();}
 
 function capturePhoto(){
+  if(window._capturing)return;window._capturing=true;setTimeout(()=>{window._capturing=false;},3000);
   const video=document.getElementById('video');
   const canvas=document.getElementById('canvas');
   const status=document.getElementById('camera-status');
@@ -5328,9 +5418,10 @@ async function ocrSpaceFromDataUrl(dataUrl,onProgress){
     fd.append('isOverlayRequired','false');
     fd.append('detectOrientation','true');
     fd.append('scale','true');
+    fd.append('isTable','false');
     fd.append('OCREngine','5');
     const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),15000);
+    const timer=setTimeout(()=>controller.abort(),25000);
     const resp=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:fd,signal:controller.signal});
     clearTimeout(timer);
     if(!resp.ok)throw new Error('status '+resp.status);
@@ -5350,10 +5441,11 @@ async function ocrSpaceFromDataUrl(dataUrl,onProgress){
         isOverlayRequired:'false',
         detectOrientation:'true',
         scale:'true',
+        isTable:'false',
         OCREngine:'5'
       });
       const controller2=new AbortController();
-      const timer2=setTimeout(()=>controller2.abort(),15000);
+      const timer2=setTimeout(()=>controller2.abort(),25000);
       const resp2=await fetch('https://api.ocr.space/parse/image',{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
@@ -5380,12 +5472,17 @@ async function compressImage(dataUrl,targetKB){
       try{
         const canvas=document.createElement('canvas');
         let w=img.width,h=img.height;
-        const maxPx=2000;
+        // Max 2400px (better for dense legal text) but cap for OCR.space limit
+        const maxPx=2400;
         if(w>maxPx||h>maxPx){const r=Math.min(maxPx/w,maxPx/h);w=Math.round(w*r);h=Math.round(h*r);}
         canvas.width=w;canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        let q=0.85,result=canvas.toDataURL('image/jpeg',q);
-        while(result.length*0.75/1024>targetKB&&q>0.3){q-=0.1;result=canvas.toDataURL('image/jpeg',q);}
+        const ctx=canvas.getContext('2d');
+        ctx.imageSmoothingEnabled=true;
+        ctx.imageSmoothingQuality='high';
+        ctx.drawImage(img,0,0,w,h);
+        // Start at high quality, step down until under target
+        let q=0.90,result=canvas.toDataURL('image/jpeg',q);
+        while(result.length*0.75/1024>targetKB&&q>0.35){q=Math.round((q-0.05)*100)/100;result=canvas.toDataURL('image/jpeg',q);}
         res(result);
       }catch(e){rej(e);}
     };
@@ -5410,7 +5507,7 @@ async function loadTesseract(statusEl){
   const cdns=[
     'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.4/dist/tesseract.min.js',
     'https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js',
+    'https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js',
   ];
   for(const url of cdns){
     try{
@@ -5638,10 +5735,24 @@ async function extractPDF(buf,statusEl){
     const pageNums=Array.from({length:pagesToRead},(_,i)=>i+1);
     const pages=await Promise.all(pageNums.map(async n=>{
       const page=await pdf.getPage(n);
-      const c=await page.getTextContent();
-      return c.items.map(x=>x.str).join(' ');
+      const c=await page.getTextContent({normalizeWhitespace:true,disableCombineTextItems:false});
+      // Reconstruct text with paragraph breaks using Y-position and hasEOL
+      let result='';
+      let lastY=null;
+      for(const item of c.items){
+        if(!item.str&&!item.hasEOL)continue;
+        const y=item.transform?Math.round(item.transform[5]):null;
+        // New line if Y changes significantly (different text row)
+        if(lastY!==null&&y!==null&&Math.abs(y-lastY)>5){
+          result+=(Math.abs(y-lastY)>15)?'\n\n':'\n';
+        }
+        result+=item.str;
+        if(item.hasEOL)result+='\n';
+        lastY=y;
+      }
+      return result.trim();
     }));
-    return pages.join('\n').trim();
+    return pages.join('\n\n').trim();
   })();
   return Promise.race([extractPromise,timeoutPromise]);
 }
@@ -5656,17 +5767,38 @@ async function extractDocx(file){
   const zip=await JSZip.loadAsync(buf);
   const docXml=zip.file('word/document.xml');
   if(!docXml)throw new Error('Not a valid DOCX file');
+
+  // Helper: strip XML tags and decode entities from any XML string
+  function stripXml(xml){
+    return xml
+      .replace(/<w:p[ >][^>]*>/gi,'\n')   // paragraph = newline
+      .replace(/<w:tr[ >][^>]*>/gi,'\n')   // table row = newline
+      .replace(/<w:br[^>]*>/gi,' ')         // line break
+      .replace(/<w:tab[^>]*>/gi,'\t')      // tab character
+      .replace(/<[^>]+>/g,'')              // all remaining tags
+      .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#x([0-9A-Fa-f]+);/g,(_,h)=>String.fromCodePoint(parseInt(h,16)))
+      .replace(/[ \t]+/g,' ')
+      .replace(/\n{3,}/g,'\n\n')
+      .trim();
+  }
+
+  // Collect text from document body
   const xmlText=await docXml.async('string');
-  // Strip all XML tags, decode common entities, clean whitespace
-  const text=xmlText
-    .replace(/<w:p[ >][^>]*>/gi,'\n')  // paragraph breaks
-    .replace(/<w:br[^>]*>/gi,' ')       // line breaks
-    .replace(/<w:tab[^>]*>/gi,' ')      // tabs
-    .replace(/<[^>]+>/g,'')            // all remaining tags
-    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'")
-    .replace(/[ \t]+/g,' ')
-    .replace(/\n{3,}/g,'\n\n')
-    .trim();
+  let parts=[stripXml(xmlText)];
+
+  // Also extract headers and footers (contain important terms in contracts)
+  const headerFooterFiles=Object.keys(zip.files).filter(n=>
+    n.match(/^word\/(header|footer|footnotes|endnotes)[0-9]*\.xml$/i)
+  );
+  for(const fname of headerFooterFiles){
+    try{
+      const extra=await zip.file(fname).async('string');
+      const extracted=stripXml(extra);
+      if(extracted&&extracted.length>10)parts.push(extracted);
+    }catch{}
+  }
+
+  const text=parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
   return text;
 }
 
@@ -5836,7 +5968,7 @@ function clearAll(){
 function setStatus(msg){document.getElementById('status-msg').textContent=msg;}
 
 // animated progress
-const STEPS=[[10,'Reading document…'],[28,'Identifying document type…'],[46,'Scanning risk patterns…'],[62,`Checking ${RULES.length} clause types…`],[78,'Compiling findings…']];
+const STEPS=[[8,'Reading document…'],[22,'Detecting document type…'],[40,'Running keyword scan…'],[58,`Checking ${RULES.length} clause patterns…`],[72,'Analysing risk levels…'],[85,'Building summary…']];
 let progTimer=null;
 function startProgress(){
   document.getElementById('prog-wrap').style.display='block';
@@ -5885,6 +6017,7 @@ async function analyze(){
   btn.classList.add('loading');
   btn.setAttribute('aria-busy','true');
   document.getElementById('results').innerHTML='';
+  const _aic=document.getElementById('ai-result-container');if(_aic){_aic.innerHTML='';_aic.style.display='none';}
   startProgress();
   await new Promise(r=>setTimeout(r,30));
 
